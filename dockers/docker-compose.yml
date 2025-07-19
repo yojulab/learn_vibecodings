@@ -1,0 +1,12 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - GITHUB_PAT=${GITHUB_PAT}
+    ports:
+      - 3005:3005
+    env_file:
+      - .env
+    command: sleep infinity
