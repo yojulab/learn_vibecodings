@@ -1,0 +1,61 @@
+
+# CoCoLabHub Website Analysis
+
+## 1. Main Structure
+
+CoCoLabHub
+|
++-- Header
+|   +-- Logo: CoCoLabHub
+|   +-- Navigation
+|       +-- 연구소 소개 (About)
+|       +-- 주요 서비스 (Main Services)
+|
++-- Hero Section
+|   +-- Title: 코코랭허브 (CoCoLabHub)
+|   +-- Subtitle: 코딩을 넘어 협업으로, 언어를 넘어 커뮤니케이션으로... (Beyond coding to collaboration...)
+|   +-- Buttons
+|       +-- 연구소 소개 (About)
+|       +-- 주요 서비스 (Main Services)
+|
++-- Section: AI 프론티어 (AI Frontier)
+|   |
+|   +-- Left Content
+|   |   +-- Title: 협업, 코딩, 언어의 혁신 (Innovation in Collaboration, Coding, Language)
+|   |   +-- Description: AI 기술을 활용하여... (Utilizing AI technology...)
+|   |   +-- Link: 더 알아보기 (Learn More)
+|   |
+|   +-- Right Content (Card)
+|       +-- Icon: Lightbulb/Atom
+|       +-- Title: 혁신적인 AI 솔루션 (Innovative AI Solution)
+|       +-- Description: 최신 AI 기술을 활용하여... (Using the latest AI technology...)
+|
++-- Section: 주요 서비스 (Main Services)
+    |
+    +-- Service 1: CodeInDocker
+    |   +-- Description: 개발 구성원 간 보다 쉽고 정확하게 소스 공유... (Easier and more accurate source sharing...)
+    |   +-- Link: 서비스 방문하기 (Visit Service)
+    |
+    +-- Service 2: LecturePlans
+        +-- Description: 바이브 코딩으로 작성한 AI와 협업을 통해... (Through collaboration with AI written in VIBE coding...)
+        +-- Link: 서비스 방문하기 (Visit Service)
+
+## 2. Key Components & Relationships
+
+- **CoCoLabHub (Core Concept)**
+  - **Offers:** AI Frontier, Main Services
+  - **Goal:** Innovation in Collaboration, Coding, and Language.
+
+- **AI Frontier (Feature)**
+  - **Provides:** Innovative AI Solutions
+  - **For:** Developers and Educators
+
+- **Main Services (Offerings)**
+  - **Includes:**
+    1.  **CodeInDocker:** Focuses on source code sharing for developers.
+    2.  **LecturePlans:** Focuses on preparing lecture materials with AI.
+
+- **User Actions (Calls to Action)**
+  - Learn More (AI Frontier)
+  - Visit Service (CodeInDocker, LecturePlans)
+  - About / Main Services (Header/Hero)
