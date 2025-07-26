@@ -1,0 +1,93 @@
+{
+	"meta": {
+		"generatedAt": "2025-07-20T05:30:56.417Z",
+		"tasksAnalyzed": 10,
+		"totalTasks": 10,
+		"analysisCount": 10,
+		"thresholdScore": 5,
+		"projectName": "Taskmaster",
+		"usedResearch": false
+	},
+	"complexityAnalysis": [
+		{
+			"taskId": 11,
+			"taskTitle": "Project Setup & Tooling",
+			"complexityScore": 5,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Please break down Project Setup & Tooling into 5 subtasks covering project scaffolding, dependency installation, Tailwind configuration, linting and hooks setup, and CI/CD workflow creation.",
+			"reasoning": "The task involves multiple tool installations and configurations across project setup, linting, styling, and CI, increasing complexity."
+		},
+		{
+			"taskId": 12,
+			"taskTitle": "Core Layout & Styling",
+			"complexityScore": 4,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Please break down Core Layout & Styling into 5 subtasks covering custom theme configuration, BaseLayout.vue creation, static SEO tag setup in index.html, dynamic meta tag integration, and global CSS/typography setup.",
+			"reasoning": "Requires theme customization, layout component coding, and SEO integration, but follows standard patterns."
+		},
+		{
+			"taskId": 13,
+			"taskTitle": "Basic Navigation Framework",
+			"complexityScore": 3,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Please break down Basic Navigation Framework into 4 subtasks covering NavBar.vue component creation, smooth scrolling implementation, MobileMenu.vue with Pinia state, and navigation styling with Tailwind.",
+			"reasoning": "Straightforward implementation of navigation components and scroll behavior, minimal complexity."
+		},
+		{
+			"taskId": 14,
+			"taskTitle": "Static Content Sections",
+			"complexityScore": 3,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Please break down Static Content Sections into 5 subtasks covering creation of HeroSection.vue, AboutSection.vue, ServiceGrid.vue with ServiceCard.vue, ContactForm.vue, and integration of these sections into the main view.",
+			"reasoning": "Simple creation of static components and layout integration with placeholder content."
+		},
+		{
+			"taskId": 15,
+			"taskTitle": "Responsive Design & Accessibility",
+			"complexityScore": 6,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Please break down Responsive Design & Accessibility into 5 subtasks covering mobile-first responsive utilities, ARIA attributes and roles, dark/high-contrast mode toggle, reduced-motion respect, and color contrast/font size validation.",
+			"reasoning": "High complexity due to accessibility compliance, keyboard support, and responsive design requirements."
+		},
+		{
+			"taskId": 16,
+			"taskTitle": "Advanced Navigation Interactivity",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Please break down Advanced Navigation Interactivity into 4 subtasks covering IntersectionObserver composable implementation, SectionIndicator.vue creation, scroll progress bar development, and MobileMenu slide animations.",
+			"reasoning": "Involves advanced browser APIs, state management, and animation coordination, which is moderately complex."
+		},
+		{
+			"taskId": 17,
+			"taskTitle": "Hero Section Animations",
+			"complexityScore": 5,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Please break down Hero Section Animations into 4 subtasks covering parallax background composable integration, typewriter/fade-in text animations, CTAButton hover/focus transitions, and reduced-motion compliance.",
+			"reasoning": "Requires custom animations, composable integration, and accessibility considerations, adding moderate complexity."
+		},
+		{
+			"taskId": 18,
+			"taskTitle": "Service Section Interactivity",
+			"complexityScore": 5,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Please break down Service Section Interactivity into 4 subtasks covering hover effects on ServiceCard, ServiceModal.vue with animations, SVG icon micro-interactions, and dynamic import for modal lazy-loading.",
+			"reasoning": "Combines UI effects, modal state management, animations, and performance optimizations, making it moderately complex."
+		},
+		{
+			"taskId": 19,
+			"taskTitle": "Performance Optimization",
+			"complexityScore": 7,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Please break down Performance Optimization into 5 subtasks covering image lazy-loading, dynamic imports for code splitting, critical CSS inlining with Vite plugin, Lighthouse CI performance budgets setup, and image WebP optimization.",
+			"reasoning": "Entails several performance strategies and tooling configurations with strict metrics targets, increasing complexity."
+		},
+		{
+			"taskId": 20,
+			"taskTitle": "Backend Contact Form Integration",
+			"complexityScore": 7,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Please break down Backend Contact Form Integration into 5 subtasks covering Fastify server setup, Prisma schema and migration, POST /api/contact endpoint with zod validation, SendGrid email integration, and JSON response handling.",
+			"reasoning": "Backend development with database migrations, schema validation, and email integration involves multiple layers, making it complex."
+		}
+	]
+}

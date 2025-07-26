@@ -1,0 +1,636 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 11,
+        "title": "Project Setup & Tooling",
+        "description": "Initialize the Vue 3 + Vite + TypeScript project with TailwindCSS, ESLint, Prettier, Git hooks, and a basic CI/CD pipeline.",
+        "details": "1. Run `npm init vite@latest` with the Vue + TS template.\n2. Install dependencies: vue, vue-router, pinia, axios, @vueuse/core.\n3. Install devDependencies: vite, typescript, tailwindcss, postcss, autoprefixer, eslint, prettier, husky, lint-staged, vitest, playwright.\n4. Configure tailwind.config.js with custom colors (Cosmic Blue, Purple, Accent) and responsive breakpoints.\n5. Setup ESLint and Prettier rules; configure Husky pre-commit hooks for lint-staged.\n6. Add GitHub Actions workflow (.github/workflows/ci.yml) to run lint, type-check, tests, and build on PRs.",
+        "testStrategy": "- Ensure `npm run dev` starts without errors.\n- Run `npm run lint` and `npm run format:check` to verify no failures.\n- Validate CI pipeline passes on a sample PR.\n- Check Tailwind classes apply in a dummy component.",
+        "priority": "medium",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Project Scaffolding",
+            "description": "Initialize the Vue 3 + Vite + TypeScript project scaffold",
+            "dependencies": [],
+            "details": "Run `npm init vite@latest`, select the Vue + TS template, verify project structure, and commit the initial scaffold to Git.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Dependency Installation",
+            "description": "Install production and development dependencies",
+            "dependencies": [
+              1
+            ],
+            "details": "Run `npm install vue vue-router pinia axios @vueuse/core` and `npm install -D vite typescript tailwindcss postcss autoprefixer eslint prettier husky lint-staged vitest playwright`.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "TailwindCSS Configuration",
+            "description": "Configure TailwindCSS with custom theme and breakpoints",
+            "dependencies": [
+              2
+            ],
+            "details": "Run `npx tailwindcss init -p`, update `tailwind.config.js` with Cosmic Blue, Purple, Accent colors, define responsive breakpoints, and add content paths for Vue files.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Linting and Git Hooks Setup",
+            "description": "Set up ESLint, Prettier, Husky, and lint-staged for automated code checks",
+            "dependencies": [
+              2
+            ],
+            "details": "Initialize ESLint with Vue 3 and TypeScript rules, configure Prettier settings, add lint-staged for `.vue`/`.ts` files, and configure a Husky pre-commit hook to run lint and format checks.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "CI/CD Workflow Creation",
+            "description": "Create a GitHub Actions workflow for build, lint, test, and deploy",
+            "dependencies": [
+              3,
+              4
+            ],
+            "details": "Add a `.github/workflows/ci.yml` defining jobs to install dependencies, run lint, format check, execute Vitest and Playwright tests, build with Vite, and optionally deploy artifacts.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Core Layout & Styling",
+        "description": "Implement the responsive grid system, base typography, color scheme, and SEO meta tags.",
+        "details": "1. Define custom Tailwind theme in tailwind.config.js (colors, fonts).\n2. Create `BaseLayout.vue` with header, main, and footer slots.\n3. Configure index.html with default SEO meta tags and Open Graph tags.\n4. Integrate `vue-meta` or `@vueuse/head` to manage dynamic meta tags per section.\n5. Set up global CSS imports and apply base typography classes.",
+        "testStrategy": "- Visual QA across mobile, tablet, desktop breakpoints.\n- Vitest snapshot tests for `BaseLayout.vue`.\n- E2E test inspecting meta tags in rendered page DOM.",
+        "priority": "medium",
+        "dependencies": [
+          11
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Custom Tailwind Theme Configuration",
+            "description": "Define and extend Tailwind CSS theme in tailwind.config.js with custom colors, fonts, and responsive settings.",
+            "dependencies": [],
+            "details": "Update tailwind.config.js: extend theme.colors (primary, secondary, accent), theme.fontFamily (sans, serif), configure darkMode and content paths for purging unused styles.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Create BaseLayout.vue",
+            "description": "Build the BaseLayout.vue component with header, main, and footer slots using Tailwind’s responsive grid and utility classes.",
+            "dependencies": [
+              1
+            ],
+            "details": "In src/components/BaseLayout.vue, create a template with <header>, <main><slot /></main>, and <footer>; apply grid and flex utilities for layout; define props or named slots for header and footer content; export the component for global use.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Setup Static SEO Meta Tags",
+            "description": "Configure public/index.html with default SEO meta tags, Open Graph tags, and viewport settings.",
+            "dependencies": [
+              2
+            ],
+            "details": "In public/index.html, add <meta name=\"description\" content=\"...\">, <meta property=\"og:title\" content=\"...\">, <meta property=\"og:description\" content=\"...\">, <meta property=\"og:image\" content=\"/path/to/image.png\">, <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">, and <link rel=\"icon\" href=\"/favicon.ico\">.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Integrate Dynamic Meta Tag Management",
+            "description": "Implement vue-meta or @vueuse/head to manage dynamic meta tags based on active route or page data.",
+            "dependencies": [
+              3
+            ],
+            "details": "Install and configure @vueuse/head in main.js: import { createHead }, register head; in BaseLayout.vue or relevant pages use useHead() to set reactive title and meta fields; ensure tags update on route changes.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Global CSS and Typography Setup",
+            "description": "Import global CSS and apply base typography settings across the site using Tailwind and its typography plugin.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create src/assets/styles/global.css with @tailwind base, components, utilities; add typography plugin utilities (e.g., prose classes) and custom resets; import global.css in main.js or App.vue; apply base typography classes to body or root container.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "title": "Basic Navigation Framework",
+        "description": "Develop a fixed navigation bar with anchor links, smooth scrolling, and a mobile hamburger menu.",
+        "details": "1. Create `NavBar.vue` with links to each section id.\n2. Implement smooth scroll via Vue Router `scrollBehavior` or `window.scrollTo` with `behavior:'smooth'`.\n3. Create `MobileMenu.vue` toggled by a hamburger icon; manage open state in Pinia store (navigation.ts).\n4. Style the navigation using Tailwind fixed positioning and responsive utilities.",
+        "testStrategy": "- Unit test Pinia navigation store state changes.\n- Manual/E2E tests: clicking nav links scrolls to correct section.\n- Verify mobile menu toggles open/close on button click.",
+        "priority": "medium",
+        "dependencies": [
+          11,
+          12
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create NavBar.vue Component",
+            "description": "Develop the NavBar.vue component with anchor links to each section of the page.",
+            "dependencies": [],
+            "details": "Set up a Vue 3 single-file component (NavBar.vue) with a fixed <nav> element, add router-link or <a> tags pointing to section IDs, and ensure component registration.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Smooth Scrolling",
+            "description": "Add smooth scrolling behavior when navigation links are clicked.",
+            "dependencies": [
+              1
+            ],
+            "details": "Configure Vue Router scrollBehavior or use window.scrollTo({behavior: 'smooth'}) in NavBar.vue methods to scroll to target sections by ID.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Build MobileMenu.vue with Pinia State",
+            "description": "Create the MobileMenu.vue component and manage its open/close state via a Pinia store.",
+            "dependencies": [
+              1
+            ],
+            "details": "Define a Pinia store (navigation.ts) with a boolean for menu visibility, build a hamburger icon trigger in MobileMenu.vue, and toggle the state on click.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Style Navigation with Tailwind CSS",
+            "description": "Apply Tailwind CSS utilities to style the navigation bar and mobile menu for responsive design.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Use Tailwind classes for fixed positioning, responsive layouts, hover states, and mobile breakpoints; ensure the menu slides in/out and the nav looks consistent across viewports.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "title": "Static Content Sections",
+        "description": "Build static Hero, About, Services, and Contact sections with placeholder content and basic styling.",
+        "details": "1. Create `HeroSection.vue`, `AboutSection.vue`, `ServiceGrid.vue` with three `ServiceCard.vue` components, and `ContactForm.vue` (layout only).\n2. Place sections in `App.vue` or `HomeView.vue` in proper order.\n3. Use semantic HTML tags (`<section>`, `<h1>`, `<p>`, `<footer>`).\n4. Apply Tailwind classes for layout and spacing.",
+        "testStrategy": "- Vitest snapshot tests for each section component.\n- E2E test: verify sections render in correct order with placeholder text.",
+        "priority": "medium",
+        "dependencies": [
+          11,
+          12
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create HeroSection.vue",
+            "description": "Build the static Hero section component with placeholder heading, subtext, and CTA layout.",
+            "dependencies": [],
+            "details": "• Create components/HeroSection.vue\n• Use <section> with <h1> and <p> placeholders\n• Add a placeholder CTA button element\n• Apply Tailwind classes for full-width hero layout, padding, typography\n• Write Vitest snapshot test for rendering",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Create AboutSection.vue",
+            "description": "Build the static About section component with placeholder title and description text.",
+            "dependencies": [],
+            "details": "• Create components/AboutSection.vue\n• Use <section> with <h2> and <p> placeholders\n• Add semantic content structure and placeholder image element\n• Apply Tailwind classes for layout, spacing, and typography\n• Write Vitest snapshot test for rendering",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Create ServiceGrid.vue and ServiceCard.vue",
+            "description": "Build the Services section grid and individual service cards with placeholder content.",
+            "dependencies": [],
+            "details": "• Create components/ServiceCard.vue and components/ServiceGrid.vue\n• ServiceCard.vue: use <div> with icon placeholder, <h3>, and <p>\n• ServiceGrid.vue: use <section> and render three ServiceCard instances in a Tailwind CSS grid\n• Apply Tailwind classes for responsive grid layout and card styling\n• Write Vitest snapshot tests for both components",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Create ContactForm.vue",
+            "description": "Build the static Contact section component with a placeholder form layout.",
+            "dependencies": [],
+            "details": "• Create components/ContactForm.vue\n• Use <section> with <form>, include <label> and <input> placeholders for name, email, <textarea>, and submit <button>\n• Apply Tailwind classes for form layout, spacing, and button styling\n• Write Vitest snapshot test for rendering",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Integrate sections into main view",
+            "description": "Import and place all static section components in App.vue or HomeView.vue in correct order.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "details": "• Open App.vue or views/HomeView.vue\n• Import HeroSection, AboutSection, ServiceGrid, ContactForm\n• Arrange components inside <main> in order: HeroSection, AboutSection, ServiceGrid, ContactForm\n• Ensure semantic structure and apply any container Tailwind classes\n• Write E2E test to verify section order and placeholder content",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "title": "Responsive Design & Accessibility",
+        "description": "Ensure the site is mobile-first, WCAG 2.1 AA compliant, supports keyboard navigation, and high-contrast mode.",
+        "details": "1. Use Tailwind's responsive utility classes for all layout components.\n2. Add `aria-label`, `role`, and `tabindex` attributes where needed.\n3. Implement dark/high-contrast mode toggle in `ui.ts` Pinia store.\n4. Respect `prefers-reduced-motion` in animations.\n5. Validate font sizes, color contrast ratios.",
+        "testStrategy": "- Run `axe-core` accessibility checks in CI.\n- Manual keyboard navigation across components.\n- Test dark/high-contrast toggle functionality.\n- Verify layout at common breakpoints in browser dev tools.",
+        "priority": "medium",
+        "dependencies": [
+          14
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Mobile-First Responsive Utilities",
+            "description": "Apply Tailwind CSS mobile-first responsive utility classes across layout components.",
+            "dependencies": [],
+            "details": "Use Tailwind's responsive prefixes (sm:, md:, lg:, xl:) to adjust grid, flex, spacing, and typography scales at common breakpoints. Verify layouts in browser dev tools.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Add ARIA Attributes and Roles",
+            "description": "Enhance accessibility by adding appropriate ARIA attributes, roles, and tabindex where needed.",
+            "dependencies": [
+              1
+            ],
+            "details": "Audit interactive elements and assign aria-label, aria-labelledby, and role attributes. Manage tabindex order for keyboard navigation and ensure focus indicators are visible.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Implement Dark/High-Contrast Mode Toggle",
+            "description": "Provide a UI toggle for dark mode and high-contrast mode stored in Pinia.",
+            "dependencies": [
+              1
+            ],
+            "details": "Update ui.ts Pinia store with darkMode and highContrast flags. Create toggle switch component, persist preferences in localStorage, and apply Tailwind CSS classes conditionally.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Respect Reduced-Motion Preferences",
+            "description": "Ensure animations and transitions respect the user's prefers-reduced-motion setting.",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement CSS media query @media (prefers-reduced-motion: reduce) to disable or simplify animations. Update JavaScript animations to check window.matchMedia before initiating motion.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Validate Color Contrast and Font Sizes",
+            "description": "Verify that color contrast ratios and font sizes meet WCAG 2.1 AA standards.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "details": "Run automated axe-core checks in CI, manually audit pages using contrast analysis tools, and ensure body text is at least 16px with minimum 4.5:1 contrast for normal text and 3:1 for large text.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "title": "Advanced Navigation Interactivity",
+        "description": "Add IntersectionObserver-based active section highlighting, a scroll progress indicator, and mobile menu slide animations.",
+        "details": "1. Implement `useIntersectionObserver.ts` to detect visible sections; update `NavigationState.currentSection`.\n2. Create `SectionIndicator.vue` that highlights the active nav link.\n3. Add a top-edge scroll progress bar updating on `window.onscroll`.\n4. Animate `MobileMenu.vue` slide-in/out with CSS transitions.",
+        "testStrategy": "- Unit test `useIntersectionObserver` with simulated intersection entries.\n- E2E: scroll page and confirm active nav link and progress bar update.\n- Verify mobile menu slide animation works and respects reduced-motion.",
+        "priority": "medium",
+        "dependencies": [
+          13,
+          14
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement useIntersectionObserver Composable",
+            "description": "Create a Vue composable to observe section visibility using the IntersectionObserver API and update application state with the currently active section.",
+            "dependencies": [],
+            "details": "• Define `useIntersectionObserver.ts` composable in `src/composables`.\n• Accept section element refs and options (rootMargin, threshold).\n• Emit intersection entries and update `NavigationState.currentSection` in Pinia store.\n• Clean up observers on unmount.\n• Write unit tests simulating intersection events.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Create SectionIndicator.vue Component",
+            "description": "Develop a component that highlights the active navigation link based on the current section stored in state.",
+            "dependencies": [
+              1
+            ],
+            "details": "• Create `SectionIndicator.vue` in `src/components`.\n• Fetch `NavigationState.currentSection` from Pinia.\n• Render nav links with conditional classes for the active link.\n• Use Tailwind classes to animate the indicator slide under the active link.\n• Write snapshot/unit tests to ensure correct link is highlighted.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Develop Scroll Progress Bar",
+            "description": "Implement a top-edge progress bar that updates its width based on page scroll position.",
+            "dependencies": [],
+            "details": "• Add `ScrollProgressBar.vue` component at layout level.\n• Use `window.onscroll` or `window.addEventListener('scroll')` to calculate scroll percentage.\n• Bind percentage to a div’s width via inline styles or reactive class.\n• Animate width transitions smoothly with Tailwind/Tween.\n• Add unit/e2e tests to verify correct width at various scroll positions.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Animate MobileMenu Slide In/Out",
+            "description": "Add CSS-based slide animations to the mobile menu component respecting reduced-motion preferences.",
+            "dependencies": [],
+            "details": "• Update `MobileMenu.vue` to include enter/leave transitions.\n• Define Tailwind or custom CSS for slide-in/out animations (translateX).\n• Use `<transition>` wrapper in Vue for mounting/unmounting animations.\n• Detect `prefers-reduced-motion` to disable or simplify animations.\n• Write e2e tests to open/close menu and verify animation classes/states.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "title": "Hero Section Animations",
+        "description": "Implement parallax background effects, typography animations, and interactive CTA hover states.",
+        "details": "1. Use `useParallax.ts` composable in `AnimatedBackground.vue` for background layers.\n2. Apply CSS keyframes or JS for typewriter/fade-in effect on slogan text in `HeroSection.vue`.\n3. Style `CTAButton.vue` with hover/focus states using Tailwind transitions.\n4. Ensure all animations respect `prefers-reduced-motion`.",
+        "testStrategy": "- Manual QA for parallax effect on scroll.\n- Vitest unit test for `useParallax` responding to scroll events.\n- Verify typewriter animation runs and can be disabled by reduced-motion setting.",
+        "priority": "medium",
+        "dependencies": [
+          14
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Parallax Background Composable Integration",
+            "description": "Integrate the useParallax composable into AnimatedBackground.vue to enable layered parallax scrolling effects.",
+            "dependencies": [],
+            "details": "1. Import useParallax from useParallax.ts into AnimatedBackground.vue 2. Initialize composable with refs for each background layer 3. Bind scroll event to adjust layer offsets based on speed factors 4. Configure Tailwind or CSS classes for proper layer positioning 5. Write Vitest unit test to verify reactive scroll updates",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Typewriter and Fade-In Text Animations",
+            "description": "Implement a typewriter effect and fade-in animation for the slogan text in HeroSection.vue.",
+            "dependencies": [],
+            "details": "1. Add CSS keyframes or JS logic for sequential character reveal 2. Apply fade-in transition to the full slogan element 3. Configure timing and easing to match design spec 4. Ensure text remains readable during animation 5. Write manual QA steps to verify smooth reveal",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "CTAButton Hover and Focus Transitions",
+            "description": "Style CTAButton.vue to include smooth hover and focus animations using Tailwind CSS transitions.",
+            "dependencies": [],
+            "details": "1. Update CTAButton.vue to include Tailwind transition classes (duration, easing) 2. Define hover state background and scale transforms 3. Add focus-visible outline and transition for accessibility 4. Ensure transitions reset properly on mouse leave or blur 5. Perform interactive QA to validate hover and focus behavior",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Reduced-Motion Compliance",
+            "description": "Ensure all animations respect the user's prefers-reduced-motion setting and can be disabled or simplified.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "1. Detect prefers-reduced-motion via CSS media query or JS matchMedia 2. Wrap parallax, text, and CTA animations in conditionals 3. Provide fallback static styles when motion is reduced 4. Update components to read and react to motion preference at runtime 5. Test reduced-motion mode manually to confirm animations are disabled",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "title": "Service Section Interactivity",
+        "description": "Add hover effects on service cards, expandable modals with animations, and micro-interactions for icons.",
+        "details": "1. Enhance `ServiceCard.vue` with Tailwind hover utilities and transition classes.\n2. Implement `ServiceModal.vue` using `<transition>` for entrance/exit animations; manage open state in `ui.ts` store.\n3. Add SVG icon animations (e.g., stroke-draw) on hover via CSS animations.\n4. Lazy-load modal content with dynamic import.",
+        "testStrategy": "- E2E: hover over cards to see effects; click to open/close modal.\n- Unit test modal component opens with correct props and emits close event.\n- Performance audit to ensure dynamic import works.",
+        "priority": "medium",
+        "dependencies": [
+          14
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Add hover effects to ServiceCard.vue",
+            "description": "Enhance ServiceCard.vue with hover interactions using Tailwind CSS utilities and transition classes.",
+            "dependencies": [],
+            "details": "Apply Tailwind hover utilities for background, scale, and shadow changes. Configure transition durations and easing for smooth effects.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement ServiceModal.vue with entrance/exit animations",
+            "description": "Create ServiceModal.vue component using Vue <transition> for animated entrance and exit; manage its open state in ui.ts store.",
+            "dependencies": [
+              1
+            ],
+            "details": "Define <transition> wrappers with fade/scale animations. Connect modal visibility to the ui.ts store and handle open/close events.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Add SVG icon micro-interactions",
+            "description": "Animate SVG icons on hover with CSS animations such as stroke-draw and fill transitions.",
+            "dependencies": [
+              1
+            ],
+            "details": "Write CSS keyframes or Tailwind plugin classes for stroke-draw and fill animations on hover. Apply these to icons in ServiceCard.vue.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Lazy-load ServiceModal.vue with dynamic import",
+            "description": "Implement dynamic import for ServiceModal.vue to enable modal content lazy-loading and improve performance.",
+            "dependencies": [
+              2
+            ],
+            "details": "Use defineAsyncComponent or dynamic import in the parent to load ServiceModal.vue only when triggered. Verify code splitting in build output.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "title": "Performance Optimization",
+        "description": "Implement lazy loading, code splitting, critical CSS inlining, and ensure Core Web Vitals targets are met.",
+        "details": "1. Add `loading=\"lazy\"` to `<img>` tags.\n2. Use dynamic `import()` for heavy components (e.g., ServiceModal).\n3. Configure Vite for code splitting and integrate `vite-plugin-critters` for critical CSS inlining.\n4. Set up Lighthouse CI with performance budgets for FCP, LCP, FID, CLS, TTI.\n5. Optimize images to WebP with fallbacks.",
+        "testStrategy": "- Run Lighthouse CI in workflow; assert metrics within thresholds.\n- Check bundle sizes in build reports (<250KB JS, <50KB CSS gzipped).\n- Unit test dynamic import modules load correctly.",
+        "priority": "medium",
+        "dependencies": [
+          12,
+          14
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Image Lazy-Loading",
+            "description": "Add loading=\"lazy\" attributes to all <img> elements across the application to defer off-screen image loading.",
+            "dependencies": [],
+            "details": "Scan codebase for <img> tags in components and markup, add loading=\"lazy\" where appropriate, verify placeholders or spinners for loading states, and test in dev tools network panel to confirm deferred loading.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Set Up Dynamic Imports for Code Splitting",
+            "description": "Convert heavy or rarely used modules (e.g., ServiceModal) to dynamic imports using import() syntax to enable code splitting.",
+            "dependencies": [
+              1
+            ],
+            "details": "Identify large components, replace static imports with dynamic import() calls, update route or component loading logic to handle Promises, build and inspect chunk sizes, and run unit tests to ensure modules load correctly.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Configure Critical CSS Inlining with Vite Plugin",
+            "description": "Install and configure vite-plugin-critters in vite.config.js to inline critical-path CSS in the HTML during build.",
+            "dependencies": [
+              2
+            ],
+            "details": "Add vite-plugin-critters to devDependencies, modify vite.config.js to include the plugin with appropriate options (preload, noscript fallbacks), run production build, and verify critical CSS inlining using build output and coverage tools.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Establish Lighthouse CI Performance Budgets",
+            "description": "Set up Lighthouse CI in the CI/CD pipeline with defined performance budgets for metrics like FCP, LCP, FID, CLS, and TTI.",
+            "dependencies": [
+              3
+            ],
+            "details": "Create a .lighthouserc.js or YAML config defining thresholds, add Lighthouse CI GitHub Action or similar to the workflow, configure caching and artifact storage, run CI to validate metrics against budgets, and fail builds on regressions.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Optimize Images to WebP with Fallbacks",
+            "description": "Convert existing images to WebP format and provide JPG/PNG fallbacks for browsers without WebP support.",
+            "dependencies": [
+              4
+            ],
+            "details": "Integrate image optimization tool or plugin (e.g., Sharp or image-webpack-loader) in the build pipeline to generate .webp and fallback formats, update srcset or picture elements in templates, test in multiple browsers, and measure payload reduction.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "title": "Backend Contact Form Integration",
+        "description": "Develop the Fastify backend with Prisma ORM, implement the contact API endpoint with validation, and integrate SendGrid email notifications.",
+        "details": "1. Initialize Fastify server in `/server`, configure CORS, rate limiting, Helmet.\n2. Define `Contact` model in `prisma/schema.prisma`; run `prisma migrate`.\n3. Implement `POST /api/contact` with zod schema validation, persist to PostgreSQL using Prisma.\n4. Integrate Nodemailer (SendGrid) for email notifications on new contact.\n5. Return JSON responses with success or error messages.",
+        "testStrategy": "- Write supertest integration tests for valid/invalid payloads.\n- E2E: submit the contact form in the UI; verify success feedback and email send mock.\n- Check new record in the database with correct status.",
+        "priority": "medium",
+        "dependencies": [
+          11
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Fastify Server Setup",
+            "description": "Initialize and configure the Fastify server with essential middleware",
+            "dependencies": [],
+            "details": "Set up a new Fastify instance in /server, configure CORS, rate limiting, and Helmet for security, and ensure the server can start and accept connections.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Prisma Schema and Migration",
+            "description": "Define the Contact model and run the database migration",
+            "dependencies": [
+              1
+            ],
+            "details": "Add a Contact model to prisma/schema.prisma with fields for name, email, subject, message, and timestamps, then run prisma migrate dev to create the corresponding PostgreSQL table.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Contact Endpoint with Zod Validation",
+            "description": "Implement the POST /api/contact endpoint with request validation",
+            "dependencies": [
+              2
+            ],
+            "details": "Create a Fastify route for POST /api/contact, define a Zod schema for the payload (name, email, subject, message), validate incoming data, and persist valid submissions to the database using Prisma.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "SendGrid Email Integration",
+            "description": "Configure and integrate SendGrid to send notification emails",
+            "dependencies": [
+              3
+            ],
+            "details": "Install and configure Nodemailer with SendGrid transport, load the API key from environment variables, and send a confirmation or notification email whenever a new contact submission is received.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "JSON Response Handling",
+            "description": "Return standardized JSON responses for success and error cases",
+            "dependencies": [
+              4
+            ],
+            "details": "Ensure the POST /api/contact endpoint returns appropriate HTTP status codes and JSON bodies for validation errors, database errors, and successful submissions, including meaningful messages.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2025-07-19T16:37:12.500Z",
+      "updated": "2025-07-20T05:24:40.136Z",
+      "description": "Tasks for master context"
+    }
+  }
+}

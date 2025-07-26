@@ -1,40 +1,22 @@
 # learn_vibecodings
 
-Starting interactive model setup...
-
-🎯 Interactive Model Setup
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-💡 Navigation tips:
-   • Type to search and filter options
-   • Use ↑↓ arrow keys to navigate results
-   • Standard models are listed first, custom providers at bottom
-   • Press Enter to select
-
-✔ Select the main model for generation/updates: gemini-cli/gemini-2.5-pro
-✔ Select the research model: gemini-cli/gemini-2.5-pro
-✔ Select the fallback model (optional): gemini-cli/gemini-2.5-pro
-
 ## 1차 프롬프트
 '''markdown
-연구소 소개 웹 PRD문서를 전문가 수준으로 작성
+연구소 소개 웹 PRD문서를 전문가 수준 작성
+*  헤더와 푸터가 없는 원페이지 랜딩페이지
+*  메뉴 : 연구소 소개, 주요 서비스  
+* 모던한 UI/UX 구성과 생동감 있는 트랜지션 효과 
 
-## 요구사항
+## 메뉴 주요 내용 
+* 연구소 소개 : 우주 존재하는 모든 것들을 위한 연구  
+* 주요 서비스 : 노년 연금 보험 자동 설계, 독서 돕는 도움 플랫폼, 강의 계획 자동 작성
 
-﻿﻿헤더와 푸터가 없는 원페이지 랜딩페이지
-
-메뉴 : 연구소 소개, 주요 서비스
-
-﻿﻿모던한 UI/UX
-
-﻿﻿생동감있는 트랜지션 효과
-
-﻿﻿TailwindCSS사용
-
-## 메뉴 주요 내용
-
-연구소 소개 : 우주 존재하는 모든 것들을 위한 연구
-
-주요 서비스 : 노년 연금 보험 자동 설계, 독서 돕는 도움 플랫폼, 강의 계획 자동 작성
+## 기술 스팩
+*  TailwindCSS사용
+* 개발은 TDD 방식으로 playwright 사용
+* FrontendVue 3 + Vite + TypeScriptComposition API, PiniaRouterVue RouterNavigation guards 활용
+* Auth 관리Pinia + Axios Interceptor토큰 저장 및 재요청 처리
+* MiddlewareVue Router Guard + 서버 미들웨어사용자 인증/권한 검사BackendVite + Fastify (or Express) + TypeScript백엔드도 Vite로 번들링 가능Auth 인증JWT (access/refresh)혹은 OAuth2 / 세션 등DBPostgreSQL / MySQLPrisma or TypeORM 사용ORMPrisma (Type-safe)DB 마이그레이션 포함
 '''
 
 ### 2차 프롬프트
@@ -44,3 +26,17 @@ Starting interactive model setup...
 ---------
 .taskmaster/templates/example_prd.txt 내용
 '''
+
+## task master Commands
+```bash
+~# tm init
+~# tm parse-prd
+~# tm list
+~# tm show [number]
+~# tm analyze-complexity
+~# tm list
+~# tm complexity-report
+~# tm  expand --all
+~# tm list --with-subtasks
+~# tm next
+```
