@@ -12,8 +12,9 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # Install task-master-ai globally
 RUN npm install -g task-master-ai
-# Install gemini CLI
+# Install any CLI
 RUN npm install -g @google/gemini-cli
+RUN npm install -g @anthropic-ai/claude-code
 
 # Set working directory
 WORKDIR /apps
