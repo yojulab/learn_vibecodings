@@ -65,19 +65,19 @@
       "args": ["-y", "shrimp-task-manager-mcp"],
       "description": "Task management and workflow automation"
     },
-    "mcp-taskmanager": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@smithery/cli@latest",
-        "run",
-        "@kazuph/mcp-taskmanager",
-        "--key",
-        "f3d7791c-3c37-4c91-b638-6212d24a90f7",
-        "--profile",
-        "decisive-hornet-Be5J8X"
-      ]
-    },
+    // "mcp-taskmanager": {
+    //   "command": "npx",
+    //   "args": [
+    //     "-y",
+    //     "@smithery/cli@latest",
+    //     "run",
+    //     "@kazuph/mcp-taskmanager",
+    //     "--key",
+    //     "f3d7791c-3c37-4c91-b638-6212d24a90f7",
+    //     "--profile",
+    //     "decisive-hornet-Be5J8X"
+    //   ]
+    // },
     "claude-prompts-mcp": {
       "command": "npx",
       "args": ["-y", "claude-prompts-mcp"],
