@@ -1,0 +1,49 @@
+{
+  "mcpServers": {
+    "mongodb-mcp-server": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@smithery/cli@latest",
+        "run",
+        "@mongodb-js/mongodb-mcp-server",
+        "--key",
+        "50e75f74-3577-4acf-84b3-06e40aadf700",
+        "--profile",
+        "voluntary-eel-Z88r31"
+      ]
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },    
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ]
+    },
+    "task-master-ai": {
+      "command": "npx",
+      "args": ["-y", "--package=task-master-ai", "task-master-ai"],
+      "env": {
+        "ANTHROPIC_API_KEY": "YOUR_ANTHROPIC_API_KEY_HERE",
+        "PERPLEXITY_API_KEY": "YOUR_PERPLEXITY_API_KEY_HERE",
+        "OPENAI_API_KEY": "YOUR_OPENAI_KEY_HERE",
+        "GOOGLE_API_KEY": "AIzaSyBt3oGLg0g08LBxo63ptSbnxxeeI87RPtM",
+        "MISTRAL_API_KEY": "YOUR_MISTRAL_KEY_HERE",
+        "GROQ_API_KEY": "YOUR_GROQ_KEY_HERE",
+        "OPENROUTER_API_KEY": "YOUR_OPENROUTER_KEY_HERE",
+        "XAI_API_KEY": "YOUR_XAI_KEY_HERE",
+        "AZURE_OPENAI_API_KEY": "YOUR_AZURE_KEY_HERE",
+        "OLLAMA_API_KEY": "YOUR_OLLAMA_API_KEY_HERE"
+      }
+    },        
+    "context7": {
+      "httpUrl": "https://mcp.context7.com/mcp"
+    }    
+  }
+}
