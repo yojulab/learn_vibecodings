@@ -1,4 +1,5 @@
 {
+  "model": "gemini-2.5-flash",
   "mcpServers": {
     "mongodb-mcp-server": {
       "command": "npx",

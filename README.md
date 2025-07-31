@@ -1,3 +1,10 @@
+## 실행
+```bash
+~# gemini --debug --model gemini-2.5-flash
+```
+## Context
+이 프로젝트는 애자일 개발 원칙에 따라 진행되며, 기능 중심으로 요구사항을 분석하고, vibe coding을 위한 **PRD(Product Requirements Document)**를 작성합니다.
+
 ### 1차 프롬프트 (**PRD 작성 요청** )
 ```prompt
 당신은 사용자 중심의 문제 해결과 반복적 개선에 전문성을 갖춘 애자일 코치이자 개발 전문가입니다.
@@ -48,5 +55,5 @@ E2E 테스트 검증 위한 구현 및 진행
 ```
 ### 6차 프롬프트
 ```prompt
-tailwind CSS 알맞게 적용
+tailwind CSS 알맞게 적용, 화면 구성  비율은 글입력:글목록=8:2
 ```

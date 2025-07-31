@@ -13,6 +13,7 @@ sleep 2 # Give ports time to be released
 
 echo "--- Starting backend server... ---"
 cd backend
+npm run build
 npm run start &
 cd ..
 echo "Backend server started in the background."

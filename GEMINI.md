@@ -3,7 +3,8 @@
 # PRD (Product Requirements Document): Vibe Coding Blog
 
 이 문서는 'vibe coding' 블로그 프로젝트의 기능 요구사항을 정의합니다. 애자일 원칙에 따라 점진적으로 업데이트됩니다.
-
+- 기능 구현 시 보유한 MCP server 적극 활용
+- 기능 구현 후 Playwright를 이용한 E2E 테스트 작성
 ## 1. 글(Post) 관리 기능
 
 ### 1.1. 글 작성 (Create Post)
