@@ -22,7 +22,7 @@
         "dependencies": [
           1
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -35,7 +35,7 @@
         "dependencies": [
           1
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -48,7 +48,7 @@
         "dependencies": [
           3
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -56,7 +56,7 @@
             "description": "Motor AsyncIOMotorClient를 이용해 MongoDB에 비동기 연결을 설정하고 DB URI를 환경 변수로 관리합니다.",
             "dependencies": [],
             "details": "- settings.py 또는 .env 파일에 DB_URI 설정\n- motor.motor_asyncio.AsyncIOMotorClient로 연결 객체 생성\n- FastAPI 종속성(dependency)으로 등록",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -67,7 +67,7 @@
               "4.1"
             ],
             "details": "- id, title, content, category, author_id, created_at, updated_at 필드 타입 지정\n- 기본값 및 유효성 검증 로직 추가",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -78,7 +78,7 @@
               "4.2"
             ],
             "details": "- 컬렉션 이름 지정 및 가져오기\n- title, author_id 등의 필드에 인덱스 생성 코드 작성\n- unique 및 TTL 인덱스 옵션 예시 추가",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -89,7 +89,7 @@
               "4.3"
             ],
             "details": "- insert_one 후 find_one으로 데이터 확인\n- 잘못된 데이터 입력 시 ValidationError 발생 여부 테스트\n- pytest 또는 별도 스크립트 형태로 구현",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           }
         ]
@@ -104,7 +104,7 @@
         "dependencies": [
           4
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -112,7 +112,7 @@
             "description": "/posts 라우터 생성 및 FastAPI 앱에 등록하고 DB 연결 설정",
             "dependencies": [],
             "details": "/posts 라우터 생성 및 include_router, Motor DB 클라이언트 주입",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -123,7 +123,7 @@
               "5.1"
             ],
             "details": "GET /posts: 모든 게시글 조회, GET /posts/{id}: 단일 조회 및 존재하지 않을 시 HTTPException 404 반환",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -134,7 +134,7 @@
               "5.1"
             ],
             "details": "Pydantic 모델로 요청 본문 검증 후 insert_one 수행, 생성 성공 시 201 상태 코드 반환",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -146,7 +146,7 @@
               "5.2"
             ],
             "details": "존재 여부 확인 후 update_one 수행, 업데이트 없을 시 404 예외, 성공 시 200 반환",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -158,7 +158,7 @@
               "5.2"
             ],
             "details": "존재 여부 확인 후 delete_one 수행, 삭제 없을 시 404 예외, 성공 시 204 상태 코드 반환",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           }
         ]
@@ -174,7 +174,7 @@
           2,
           5
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -182,7 +182,7 @@
             "description": "baseURL과 timeout이 설정된 axios 인스턴스를 생성합니다.",
             "dependencies": [],
             "details": "src/api/posts.js 파일을 생성하고 axios.create를 사용해 baseURL 및 timeout 등 공통 옵션을 설정합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -193,7 +193,7 @@
               "6.1"
             ],
             "details": "각 메서드에서 올바른 HTTP 메서드, URL, 요청/응답 처리 로직을 작성하고 Promise를 반환하도록 구성합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -204,7 +204,7 @@
               "6.1"
             ],
             "details": "request/response 인터셉터를 추가해 HTTP 상태 코드별 에러 메시지 로깅 및 예외 처리를 구현합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -216,7 +216,7 @@
               "6.3"
             ],
             "details": "각 CRUD 메서드 호출 시 요청 URL, 메서드, 페이로드, 응답값을 검증하는 단위 테스트를 구현합니다.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           }
         ]
@@ -231,7 +231,7 @@
         "dependencies": [
           6
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -239,7 +239,7 @@
             "description": "Vue SFC 파일 생성 및 기본 구조 구성",
             "dependencies": [],
             "details": "프로젝트 내 components 폴더에 ListView.vue, DetailView.vue, PostForm.vue 파일 생성하고 TailwindCSS 기본 import 설정",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -250,7 +250,7 @@
               "7.1"
             ],
             "details": "게시글 데이터를 props로 받도록 설정하고, v-for로 카드 리스트 렌더링. 카테고리 드롭다운 선택 시 필터링 로직 추가",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -261,7 +261,7 @@
               "7.1"
             ],
             "details": "props로 전달된 제목, 작성일, 내용을 화면에 표시. slot 또는 v-html로 콘텐츠 마크업 처리",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -272,7 +272,7 @@
               "7.1"
             ],
             "details": "title, content 입력 폼 및 category 드롭다운 생성. 제출 시 submit 이벤트 emit 구현",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -285,7 +285,7 @@
               "7.4"
             ],
             "details": "TailwindCSS breakpoints로 레이아웃 조정. @vue/test-utils로 props 렌더링, emit 이벤트, Tailwind 클래스 존재 여부 테스트 코드 작성",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           }
         ]
@@ -334,7 +334,7 @@
     ],
     "metadata": {
       "created": "2025-07-31T08:12:18.104Z",
-      "updated": "2025-07-31T08:53:28.647Z",
+      "updated": "2025-07-31T09:28:55.877Z",
       "description": "Tasks for master context"
     }
   }
