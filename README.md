@@ -1,4 +1,8 @@
 # learn_vibecodings
+- docker 설치 확인
+```bash
+~$ python ./codes/mongo_test.py
+```
 
 ## 프로젝트 목적
 
