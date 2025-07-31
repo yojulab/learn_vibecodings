@@ -1,4 +1,4 @@
-FROM node:24.2-bookworm
+FROM mcr.microsoft.com/playwright:v1.54.0-noble
 
 # Install necessary tools
 RUN apt-get update && apt-get install -y \
@@ -15,6 +15,7 @@ RUN npm install -g task-master-ai
 # Install any CLI
 RUN npm install -g @google/gemini-cli
 RUN npm install -g @anthropic-ai/claude-code
+RUN npx playwright install chromium
 
 # Set working directory
 WORKDIR /apps
