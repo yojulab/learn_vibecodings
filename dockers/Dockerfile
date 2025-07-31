@@ -28,3 +28,5 @@ ENV GITHUB_PAT=${GITHUB_PAT}
 RUN git clone https://github.com/yojulab/learn_vibecodings.git learn_vibecodings
 
 WORKDIR /apps/learn_vibecodings
+
+# rm -rf .git
