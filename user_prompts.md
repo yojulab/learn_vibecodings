@@ -1,0 +1,4 @@
+- `task-master-ai MCP 사용해 @.taskmaster/docs/prd.txt 에 대한 tasks 작성`
+- `task 1은 넘어가고 task 2, 3 진행하고 각 서버 테스트 위한 @restart-server.sh 에 새로 작성`
+- `지금까지 사용한 프롬프트 명령어 md 형식  파일에 저장`
+- `사용자자 입력한 프롬프트만 파일에 저장`

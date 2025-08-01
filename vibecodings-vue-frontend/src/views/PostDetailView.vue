@@ -1,60 +1,81 @@
+<script setup>
+import { ref, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import api, { deletePost } from '../services/api'
+import { marked } from 'marked'
+
+const route = useRoute()
+const router = useRouter()
+const post = ref(null)
+const loading = ref(true)
+const error = ref(null)
+
+const renderedContent = ref('')
+
+const handleDelete = async () => {
+  if (confirm('Are you sure you want to delete this post?')) {
+    try {
+      await deletePost(post.value.id)
+      router.push({ name: 'PostList' })
+    } catch (err) {
+      error.value = 'Failed to delete post.'
+      console.error(err)
+    }
+  }
+}
+
+const fetchPost = async (id) => {
+  loading.value = true
+  error.value = null
+  try {
+    const response = await api.get(`/posts/${id}`)
+    post.value = response.data
+    renderedContent.value = marked(post.value.content) // Render markdown
+  } catch (err) {
+    error.value = 'Failed to fetch post.'
+    console.error(err)
+    // Redirect to 404 or list if post not found
+    router.push({ name: 'PostList' })
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  fetchPost(route.params.id)
+})
+
+watch(() => route.params.id, (newId) => {
+  if (newId) {
+    fetchPost(newId)
+  }
+})
+</script>
+
 <template>
   <div class="container mx-auto p-4">
-    <div v-if="loading">Loading...</div>
-    <div v-if="error" class="text-red-500">{{ error }}</div>
-    <div v-if="post">
-      <h1 class="text-4xl font-bold mb-2">{{ post.title }}</h1>
-      <p class="text-gray-500 mb-4">Category: {{ post.category }}</p>
-      <div class="prose max-w-none">
-        {{ post.content }}
-      </div>
-      <div class="mt-8">
-        <router-link :to="{ name: 'PostEdit', params: { id: post._id } }" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+    <div v-if="loading" class="text-center text-gray-500">Loading post...</div>
+    <div v-else-if="error" class="text-center text-red-500">{{ error }}</div>
+    <div v-else-if="post" class="bg-white p-8 rounded-lg shadow-md">
+      <h1 class="text-4xl font-extrabold mb-4 text-gray-900">{{ post.title }}</h1>
+      <p class="text-sm text-gray-500 mb-6">
+        By {{ post.author_id }} on {{ new Date(post.created_at).toLocaleDateString() }}
+      </p>
+      <div class="prose lg:prose-lg max-w-none mb-8 text-gray-800" v-html="renderedContent"></div>
+      <div class="flex space-x-4">
+        <router-link :to="{ name: 'PostEdit', params: { id: post.id } }" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
           Edit
         </router-link>
-        <button @click="deleteCurrentPost" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ml-2">
+        <button @click="handleDelete" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
           Delete
         </button>
       </div>
     </div>
+    <div v-else class="text-center text-gray-500">Post not found.</div>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { postsApi, type Post } from '@/api/posts';
 
-const route = useRoute();
-const router = useRouter();
-const post = ref<Post | null>(null);
-const loading = ref(true);
-const error = ref<string | null>(null);
-
-const postId = route.params.id as string;
-
-onMounted(async () => {
-  try {
-    const response = await postsApi.getPost(postId);
-    post.value = response.data;
-  } catch (err) {
-    error.value = 'Failed to fetch post.';
-    console.error(err);
-  } finally {
-    loading.value = false;
-  }
-});
-
-async function deleteCurrentPost() {
-  if (!post.value) return;
-  if (confirm('Are you sure you want to delete this post?')) {
-    try {
-      await postsApi.deletePost(post.value._id);
-      router.push({ name: 'PostList' });
-    } catch (err) {
-      error.value = 'Failed to delete post.';
-      console.error(err);
-    }
-  }
-}
-</script>
+<style scoped>
+/* Component-specific styles */
+</style>

@@ -17,6 +17,20 @@ stop_servers() {
     sleep 2
 }
 
+test_servers() {
+    echo "Testing backend server..."
+    curl -s http://localhost:8000/ && echo "Backend root endpoint OK."
+    curl -s http://localhost:8000/health && echo "Backend health endpoint OK."
+
+    echo "Testing frontend server..."
+    if pgrep -f "vite" > /dev/null
+    then
+        echo "Frontend server (vite) is running."
+    else
+        echo "Frontend server (vite) is NOT running."
+    fi
+}
+
 start_servers() {
     echo "Starting servers in background..."
 
@@ -51,8 +65,11 @@ case "$ACTION" in
         stop_servers
         start_servers
         ;;
+    test)
+        test_servers
+        ;;
     *)
-        echo "Usage: $0 {start|stop|restart}"
+        echo "Usage: $0 {start|stop|restart|test}"
         exit 1
         ;;
 esac

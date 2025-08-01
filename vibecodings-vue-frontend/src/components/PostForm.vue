@@ -1,52 +1,57 @@
+<script setup>
+import { ref, watch } from 'vue'
+import VueSimplemde from 'vue-simplemde'
+import 'simplemde/dist/simplemde.min.css'
+
+const props = defineProps({
+  initialTitle: { type: String, default: '' },
+  initialContent: { type: String, default: '' },
+})
+
+const emits = defineEmits(['submit'])
+
+const title = ref(props.initialTitle)
+const content = ref(props.initialContent)
+
+watch(() => props.initialTitle, (newVal) => {
+  title.value = newVal
+})
+
+watch(() => props.initialContent, (newVal) => {
+  content.value = newVal
+})
+
+const handleSubmit = () => {
+  emits('submit', { title: title.value, content: content.value, author_id: 'temp_author' }) // TODO: Replace temp_author with actual author_id from auth system
+}
+</script>
+
 <template>
-  <form @submit.prevent="handleSubmit" class="space-y-4">
-    <div>
-      <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
-      <input type="text" id="title" v-model="editablePost.title" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+  <form @submit.prevent="handleSubmit" class="bg-white p-6 rounded-lg shadow-md">
+    <div class="mb-4">
+      <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Title:</label>
+      <input
+        type="text"
+        id="title"
+        v-model="title"
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        required
+      />
     </div>
-    <div>
-      <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
-      <input type="text" id="category" v-model="editablePost.category" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+    <div class="mb-6">
+      <label for="content" class="block text-gray-700 text-sm font-bold mb-2">Content:</label>
+      <VueSimplemde v-model="content" ref="markdownEditor" />
     </div>
-    <div>
-      <label for="content" class="block text-sm font-medium text-gray-700">Content</label>
-      <textarea id="content" v-model="editablePost.content" required rows="10" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></textarea>
-    </div>
-    <div>
-      <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-        {{ post ? 'Update' : 'Create' }} Post
-      </button>
-    </div>
+    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      Submit
+    </button>
   </form>
 </template>
 
-<script setup lang="ts">
-import { ref, watch } from 'vue';
-import type { Post, PostCreate, PostUpdate } from '@/api/posts';
+<style scoped>
+/* Component-specific styles */
+</style>
 
-const props = defineProps<{
-  post?: Post | null;
-}>();
-
-const emit = defineEmits<{
-  (e: 'submit', data: PostCreate | PostUpdate): void;
-}>();
-
-const editablePost = ref<PostCreate | PostUpdate>({
-  title: '',
-  content: '',
-  category: '',
-});
-
-watch(() => props.post, (newPost) => {
-  if (newPost) {
-    editablePost.value = { ...newPost };
-  } else {
-    editablePost.value = { title: '', content: '', category: '' };
-  }
-}, { immediate: true });
-
-function handleSubmit() {
-  emit('submit', editablePost.value);
-}
-</script>
+<style scoped>
+/* Component-specific styles */
+</style>
