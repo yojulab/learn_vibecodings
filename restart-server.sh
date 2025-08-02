@@ -1,30 +1,27 @@
 #!/bin/bash
 
-# 스크립트가 있는 디렉토리에서 실행되도록 보장합니다.
+# Ensure the script is run from its directory
 cd "$(dirname "$0")"
 
-# 함수 정의
+# Function definitions
 stop_servers() {
     echo "Stopping existing servers..."
-    # 백엔드 서버 (uvicorn) 종료
-    pkill -f "uvicorn main:app"
-    echo "Backend server (uvicorn) stop signal sent."
-
-    # 프론트엔드 서버 (vite) 종료
-    # 'npm run dev'는 vite를 실행합니다.
-    pkill -f "vite"
-    echo "Frontend server (vite) stop signal sent."
-    sleep 2
+    # Kill backend server (uvicorn)
+    pkill -f "uvicorn app.main:app" && echo "Backend server stopped." || echo "No backend server process found."
+    # Kill frontend server (vite)
+    pkill -f "npm run dev" && echo "Frontend server stopped." || echo "No frontend server process found."
 }
 
 test_servers() {
     echo "Testing backend server..."
     curl -s http://localhost:8000/ && echo "Backend root endpoint OK."
     curl -s http://localhost:8000/health && echo "Backend health endpoint OK."
+    curl -s http://localhost:8000/posts/ && echo "Backend posts endpoint OK."
+
 
     echo "Testing frontend server..."
-    if pgrep -f "vite" > /dev/null
-    then
+    # We will rely on the logs to check if the frontend server is running.
+    if grep -q "ready in" frontend.log; then
         echo "Frontend server (vite) is running."
     else
         echo "Frontend server (vite) is NOT running."
@@ -34,24 +31,24 @@ test_servers() {
 start_servers() {
     echo "Starting servers in background..."
 
-    # 백엔드 서버 시작
+    # Start backend server
     echo "Starting backend server..."
     cd backend
     nohup python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000 > ../backend.log 2>&1 &
     echo "Backend server started. PID: $!. Log: backend.log"
     cd ../
 
-    # 프론트엔드 서버 시작
+    # Start frontend server
     echo "Starting frontend server..."
-    cd vibecodings-vue-frontend
+    cd frontend
     nohup npm run dev -- --host &> ../frontend.log &
     echo "Frontend server started. PID: $!. Log: frontend.log"
 
     cd /apps/learn_vibecodings
 }
 
-# 메인 로직
-ACTION=${1:-restart} # 인자가 없으면 'restart'를 기본값으로 사용
+# Main logic
+ACTION=${1:-restart} # Default to 'restart' if no argument is given
 
 case "$ACTION" in
     start)

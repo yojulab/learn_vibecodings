@@ -9,7 +9,7 @@
         "testStrategy": "Verify that the development server runs successfully using `npm run dev`. Confirm that TailwindCSS utility classes can be applied to components and are rendered correctly in the browser.",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -17,7 +17,7 @@
             "description": "Create a new React project using the Vite build tool to establish the basic project structure and development server.",
             "dependencies": [],
             "details": "Use the command `npm create vite@latest` to scaffold a new React project. Select the 'React' framework and 'JavaScript' or 'TypeScript' variant. After creation, navigate into the project directory and run `npm install` to install the initial dependencies.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run `npm run dev` and verify that the default Vite + React application loads successfully in the browser at the provided local address."
           },
           {
@@ -26,7 +26,7 @@
             "description": "Install and configure TailwindCSS for utility-first styling within the Vite project.",
             "dependencies": [],
             "details": "Follow the official TailwindCSS guide for Vite. This involves installing `tailwindcss`, `postcss`, and `autoprefixer` as dev dependencies. Generate `tailwind.config.js` and `postcss.config.js` files. Configure the `content` property in `tailwind.config.js` to scan all relevant project files for classes. Add the `@tailwind` directives to the main CSS file.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Apply a TailwindCSS utility class (e.g., `bg-blue-500`, `text-3xl`) to the main `App` component. Run the development server and confirm that the styles are correctly applied and rendered in the browser."
           },
           {
@@ -35,7 +35,7 @@
             "description": "Install and configure ESLint to enforce consistent code quality and catch common errors during development.",
             "dependencies": [],
             "details": "Install ESLint and relevant plugins for React (e.g., `eslint-plugin-react`, `eslint-plugin-react-hooks`, `eslint-plugin-jsx-a11y`). Create an `.eslintrc.cjs` configuration file and extend it with recommended rule sets like `eslint:recommended` and `plugin:react/recommended`.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Add a line of code that violates a configured ESLint rule, such as declaring an unused variable. Run the lint command (e.g., `npm run lint` or `npx eslint .`) and verify that the linter reports the expected error in the console."
           },
           {
@@ -44,7 +44,7 @@
             "description": "Install and configure Prettier to automatically format code, ensuring a consistent style across the entire codebase.",
             "dependencies": [],
             "details": "Install `prettier` as a dev dependency. Create a `.prettierrc` configuration file to define project-wide formatting rules (e.g., `tabWidth`, `semi`, `singleQuote`). Create a `.prettierignore` file to exclude specific files and directories (like `node_modules` or `dist`) from formatting.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Intentionally misformat a component file with inconsistent indentation and spacing. Run the Prettier format command (e.g., `npx prettier --write .`) and verify that the file is automatically reformatted according to the rules defined in `.prettierrc`."
           },
           {
@@ -53,7 +53,7 @@
             "description": "Configure ESLint and Prettier to work together seamlessly, preventing conflicts between linting and formatting rules.",
             "dependencies": [],
             "details": "Install `eslint-config-prettier` as a dev dependency. This package turns off all ESLint rules that are unnecessary or might conflict with Prettier. Add `prettier` to the `extends` array in the `.eslintrc.cjs` configuration file, ensuring it is the last item in the array to override other configs.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify that running the linter does not report formatting issues that Prettier would fix. Confirm that running the formatter does not introduce new linting errors. Both tools should work in harmony."
           }
         ]
@@ -66,7 +66,7 @@
         "testStrategy": "Run the FastAPI server using Uvicorn and ensure it starts without errors. Access the root endpoint in a browser or with curl to verify it returns a successful response.",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -74,7 +74,7 @@
             "description": "Set up the project directory, create a Python virtual environment, and install FastAPI, Pydantic v2, and Uvicorn.",
             "dependencies": [],
             "details": "Create a project folder, initialize a virtual environment (e.g., using `python -m venv venv`), and activate it. Create a `requirements.txt` file listing `fastapi`, `pydantic>=2.0`, and `uvicorn[standard]`, then install them using `pip install -r requirements.txt`.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Activate the virtual environment and run `pip freeze`. Verify that fastapi, pydantic, and uvicorn are listed with the correct versions."
           },
           {
@@ -85,7 +85,7 @@
               "2.1"
             ],
             "details": "Inside the root project directory, create a source folder (e.g., `app/`). Within `app/`, create subdirectories: `routes/`, `models/`, and `services/`. Add an empty `__init__.py` file to each of these subdirectories to make them importable Python packages.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Confirm the existence of the following directory structure: `app/`, `app/routes/`, `app/models/`, `app/services/`. Ensure all necessary `__init__.py` files are present."
           },
           {
@@ -96,7 +96,7 @@
               "2.2"
             ],
             "details": "In the `app/` directory, create a `main.py` file. Import `FastAPI` and instantiate the application: `app = FastAPI()`. Add a root GET endpoint (`@app.get(\"/\")`) that returns a simple JSON response, such as `{\"status\": \"ok\"}`.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run the application using `uvicorn app.main:app --reload` from the project root. Access `http://127.0.0.1:8000` in a browser or with `curl` and verify it returns `{\"status\": \"ok\"}`."
           },
           {
@@ -107,7 +107,7 @@
               "2.2"
             ],
             "details": "In the `app/models/` directory, create a `post.py` file. Define a `PostBase` Pydantic model with essential fields like `title: str` and `content: str`. This will serve as a base for create, update, and read schemas.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Ensure the `app/models/post.py` file is free of syntax errors and that the Pydantic model can be imported into other parts of the application without issues."
           },
           {
@@ -118,7 +118,7 @@
               "2.3"
             ],
             "details": "In `app/routes/`, create a `posts.py` file. Import `APIRouter` from FastAPI and create a new router instance. Add a placeholder endpoint, for example, a `GET /` on the router that returns an empty list. In `app/main.py`, import the new router and include it in the main app using `app.include_router(posts_router, prefix=\"/posts\", tags=[\"posts\"])`.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run the Uvicorn server. Access the auto-generated docs at `http://127.0.0.1:8000/docs`. Verify that the 'posts' tag and the placeholder endpoint under `/posts` are visible and executable."
           }
         ]
@@ -1013,7 +1013,7 @@
     ],
     "metadata": {
       "created": "2025-08-02T04:41:42.820Z",
-      "updated": "2025-08-02T04:41:42.820Z",
+      "updated": "2025-08-02T05:11:39.114Z",
       "description": "Tasks for master context"
     }
   }
