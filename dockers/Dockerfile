@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     net-tools \
     gnupg \
     wget \
+    procps \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js (v22 LTS) and npm
