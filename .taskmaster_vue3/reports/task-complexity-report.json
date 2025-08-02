@@ -1,0 +1,189 @@
+{
+	"meta": {
+		"generatedAt": "2025-08-02T04:25:16.473Z",
+		"tasksAnalyzed": 22,
+		"totalTasks": 49,
+		"analysisCount": 22,
+		"thresholdScore": 5,
+		"projectName": "Taskmaster",
+		"usedResearch": true
+	},
+	"complexityAnalysis": [
+		{
+			"taskId": 28,
+			"taskTitle": "Setup Frontend Environment",
+			"complexityScore": 3,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Expand the task 'Setup Frontend Environment' into subtasks. The subtasks should cover initializing the Vite+React project, installing and configuring TailwindCSS and its dependencies (PostCSS, Autoprefixer), and creating a simple test component to verify that the dev server runs and Tailwind classes are applied correctly.",
+			"reasoning": "This is a standard setup task with clear, well-documented steps. It involves running initializers and configuring a few files. The complexity is low as it doesn't require novel problem-solving."
+		},
+		{
+			"taskId": 29,
+			"taskTitle": "Setup Backend Environment",
+			"complexityScore": 2,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Expand the task 'Setup Backend Environment' into subtasks. The subtasks should include creating a Python virtual environment, installing FastAPI, Uvicorn, and Pydantic, creating the main application file with a root endpoint, and defining a basic project folder structure.",
+			"reasoning": "This is a foundational setup task following a standard tutorial pattern. It involves installing packages and creating a minimal 'hello world' application file. The steps are straightforward and quick to execute."
+		},
+		{
+			"taskId": 30,
+			"taskTitle": "Establish MongoDB Connection and Define Post Model",
+			"complexityScore": 4,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Expand the task 'Establish MongoDB Connection and Define Post Model'. Subtasks should cover installing the `motor` library, creating a database connection module that reads the connection string from environment variables, defining the `Post` Pydantic model with all specified fields, and implementing a startup event to test the connection.",
+			"reasoning": "This task introduces an external dependency (the database) and state management (the connection pool). It requires careful configuration, including handling secrets, and defining a data schema in code that must match business requirements."
+		},
+		{
+			"taskId": 31,
+			"taskTitle": "Implement `POST /posts` Endpoint",
+			"complexityScore": 5,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Expand the task 'Implement `POST /posts` Endpoint'. The subtasks should detail creating the API route, defining the request body model, implementing the logic to save the validated data to MongoDB, returning the created post with a 201 status code, and handling potential database errors.",
+			"reasoning": "This is a standard but crucial CRUD operation. It involves coordinating multiple components: the API framework (FastAPI), the data model (Pydantic), and the database driver. It requires careful implementation of the business logic for creating a new resource."
+		},
+		{
+			"taskId": 32,
+			"taskTitle": "Implement `GET /posts` and `GET /posts/{id}` Endpoints",
+			"complexityScore": 5,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand the task 'Implement `GET /posts` and `GET /posts/{id}` Endpoints'. Create separate subtasks for implementing the list endpoint (`GET /posts`), adding category filtering to it, implementing the detail endpoint (`GET /posts/{id}`), ensuring proper 404 error handling for non-existent IDs, and writing tests for all cases.",
+			"reasoning": "This task covers two distinct but related read operations. It involves database querying, list serialization, single-item retrieval, and specific error handling (404). The addition of filtering logic adds a layer of complexity over a simple 'get all'."
+		},
+		{
+			"taskId": 33,
+			"taskTitle": "Implement `PUT /posts/{id}` Endpoint",
+			"complexityScore": 5,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Expand the task 'Implement `PUT /posts/{id}` Endpoint'. Subtasks should cover creating the API route, implementing the logic to fetch the existing post by ID, applying the updates from the request payload, saving the changes to the database, and returning the updated document. Include error handling for posts that are not found.",
+			"reasoning": "This update operation combines retrieval and modification. It requires handling the path parameter, validating the incoming payload, finding the correct document in the database, applying the update, and handling the 'not found' error case."
+		},
+		{
+			"taskId": 34,
+			"taskTitle": "Implement `DELETE /posts/{id}` Endpoint",
+			"complexityScore": 4,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Expand the task 'Implement `DELETE /posts/{id}` Endpoint'. The subtasks should include creating the API route, implementing the logic to find and delete the post from MongoDB by its ID, ensuring the endpoint returns a 204 No Content response on success, and testing both successful deletion and attempts to delete a non-existent post.",
+			"reasoning": "This is a destructive operation that is typically simpler than creation or update. The core logic is to find a document and remove it. The complexity lies in ensuring correct HTTP semantics (like returning a 204 status) and handling the case where the target resource doesn't exist."
+		},
+		{
+			"taskId": 35,
+			"taskTitle": "Configure Auto-generated API Documentation",
+			"complexityScore": 3,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Expand the task 'Configure Auto-generated API Documentation'. The subtasks should involve reviewing the current state of the `/docs` page, then systematically adding `summary`, `description`, and `response_description` parameters to all existing API endpoint decorators, and adding `Field` examples to the Pydantic models to improve clarity.",
+			"reasoning": "The core functionality is provided automatically by FastAPI. This task is about enhancing the generated output by adding descriptive metadata. It's low complexity because it doesn't involve writing new logic, but rather annotating existing code."
+		},
+		{
+			"taskId": 36,
+			"taskTitle": "Implement Post Creation/Edit Form Component",
+			"complexityScore": 5,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand the task 'Implement Post Creation/Edit Form Component'. Subtasks should cover creating the component with TailwindCSS for styling, adding controlled inputs for title, content, and category, managing the form's data in state, and handling the `onSubmit` event to pass the form data to a parent component. The component should also accept initial data via props for the 'edit' mode.",
+			"reasoning": "This task involves creating a core UI component with internal state management. It requires knowledge of React hooks, event handling, and component composition to make it reusable for both 'create' and 'edit' scenarios."
+		},
+		{
+			"taskId": 37,
+			"taskTitle": "Implement Post List View Component",
+			"complexityScore": 4,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Expand the task 'Implement Post List View Component'. Subtasks should include creating the main component structure, designing a 'PostListItem' child component to display a post's title and summary, using `map` to render a list of these items from mock data passed as props, and adding a styled dropdown for category filtering.",
+			"reasoning": "This is a standard 'list view' component. The primary task is rendering a collection of data. The complexity is moderate because it involves structuring the list and including interactive elements, but it doesn't yet include data fetching logic."
+		},
+		{
+			"taskId": 38,
+			"taskTitle": "Implement Individual Post Detail View Component",
+			"complexityScore": 4,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Expand the task 'Implement Individual Post Detail View Component'. Subtasks should cover creating the component layout to display a post's title, full content, category, and timestamps. Also, include the addition of 'Edit' and 'Delete' buttons. The component should receive the post data via props and be tested with a mock object.",
+			"reasoning": "This is a straightforward presentation component. Its main job is to display the fields of a data object. The complexity is low-to-medium, involving layout and placeholder action buttons, but no complex state management is required at this stage."
+		},
+		{
+			"taskId": 39,
+			"taskTitle": "Connect Create/Update Form to Backend APIs",
+			"complexityScore": 7,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand the task 'Connect Create/Update Form to Backend APIs'. Subtasks should include setting up React Query, creating a mutation hook for the `POST /posts` endpoint, creating another mutation hook for the `PUT /posts/{id}` endpoint, modifying the form's `onSubmit` handler to trigger the correct mutation, and implementing UI feedback for loading and error states.",
+			"reasoning": "This task has high complexity because it bridges the frontend and backend. It requires managing asynchronous operations, handling various states (loading, error), and implementing conditional logic to differentiate between creating and updating. Using a library like React Query adds its own setup."
+		},
+		{
+			"taskId": 40,
+			"taskTitle": "Connect Post List View to `GET /posts` API",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Expand the task 'Connect Post List View to `GET /posts` API'. Subtasks should cover using React Query's `useQuery` to fetch data from the `/posts` endpoint, updating the component to render the fetched data instead of mock data, adding logic to pass the selected category to the query, and displaying a loading state while fetching.",
+			"reasoning": "This task moves the component from static to dynamic. It requires implementing asynchronous data fetching, managing state based on the API response (loading, data, error), and adding interactive logic for the filter to trigger a new API call."
+		},
+		{
+			"taskId": 41,
+			"taskTitle": "Connect Post Detail View to `GET /posts/{id}` API",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Expand the task 'Connect Post Detail View to `GET /posts/{id}` API'. Subtasks should include using a router hook (e.g., `useParams`) to extract the post ID from the URL, using `useQuery` with the ID to fetch data from `/posts/{id}`, displaying the fetched data, and implementing UI for loading and error states, with special handling for a 'Not Found' response.",
+			"reasoning": "This task involves integration between the router (to get the ID) and the data fetching layer. It requires handling a dynamic parameter in the API call and correctly interpreting API responses, including success and specific errors like 404 Not Found."
+		},
+		{
+			"taskId": 42,
+			"taskTitle": "Implement Delete Functionality in UI",
+			"complexityScore": 6,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand the task 'Implement Delete Functionality in UI'. Subtasks should cover creating a mutation for the `DELETE /posts/{id}` endpoint, adding a confirmation dialog before deleting, triggering the mutation from the 'Delete' button's click handler, and upon success, invalidating the post list query in React Query and redirecting the user.",
+			"reasoning": "This task is more than just an API call; it involves user experience elements like confirmation and application state management. The need to invalidate the cache of another query to ensure UI consistency adds a layer of complexity."
+		},
+		{
+			"taskId": 43,
+			"taskTitle": "Refine Responsive Design",
+			"complexityScore": 7,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand the task 'Refine Responsive Design'. Create subtasks for each major view: Post List, Post Detail, and the Create/Edit Form. Each subtask should focus on applying TailwindCSS responsive breakpoints to ensure the layout, typography, and interactive elements are optimized for mobile, tablet, and desktop views. Include a final subtask for comprehensive testing across all views.",
+			"reasoning": "High complexity due to its wide scope, affecting the entire frontend. It's not about writing complex algorithms, but about meticulous, detailed adjustments across many files and thorough manual testing to ensure a consistent user experience on all devices."
+		},
+		{
+			"taskId": 44,
+			"taskTitle": "Implement UI Loading and Feedback States",
+			"complexityScore": 6,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand the task 'Implement UI Loading and Feedback States'. Subtasks should include adding skeleton loading components for list and detail views, disabling form buttons and showing a spinner during submission, and implementing a global toast/notification system to show success or error messages after any API mutation (create, update, delete).",
+			"reasoning": "This task's complexity comes from its breadth and the need for a consistent implementation pattern across the application. While the logic for each individual state is simple, applying it everywhere and ensuring it's effective requires careful work."
+		},
+		{
+			"taskId": 45,
+			"taskTitle": "Add Form Validation",
+			"complexityScore": 6,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand the task 'Add Form Validation'. Create subtasks for implementing client-side validation to check for required fields before submission. Also, create subtasks to ensure the FastAPI backend returns a 422 error for invalid data, and to update the frontend form to catch this error and display the specific validation messages to the user.",
+			"reasoning": "This task requires work on both the frontend and backend. While Pydantic simplifies server-side validation, implementing robust client-side validation and gracefully handling/displaying server-side errors on the form adds significant complexity."
+		},
+		{
+			"taskId": 46,
+			"taskTitle": "Refactor Frontend Components for Reusability",
+			"complexityScore": 7,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand the task 'Refactor Frontend Components for Reusability'. The subtasks should focus on identifying repeated UI elements like buttons, form inputs, and content cards. Then, create subtasks for extracting each of these into its own generic, reusable component. A final subtask should cover replacing the original implementations with these new components throughout the application.",
+			"reasoning": "This task is complex because it involves architectural decisions and can have wide-ranging impacts on the codebase. It requires a good understanding of React patterns to improve maintainability without introducing regressions."
+		},
+		{
+			"taskId": 47,
+			"taskTitle": "Add Unit and Integration Tests for Backend",
+			"complexityScore": 8,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Expand the task 'Add Unit and Integration Tests for Backend'. Create subtasks for setting up the `pytest` environment with a test database. Then, create separate subtasks for writing integration tests for each CRUD endpoint (`POST`, `GET`, `PUT`, `DELETE`), ensuring tests cover success cases, invalid input (e.g., 422), and not-found errors (404). Include a subtask for measuring test coverage.",
+			"reasoning": "High complexity due to the scope and meticulous nature of writing good tests. It requires a different mindset from feature development, focusing on edge cases, error conditions, and setting up isolated test environments. Achieving good coverage is time-consuming."
+		},
+		{
+			"taskId": 48,
+			"taskTitle": "Add Component Tests for Frontend",
+			"complexityScore": 7,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Expand the task 'Add Component Tests for Frontend'. Subtasks should include configuring Vitest and React Testing Library. Then, create subtasks to write tests for the `PostForm` component (verifying it renders and handles user input) and the `PostList` component (verifying it renders a list from props). Include a subtask for setting up a mock service worker to test components that fetch data.",
+			"reasoning": "This task is complex because it requires specialized tools and techniques for testing UI components in a simulated environment. Writing meaningful tests that check behavior rather than implementation details, and effectively mocking dependencies like API calls, is a non-trivial skill."
+		},
+		{
+			"taskId": 49,
+			"taskTitle": "Configure CORS and Environment Variables",
+			"complexityScore": 4,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Expand the task 'Configure CORS and Environment Variables'. Subtasks should include implementing `python-dotenv` in the FastAPI app to load a `.env` file, moving the MongoDB connection string into this file, adding and configuring FastAPI's `CORSMiddleware` to allow requests from the frontend's development server origin, and verifying the full-stack application works.",
+			"reasoning": "This task has moderate complexity. The code changes are small, but the concepts (CORS, environment management) are critical infrastructure concerns. It requires careful configuration and testing to ensure the two separate applications can communicate securely."
+		}
+	]
+}

@@ -1809,11 +1809,310 @@
             "testStrategy": "Create a new post using the Markdown editor with various Markdown elements (headers, lists, bold, italics, code blocks, links). Save the post. Navigate to the post detail page and visually verify that all Markdown elements are correctly rendered as HTML."
           }
         ]
+      },
+      {
+        "id": 28,
+        "title": "Setup Frontend Environment",
+        "description": "Initialize a new React project using Vite and configure TailwindCSS for styling.",
+        "details": "Create the project structure, install necessary dependencies (React, Vite, TailwindCSS, PostCSS, Autoprefixer), and configure `tailwind.config.js` and `postcss.config.js`. Ensure the development server runs with Hot Module Replacement (HMR).",
+        "testStrategy": "Verify that the Vite development server starts successfully and that TailwindCSS utility classes can be applied to components and are reflected in the browser.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 29,
+        "title": "Setup Backend Environment",
+        "description": "Configure a new FastAPI project with Pydantic v2 for data modeling.",
+        "details": "Set up the Python virtual environment, install FastAPI, Uvicorn, and Pydantic. Create the main application file and a basic project structure for routes, models, and services.",
+        "testStrategy": "Run the FastAPI server using Uvicorn and access the root endpoint to confirm the server is running correctly.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 30,
+        "title": "Establish MongoDB Connection and Define Post Model",
+        "description": "Connect the FastAPI application to a MongoDB database and define the `Post` data model.",
+        "details": "Use a library like `motor` or `pymongo` to establish the database connection. Define the `Post` model using Pydantic, matching the schema specified in the PRD, including fields for title, content, category, and timestamps.",
+        "testStrategy": "Write a startup event in FastAPI to test the database connection. Create a test script to insert and retrieve a document using the defined model.",
+        "priority": "high",
+        "dependencies": [
+          29
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 31,
+        "title": "Implement `POST /posts` Endpoint",
+        "description": "Create a new blog post.",
+        "details": "Develop the FastAPI endpoint to handle POST requests at `/posts`. It should accept a JSON payload matching the Post model (excluding server-generated fields like id and timestamps), validate it, and save it to MongoDB.",
+        "testStrategy": "Use an API client (like Postman or curl) or an automated test to send a valid payload to the endpoint and verify that a new document is created in the database with a 201 status code.",
+        "priority": "high",
+        "dependencies": [
+          30
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 32,
+        "title": "Implement `GET /posts` and `GET /posts/{id}` Endpoints",
+        "description": "Retrieve all posts and a single post by its ID.",
+        "details": "Implement `GET /posts` to return a list of all posts, with an optional query parameter for category filtering. Implement `GET /posts/{id}` to retrieve a specific post by its unique identifier.",
+        "testStrategy": "Test `GET /posts` to ensure it returns an array of post objects. Test the category filter. Test `GET /posts/{id}` with a valid ID to get a single post and with an invalid ID to get a 404 error.",
+        "priority": "high",
+        "dependencies": [
+          30
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 33,
+        "title": "Implement `PUT /posts/{id}` Endpoint",
+        "description": "Update an existing blog post.",
+        "details": "Develop the endpoint to handle PUT requests at `/posts/{id}`. It should accept a JSON payload with the updated post data, find the corresponding document in MongoDB, and apply the changes.",
+        "testStrategy": "Send a PUT request with updated data to an existing post's ID. Verify the response and check the database to confirm the document has been updated correctly.",
+        "priority": "high",
+        "dependencies": [
+          30
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 34,
+        "title": "Implement `DELETE /posts/{id}` Endpoint",
+        "description": "Remove a blog post from the system.",
+        "details": "Develop the endpoint to handle DELETE requests at `/posts/{id}`. It should find and remove the specified post from the MongoDB collection.",
+        "testStrategy": "Send a DELETE request to an existing post's ID. Verify the response (e.g., 204 No Content) and confirm the document has been removed from the database.",
+        "priority": "high",
+        "dependencies": [
+          30
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 35,
+        "title": "Configure Auto-generated API Documentation",
+        "description": "Ensure FastAPI's automatic Swagger/OpenAPI documentation is correctly configured and accessible.",
+        "details": "Review the auto-generated documentation at `/docs`. Add summaries, descriptions, and examples to the Pydantic models and API endpoints to make the documentation clear and useful for frontend development.",
+        "testStrategy": "Navigate to the `/docs` URL of the running FastAPI application and verify that all CRUD endpoints are listed with correct models, parameters, and response types.",
+        "priority": "high",
+        "dependencies": [
+          31,
+          32,
+          33,
+          34
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 36,
+        "title": "Implement Post Creation/Edit Form Component",
+        "description": "Build a reusable React form component for creating and editing blog posts.",
+        "details": "The form should include input fields for the post's title, a textarea for content, and a select dropdown for the category. It should manage its own state for the input values.",
+        "testStrategy": "Render the component in a test environment (e.g., Storybook or a test page). Verify that all form fields are present and that user input correctly updates the component's state.",
+        "priority": "high",
+        "dependencies": [
+          28
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 37,
+        "title": "Implement Post List View Component",
+        "description": "Build a React component to display a list of all blog posts.",
+        "details": "The component will fetch and display posts, showing the title and a brief summary for each. It should also include the category filter dropdown as specified in the PRD.",
+        "testStrategy": "Render the component with mock data. Verify that the list of posts is displayed correctly and that the category filter is present.",
+        "priority": "high",
+        "dependencies": [
+          28
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 38,
+        "title": "Implement Individual Post Detail View Component",
+        "description": "Create a React component to display the full content of a single blog post.",
+        "details": "This component will show the post's title, full content, category, and creation/update dates. It should also include 'Edit' and 'Delete' buttons for content management.",
+        "testStrategy": "Render the component with a single mock post object. Verify that all details are displayed correctly and that the action buttons are present.",
+        "priority": "high",
+        "dependencies": [
+          28
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 39,
+        "title": "Connect Create/Update Form to Backend APIs",
+        "description": "Integrate the frontend form component with the `POST /posts` and `PUT /posts/{id}` endpoints.",
+        "details": "Use a data fetching library like React Query or SWR to handle form submissions. On submit, send the form data to the appropriate backend endpoint. Handle API responses, including success and error states.",
+        "testStrategy": "Fill out and submit the form in the UI. Use browser developer tools to monitor the network request. Verify that the correct API call is made and that the UI updates appropriately upon success or failure.",
+        "priority": "high",
+        "dependencies": [
+          31,
+          33,
+          36
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 40,
+        "title": "Connect Post List View to `GET /posts` API",
+        "description": "Fetch and display real post data from the backend in the post list view.",
+        "details": "Replace mock data with a live API call to `GET /posts`. Implement the logic for the category filter to re-fetch data with the selected category query parameter.",
+        "testStrategy": "Load the post list page and verify that data from the backend is displayed. Test the category filter to ensure the list updates to show only posts from the selected category.",
+        "priority": "high",
+        "dependencies": [
+          32,
+          37
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 41,
+        "title": "Connect Post Detail View to `GET /posts/{id}` API",
+        "description": "Fetch and display a single post's data from the backend.",
+        "details": "When a user navigates to a post's detail page, use the post ID from the URL to call the `GET /posts/{id}` endpoint and display the returned data.",
+        "testStrategy": "Navigate to a post detail page and verify that the correct post content is fetched from the API and rendered. Test with an invalid ID to ensure an error state (e.g., 'Post not found') is handled.",
+        "priority": "high",
+        "dependencies": [
+          32,
+          38
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 42,
+        "title": "Implement Delete Functionality in UI",
+        "description": "Connect the 'Delete' button in the post detail view to the `DELETE /posts/{id}` API.",
+        "details": "Add an onClick handler to the delete button that prompts the user for confirmation and then sends a request to the DELETE endpoint. Upon success, redirect the user back to the post list.",
+        "testStrategy": "Click the delete button on a post, confirm the action, and verify that the API call is made. Check that the user is redirected and the post is no longer visible in the list.",
+        "priority": "high",
+        "dependencies": [
+          34,
+          38
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 43,
+        "title": "Refine Responsive Design",
+        "description": "Ensure all UI components and views are fully responsive and usable on mobile, tablet, and desktop screens.",
+        "details": "Use TailwindCSS's responsive breakpoints to adjust layouts, font sizes, and spacing. Test all user flows on different device sizes to ensure a consistent and accessible experience.",
+        "testStrategy": "Use browser developer tools to simulate various screen sizes (e.g., iPhone, iPad, desktop). Manually test all pages and interactions to identify and fix any layout or usability issues.",
+        "priority": "medium",
+        "dependencies": [
+          39,
+          40,
+          41,
+          42
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 44,
+        "title": "Implement UI Loading and Feedback States",
+        "description": "Add loading indicators and user feedback mechanisms for all asynchronous operations.",
+        "details": "Show loading spinners or skeleton screens while data is being fetched. Display success or error messages (e.g., toasts) after form submissions or other API interactions. Disable submit buttons during submission to prevent duplicates.",
+        "testStrategy": "Manually trigger API calls and use network throttling in browser dev tools to verify that loading states are displayed correctly. Test error scenarios to ensure feedback messages appear.",
+        "priority": "medium",
+        "dependencies": [
+          39,
+          40,
+          41,
+          42
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 45,
+        "title": "Add Form Validation",
+        "description": "Implement client-side and server-side validation for the post creation/editing forms.",
+        "details": "On the client-side, add validation to ensure required fields (like title and content) are not empty. On the server-side, ensure the FastAPI endpoint validates the incoming data using Pydantic to reject invalid requests.",
+        "testStrategy": "Attempt to submit the form with empty required fields and verify that client-side error messages are shown. Use an API client to send invalid data to the backend and verify that a 422 Unprocessable Entity error is returned.",
+        "priority": "medium",
+        "dependencies": [
+          39
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 46,
+        "title": "Refactor Frontend Components for Reusability",
+        "description": "Optimize the React component structure for maintainability and reusability.",
+        "details": "Identify and extract common UI elements (e.g., buttons, inputs, cards) into their own reusable components. Review the overall component hierarchy to ensure a logical and maintainable structure.",
+        "testStrategy": "Conduct a code review to identify refactoring opportunities. Ensure that after refactoring, all application features continue to work as expected.",
+        "priority": "low",
+        "dependencies": [
+          43,
+          44,
+          45
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 47,
+        "title": "Add Unit and Integration Tests for Backend",
+        "description": "Implement comprehensive testing coverage for the FastAPI backend.",
+        "details": "Write unit tests for business logic and integration tests for the API endpoints using a framework like `pytest`. Ensure tests cover success cases, edge cases, and error handling for all CRUD operations.",
+        "testStrategy": "Run the test suite and ensure all tests pass. Check the test coverage report to ensure critical code paths are covered.",
+        "priority": "low",
+        "dependencies": [
+          35
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 48,
+        "title": "Add Component Tests for Frontend",
+        "description": "Implement component tests for the React frontend using a library like Vitest or React Testing Library.",
+        "details": "Write tests for key components like the post form and post list. Tests should verify that components render correctly with given props and that user interactions trigger the expected behavior.",
+        "testStrategy": "Run the frontend test suite and ensure all tests pass. Verify that tests cover rendering logic, state changes, and event handling.",
+        "priority": "low",
+        "dependencies": [
+          46
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 49,
+        "title": "Configure CORS and Environment Variables",
+        "description": "Finalize infrastructure configuration for development and production.",
+        "details": "Configure CORS in the FastAPI application to allow requests from the frontend domain. Set up environment variable handling (e.g., using `.env` files) for sensitive information like database connection strings and for differentiating between development and production settings.",
+        "testStrategy": "Run the frontend and backend on their respective development servers and verify that there are no CORS errors. Check that the application can correctly read configuration from environment variables.",
+        "priority": "medium",
+        "dependencies": [
+          30,
+          35
+        ],
+        "status": "pending",
+        "subtasks": []
       }
     ],
     "metadata": {
       "created": "2025-08-01T05:33:32.660Z",
-      "updated": "2025-08-02T02:03:32.289Z",
+      "updated": "2025-08-02T04:22:06.387Z",
       "description": "Tasks for master context"
     }
   }
