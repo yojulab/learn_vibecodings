@@ -37,7 +37,7 @@ start_servers() {
     # 백엔드 서버 시작
     echo "Starting backend server..."
     cd backend
-    nohup uvicorn main:app --reload --host 0.0.0.0 --port 8000 > ../backend.log 2>&1 &
+    nohup python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000 > ../backend.log 2>&1 &
     echo "Backend server started. PID: $!. Log: backend.log"
     cd ../
 

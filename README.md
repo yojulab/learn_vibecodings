@@ -12,6 +12,15 @@
 ~# task-master list --with-subtasks
 ```
 
+```bash
+~backend/# python3 -m pip install --break-system-packages -r requirements.txt
+~vibe-coding/# npm install
+~# restart-server.sh restart
+~# tail -f backend.log
+~# tail -f frontend.log
+```
+
+
 ## 프롬프트 예시
 
 ### 1차 프롬프트
@@ -94,3 +103,4 @@
 - Technical specifications]
 </PRD>
 ```
+# 프로젝트 코드 작성 및 협업 규칙 (Copilot AI 참조용)
