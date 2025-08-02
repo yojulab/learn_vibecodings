@@ -1,0 +1,250 @@
+# Cursor Rules for learn_vibecodings Project
+
+## Project Overview
+This is a full-stack web application with React/Vite frontend and FastAPI backend, using MongoDB for data storage. The project follows an agile methodology with Task Master AI for project management.
+
+## Technology Stack
+
+### Frontend (React + Vite)
+- **Framework**: React 19.1.0 with Vite 7.0.4
+- **Styling**: Tailwind CSS 4.1.11 with PostCSS
+- **Routing**: React Router DOM 7.7.1
+- **Markdown**: React Markdown with MD Editor
+- **Linting**: ESLint with React plugins
+- **Package Manager**: npm
+
+### Backend (FastAPI)
+- **Framework**: FastAPI with Uvicorn
+- **Database**: MongoDB with Motor (async driver)
+- **Validation**: Pydantic v2
+- **CORS**: Enabled for frontend integration
+
+## Code Style & Conventions
+
+### Frontend (React)
+- Use functional components with hooks
+- Follow React 19 conventions and best practices
+- Use Tailwind CSS for styling with custom classes when needed
+- Implement responsive design principles
+- Use React Router for navigation
+- Structure components in `src/components/`
+- Place pages in `src/pages/`
+- Keep services in `src/services/`
+
+### Backend (FastAPI)
+- Use async/await patterns consistently
+- Implement proper error handling with HTTP status codes
+- Use Pydantic models for data validation
+- Structure routes in `app/routes/`
+- Keep models in `app/models/`
+- Place business logic in `app/services/`
+- Use dependency injection for database connections
+
+### Database (MongoDB)
+- Use Motor for async MongoDB operations
+- Connection URI: `mongodb://db_mongodb:27017/`
+- Implement proper connection lifecycle management
+- Use ObjectId for document references
+
+## File Structure Guidelines
+
+```
+/
+├── backend/
+│   ├── app/
+│   │   ├── main.py          # FastAPI app entry point
+│   │   ├── config.py        # Configuration settings
+│   │   ├── database.py      # MongoDB connection
+│   │   ├── models/          # Pydantic models
+│   │   ├── routes/          # API endpoints
+│   │   └── services/        # Business logic
+│   ├── tests/               # Test files
+│   └── requirements.txt     # Python dependencies
+├── frontend/
+│   ├── src/
+│   │   ├── components/      # Reusable components
+│   │   ├── pages/           # Page components
+│   │   ├── services/        # API calls
+│   │   ├── assets/          # Static assets
+│   │   ├── App.jsx          # Main app component
+│   │   └── main.jsx         # Entry point
+│   ├── public/              # Public assets
+│   └── package.json         # Node dependencies
+└── restart-server.sh        # Server management script
+```
+
+## Development Workflow
+
+### Server Management
+- Use `./restart-server.sh` for backend server management
+- Frontend runs on `npm run dev` in frontend directory
+- Backend API runs on port 8000
+- Frontend dev server runs on port 5173
+
+### Task Management
+- Use Task Master AI for project management
+- Follow agile methodology for feature development
+- Implement features incrementally with working code at each step
+
+### Code Quality
+- Run `npm run lint` for frontend code quality
+- Use Prettier for code formatting
+- Follow ESLint rules for React development
+- Implement proper error boundaries in React
+- Use TypeScript-like patterns with JSDoc comments
+
+## API Design Patterns
+
+### RESTful Endpoints
+- Use proper HTTP methods (GET, POST, PUT, DELETE)
+- Implement consistent response formats
+- Use proper status codes
+- Include error handling for all endpoints
+
+### Data Models
+- Use Pydantic models for request/response validation
+- Implement proper serialization/deserialization
+- Use MongoDB ObjectId for document references
+- Include timestamps for created/updated fields
+
+## UI/UX Guidelines
+
+### Design System
+- Use Tailwind CSS utility classes
+- Implement dark theme with gradient backgrounds
+- Use violet accent colors for interactive elements
+- Maintain consistent spacing and typography
+- Implement responsive design for mobile/desktop
+
+### Component Patterns
+- Create reusable components for common UI elements
+- Use proper semantic HTML elements
+- Implement accessibility features (ARIA labels, keyboard navigation)
+- Use loading states and error handling in UI
+
+## Testing Strategy
+
+### Frontend Testing
+- Use React Testing Library for component testing
+- Implement integration tests for user flows
+- Test responsive design across different screen sizes
+
+### Backend Testing
+- Use pytest for API testing
+- Test database operations with test fixtures
+- Implement proper test isolation
+
+## Performance Considerations
+
+### Frontend
+- Use React.memo for expensive components
+- Implement proper code splitting with React.lazy
+- Optimize bundle size with Vite
+- Use proper image optimization
+
+### Backend
+- Implement proper database indexing
+- Use async operations for I/O bound tasks
+- Implement caching where appropriate
+- Monitor API response times
+
+## Security Guidelines
+
+### Frontend
+- Sanitize user inputs
+- Implement proper CSRF protection
+- Use secure HTTP headers
+- Validate data on client and server side
+
+### Backend
+- Implement proper authentication/authorization
+- Use environment variables for sensitive data
+- Validate all inputs with Pydantic
+- Implement rate limiting for API endpoints
+
+## Deployment Considerations
+
+### Environment Configuration
+- Use `.env` files for environment variables
+- Separate development and production configurations
+- Use proper logging for debugging
+
+### Database
+- Use MongoDB Atlas or similar for production
+- Implement proper backup strategies
+- Monitor database performance
+
+## Common Patterns
+
+### Error Handling
+```javascript
+// Frontend error boundary pattern
+class ErrorBoundary extends React.Component {
+  // Implementation for catching React errors
+}
+
+// Backend error handling
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error"}
+    )
+```
+
+### API Response Format
+```python
+# Consistent API response structure
+{
+    "success": bool,
+    "data": Any,
+    "message": str,
+    "errors": List[str]
+}
+```
+
+### Component Structure
+```jsx
+// React component pattern
+import React from 'react';
+
+const ComponentName = ({ prop1, prop2 }) => {
+  // State and effects
+  // Event handlers
+  // Render logic
+  return (
+    <div className="tailwind-classes">
+      {/* Component content */}
+    </div>
+  );
+};
+
+export default ComponentName;
+```
+
+## Development Commands
+
+### Quick Start
+```bash
+# Backend
+cd backend
+python3 -m pip install -r requirements.txt
+./restart-server.sh start
+
+# Frontend
+cd frontend
+npm install
+npm run dev
+```
+
+### Testing
+```bash
+# Frontend
+npm run lint
+npm run build
+
+# Backend
+pytest backend/tests/
+```
+
+Remember to always test your changes and ensure the application runs correctly before committing code. Follow the established patterns and conventions to maintain code consistency across the project. 
