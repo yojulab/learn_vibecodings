@@ -1,188 +1,162 @@
 <context>
 
-# Overview
+## Overview
+This project is a modern blog platform that enables content creation and sharing without barriers. It solves the problem of quick content publishing by providing a streamlined interface for writing, categorizing, and displaying blog posts. The system is designed for content creators, writers, and anyone who wants to share their thoughts publicly without complex authentication processes. It's valuable because it focuses on content creation simplicity while maintaining professional presentation and organization features.
 
-이 프로젝트는 **블로그 콘텐츠 작성 및 관리 플랫폼**을 개발하는 것으로, 사용자들이 **마크다운 기반의 블로그 글을 쉽게 작성하고 관리할 수 있도록** 지원합니다.
-FastAPI와 Vue3 기반의 모던 웹 아키텍처를 채택하여, 빠르고 직관적인 사용자 경험을 제공합니다.
-본 플랫폼은 개인 블로거, 기술 문서 작성자, 콘텐츠 크리에이터들을 주요 타겟으로 하며, **간편한 인터페이스와 실시간 반영(HMR), 효율적인 API 설계**로 생산성과 유지 보수성을 극대화합니다.
-
-# Core Features
+## Core Features
 
 ### 1. **게시글 CRUD 기능**
-
-* **What**: 사용자 글 등록(Create), 조회(Read), 수정(Update), 삭제(Delete) 가능
-* **Why**: 콘텐츠 작성 및 수정 관리의 핵심 기능
-* **How**: FastAPI로 REST API 설계, Vue3에서 Axios를 활용한 폼 기반 인터페이스 제공
+- **What it does**: Enables users to create, read, update, and delete blog posts with rich content support
+- **Why it's important**: Forms the foundation of any content management system and provides essential content lifecycle management
+- **How it works**: FastAPI REST endpoints handle data operations while React components provide intuitive forms and interfaces for content manipulation
 
 ### 2. **카테고리 분류 및 필터링**
+- **What it does**: Organizes posts into categories and allows users to filter content by category
+- **Why it's important**: Improves content discoverability and helps users find relevant information quickly
+- **How it works**: Category field in data model with React select components for filtering, enabling dynamic content organization
 
-* **What**: 글을 카테고리 단위로 분류하고, 목록에서 필터링
-* **Why**: 콘텐츠 구조화 및 탐색성 향상
-* **How**: 글 모델에 `category` 필드 포함, 프론트엔드에서 드롭다운 필터 UI 제공
+### 3. **Tailwind 기반 반응형 UI 구성**
+- **What it does**: Provides responsive, modern user interface across all devices
+- **Why it's important**: Ensures accessibility and usability across desktop, tablet, and mobile platforms
+- **How it works**: TailwindCSS utility classes integrated with React components for consistent, maintainable styling
 
-### 3. **로그인 기반 작성자 인증**
+### 4. **Markdown 기반 에디터 연동 (향후)**
+- **What it does**: Enables rich text formatting using markdown syntax for enhanced content creation
+- **Why it's important**: Provides technical writers and content creators with familiar, powerful formatting options
+- **How it works**: Integration with markdown editor libraries for WYSIWYG editing experience with markdown support
 
-* **What**: 로그인한 사용자만 글을 작성·수정·삭제 가능
-* **Why**: 보안성과 사용자 기반 컨트롤을 위해 필요
-* **How**: 간단한 토큰 기반 인증 또는 OAuth 연동 예정
-
-### 4. **Tailwind 기반 반응형 UI 구성**
-
-* **What**: TailwindCSS를 활용한 폼, 목록, 상세 UI 구성
-* **Why**: 빠른 스타일링과 모바일 대응이 필요
-* **How**: PostCSS 기반 Tailwind 설정 및 컴포넌트화된 UI 설계
-
-### 5. **Markdown 기반 에디터 연동 (향후)**
-
-* **What**: 글 작성 시 마크다운 문법으로 입력 가능
-* **Why**: 기술 블로그나 문서 작성에 적합
-* **How**: Vue 기반 마크다운 에디터 컴포넌트 연동 예정
-
-# User Experience
+## User Experience
 
 ### User Personas
-
-* **개인 블로거**: 자신의 글을 효율적으로 관리하고 싶어 함
-* **기술 문서 작성자**: 코드, 문서 등을 정리하여 기록 목적
-* **콘텐츠 관리자**: 팀원들과 함께 글을 작성하고 운영하는 중소 조직의 운영자
+- **Content Creator**: Writers, bloggers, and thought leaders who need quick content publishing
+- **Reader**: Visitors seeking informative content organized by categories and topics
+- **Casual User**: Anyone who wants to share thoughts or experiences without complex setup
 
 ### Key User Flows
-
-1. 로그인 → 글 목록 보기 → 새 글 작성 → 저장
-2. 로그인 → 기존 글 클릭 → 수정/삭제
-3. 로그인 없이 방문 → 목록 조회 및 글 읽기만 가능
+1. **Content Creation Flow**: Landing page → Write button → Editor → Category selection → Publish
+2. **Content Discovery Flow**: Landing page → Category filter → Post list → Individual post view
+3. **Content Management Flow**: Post view → Edit button → Update content → Save changes
 
 ### UI/UX Considerations
-
-* 폼 기반 입력의 간결함 강조
-* 목록 및 글 읽기 화면은 가독성 중심 구성
-* 반응형 디자인으로 모바일 및 태블릿 지원
-* 실시간 HMR 기반 개발로 빠른 인터랙션 테스트 가능
+- Clean, minimal design focusing on content readability
+- Mobile-first responsive design approach
+- Intuitive navigation with clear content hierarchy
+- Fast loading and smooth transitions between views
 
 </context>
 <PRD>
 
-# Technical Architecture
+## Technical Architecture
 
 ### System Components
+- **Frontend**: React with Vite for fast development and building, TailwindCSS for styling
+- **Backend**: FastAPI with Pydantic v2 for type-safe API development and automatic documentation
+- **Database**: MongoDB for flexible schema and rapid development
+- **Dev Tools**: ESLint, Prettier, PostCSS for code quality and consistency
 
-* **Frontend**: Vue3 + Vite + TailwindCSS
-* **Backend**: FastAPI + Pydantic v2
-* **Database**: MongoDB (호스트명: `db_mongodb`)
-* **Authentication**: JWT 또는 OAuth (간단한 토큰부터 시작)
-* **Dev Tools**: Docker Compose, ESLint, Prettier, PostCSS
-
-### Data Models (요약)
-
+### Data Models
 ```python
-# Pydantic Model 예시
 class Post(BaseModel):
     id: str
     title: str
     content: str
     category: Optional[str]
-    author_id: str
     created_at: datetime
     updated_at: datetime
 ```
 
-### API 예시
-
-* `GET /posts`: 전체 글 목록
-* `GET /posts/{id}`: 특정 글 조회
-* `POST /posts`: 글 작성
-* `PUT /posts/{id}`: 글 수정
-* `DELETE /posts/{id}`: 글 삭제
+### APIs and Integrations
+- `GET /posts`: Retrieve all posts with optional category filtering
+- `GET /posts/{id}`: Fetch specific post details
+- `POST /posts`: Create new blog post
+- `PUT /posts/{id}`: Update existing post
+- `DELETE /posts/{id}`: Remove post from system
 
 ### Infrastructure Requirements
+- CORS configuration for cross-origin requests
+- MongoDB connection and indexing for performance
+- Vite development server with HMR for efficient development workflow
+- Environment configuration for development and production deployments
 
-* Docker 기반 서비스 구성 (FastAPI, Vue3, MongoDB 컨테이너)
-* CORS 설정, API Gateway는 단일 컨테이너 단계에서는 제외
-* Vite 개발 서버는 HMR 사용, 프론트는 별도 호스트 가능
-
----
-
-# Development Roadmap
+## Development Roadmap
 
 ### MVP Requirements
-
-* 게시글 CRUD 기능
-* 로그인 없이 읽기만 가능한 공개 글 시스템
-* 기본 UI 템플릿 (글 목록, 글 보기, 글 작성/수정)
-* MongoDB 연동, FastAPI 기반 REST API
-* Docker Compose로 로컬에서 서비스 실행 가능
+- **Core CRUD Operations**: Complete create, read, update, delete functionality for blog posts
+- **Basic UI Components**: Post list view, individual post view, and post creation/editing forms
+- **Category System**: Basic category assignment and filtering capability
+- **MongoDB Integration**: Full database connectivity with CRUD operations
+- **Responsive Design**: Mobile and desktop compatibility using TailwindCSS
+- **API Documentation**: Auto-generated Swagger documentation via FastAPI
 
 ### Future Enhancements
+- **Markdown Editor Integration**: Rich text editing with `@uiw/react-md-editor` or similar
+- **Image Upload System**: File handling for post thumbnails and inline images
+- **Comment System**: User engagement through post comments
+- **Advanced Category Management**: Category creation, editing, and hierarchical organization
+- **Search Functionality**: Full-text search across posts and categories
+- **Theme Support**: Dark mode and customizable color schemes
+- **Content Analytics**: View counts and engagement metrics
+- **SEO Optimization**: Meta tags, structured data, and search engine optimization
 
-* 사용자 인증 (JWT or OAuth2)
-* 마크다운 에디터 통합
-* 글 썸네일 및 이미지 업로드 기능
-* 댓글 기능
-* 카테고리 관리 기능
-* 다국어 지원 및 다크모드 전환 기능
-* 검색 및 정렬 기능
+## Logical Dependency Chain
 
----
+### Phase 1: Foundation (Priority 1)
+- Set up React + Vite + TailwindCSS development environment
+- Configure FastAPI project structure with Pydantic models
+- Establish MongoDB connection and basic Post model
+- Create basic API endpoints for CRUD operations
 
-# Logical Dependency Chain
+### Phase 2: Core Functionality (Priority 2)
+- Implement post creation form with title, content, and category fields
+- Build post list view with category filtering
+- Create individual post detail view
+- Connect frontend to backend APIs with proper error handling
 
-1. **기초 구조 설정**
+### Phase 3: UI Polish (Priority 3)
+- Refine responsive design across all screen sizes
+- Implement loading states and user feedback mechanisms
+- Add form validation and error messaging
+- Optimize component structure for maintainability
 
-   * Docker Compose 설정 (Vue3, FastAPI, MongoDB)
-   * Vite + Tailwind + Vue3 세팅
-   * FastAPI + Pydantic 기반 기본 API 구성
+### Phase 4: Enhancement Preparation (Priority 4)
+- Refactor code structure to support future enhancements
+- Add comprehensive testing coverage
+- Implement performance optimizations
+- Prepare infrastructure for advanced features
 
-2. **핵심 기능 구축**
+## Risks and Mitigations
 
-   * 게시글 모델 + API + 프론트 폼 연결
-   * 리스트 조회 및 상세 보기 화면 구성
-   * MongoDB 연동 확인
+### Technical Challenges
+- **Risk**: Complex state management between React frontend and FastAPI backend
+- **Mitigation**: Use React Query or SWR for efficient data fetching and caching, implement proper error boundaries
 
-3. **UI/UX 구성**
+### MVP Scope Management
+- **Risk**: Feature creep preventing timely MVP delivery
+- **Mitigation**: Strict adherence to CRUD + basic UI requirements, defer all non-essential features to future phases
 
-   * Tailwind로 스타일링된 폼과 리스트 구현
-   * 반응형 대응 및 초기 템플릿 완성
+### Resource Constraints
+- **Risk**: Parallel development of frontend and backend creating bottlenecks
+- **Mitigation**: API-first development approach with mock data for frontend development, enabling parallel workstreams
 
-4. **기능 보완 및 확장**
+### Database Design Evolution
+- **Risk**: MongoDB schema changes impacting existing functionality
+- **Mitigation**: Design flexible data models from the start, implement proper migration strategies for schema updates
 
-   * 사용자 인증 기능 추가
-   * 마크다운 에디터 추가
-   * 필터링, 검색 기능 확장
+## Appendix
 
----
+### Technical Specifications
+- **Node.js**: >= 18.x for modern JavaScript features and performance
+- **Python**: >= 3.11 for latest FastAPI and Pydantic compatibility
+- **MongoDB**: >= 6.x for optimal performance and feature set
 
-# Risks and Mitigations
+### Performance Targets
+- **Page Load Time**: < 2 seconds for initial load
+- **API Response Time**: < 200ms for CRUD operations
+- **Bundle Size**: < 500KB for initial JavaScript bundle
 
-### 1. 기술적인 이슈
+### Development Approach
+- **API-First Design**: Complete backend API before frontend implementation
+- **Component-Driven Development**: Reusable React components for consistent UI
+- **Incremental Enhancement**: Working MVP with gradual feature additions
 
-* **문제**: FastAPI + MongoDB 연결 안정성
-* **해결**: Motor 및 pymongo 드라이버 활용한 비동기 처리, Connection Pool 설정
-
-### 2. MVP 과잉 설계
-
-* **문제**: 마크다운, 이미지, 댓글 등 초기부터 많은 기능 구현 시 과부하
-* **해결**: 글 CRUD 중심으로 먼저 완성, 확장 가능성만 구조에 반영
-
-### 3. 리소스 부족
-
-* **문제**: 프론트와 백엔드 동시 개발 리소스 부족 시
-* **해결**: REST API 먼저 구현하고, Mock 프론트와 연결하며 순차 개발
-
----
-
-# Appendix
-
-* 기술 스택 선택 근거
-
-  * Vite: 빠른 HMR 및 ESM 기반 빌드 성능
-  * TailwindCSS: 빠른 반응형 UI 설계
-  * FastAPI: 빠른 REST API 설계 및 문서화 (Swagger 자동 제공)
-  * MongoDB: 유연한 스키마 구조 및 빠른 프로토타이핑 가능
-
-* 설치 환경
-
-  * Docker >= 24.x
-  * Node >= 18.x
-  * Python >= 3.11
-  * MongoDB >= 6.x
 </PRD>

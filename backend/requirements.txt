@@ -1,9 +1,0 @@
-fastapi
-pydantic>=2.0
-motor
-uvicorn
-pytest
-passlib[bcrypt]
-python-multipart
-PyJWT
-python-jose
