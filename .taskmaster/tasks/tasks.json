@@ -133,7 +133,7 @@
         "dependencies": [
           2
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -141,7 +141,7 @@
             "description": "Add and install the necessary Python packages for MongoDB integration, specifically 'motor' for asynchronous database operations and 'python-dotenv' for managing environment variables.",
             "dependencies": [],
             "details": "Update the project's dependency file (e.g., requirements.txt or pyproject.toml) to include `motor` and `python-dotenv`. Run the appropriate installation command to add these packages to the project's virtual environment.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify that `pip freeze` or a similar command shows `motor` and `python-dotenv` in the list of installed packages."
           },
           {
@@ -152,7 +152,7 @@
               "3.1"
             ],
             "details": "Create a `.env` file in the project root. Add keys like `MONGO_URI` and `MONGO_DB_NAME`. Create a `config.py` module that uses `python-dotenv` to load these variables and makes them accessible to the application.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Add a print statement in the main application file to output the loaded configuration values on startup and confirm they are read correctly from the .env file."
           },
           {
@@ -163,7 +163,7 @@
               "3.2"
             ],
             "details": "In `database.py`, use the configured `MONGO_URI` to instantiate an `AsyncIOMotorClient`. Create a function, such as `get_database()`, that returns a reference to the specific database instance (e.g., `client[MONGO_DB_NAME]`). This function can be used as a FastAPI dependency.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use FastAPI's startup event (`@app.on_event('startup')`) to call a function that pings the database server to confirm a successful connection. The application should log a success message or fail to start if the connection is invalid."
           },
           {
@@ -172,7 +172,7 @@
             "description": "Create the Pydantic models required to represent a blog post, including fields for title, content, category, and timestamps, as specified in the PRD.",
             "dependencies": [],
             "details": "In a new `models/post.py` file, define a `PostModel` schema. Include fields: `title: str`, `content: str`, `category: str`. Add `created_at: datetime = Field(default_factory=datetime.utcnow)` and `updated_at: datetime = Field(default_factory=datetime.utcnow)`. Also, define a helper class or configuration to handle MongoDB's `ObjectId` for proper serialization.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Instantiate the Pydantic model in a Python shell or a simple test script to ensure fields are correctly typed, default values are generated, and there are no validation errors."
           },
           {
@@ -184,7 +184,7 @@
               "3.4"
             ],
             "details": "Implement a temporary endpoint (e.g., `GET /test-db`). Within this endpoint, use the database connection to access the 'posts' collection. Create an instance of the `PostModel`, insert it into the collection, query it back by a unique field, and then delete it. The endpoint should return the retrieved document or a success message.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Access the temporary endpoint via a browser or API client. A successful 200 OK response containing the test data confirms that the connection, model, and database operations are all functioning correctly."
           }
         ]
@@ -199,7 +199,7 @@
         "dependencies": [
           3
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -207,7 +207,7 @@
             "description": "Create the necessary Pydantic models for post data (e.g., for creation, update, and database representation) and set up the FastAPI APIRouter for all post-related endpoints.",
             "dependencies": [],
             "details": "Define Pydantic models to enforce the data schema for a post, including fields like title, content, category, and timestamps. This will be used for request validation (Task 13) and response serialization. Initialize an APIRouter in a dedicated file (e.g., `routers/posts.py`) to organize the post endpoints.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Review the Pydantic models to ensure they match the required data structure. Verify the router is correctly integrated into the main FastAPI application and that the base path appears in the auto-generated docs."
           },
           {
@@ -218,7 +218,7 @@
               "4.1"
             ],
             "details": "The endpoint will use the defined Pydantic model to validate the incoming request body. Upon success, it will insert a new document into the 'posts' collection in MongoDB and return the created post with a 201 Created status code.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use the Swagger UI to send a valid JSON payload to POST /posts. Verify a 201 Created response and confirm the new post exists in the database. Send a request with missing or invalid data to ensure a 422 Unprocessable Entity error is returned."
           },
           {
@@ -229,7 +229,7 @@
               "4.1"
             ],
             "details": "Implement `GET /posts` to fetch all posts from the database. This endpoint must support a query parameter for category filtering (e.g., `?category=<name>`) as required by Task 10. Implement `GET /posts/{id}` to retrieve a single document by its ID, returning a 404 Not Found error if the ID does not exist.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Call `GET /posts` and verify it returns a list of posts. Test the category filter by calling `GET /posts?category=...`. Call `GET /posts/{id}` with a valid ID to verify a 200 OK response with the correct data, and with an invalid ID to verify a 404 response."
           },
           {
@@ -240,7 +240,7 @@
               "4.1"
             ],
             "details": "The endpoint will find a post by the ID provided in the URL path. It will validate the request body using the appropriate Pydantic model. If the post is found, it will be updated in the MongoDB collection, and the updated document will be returned. A 404 error should be returned if the post ID is not found.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use an existing post's ID to call `PUT /posts/{id}` with a valid update payload. Verify the 200 OK response contains the updated data. Re-fetch the post to confirm persistence. Test with a non-existent ID to ensure a 404 response."
           },
           {
@@ -251,7 +251,7 @@
               "4.1"
             ],
             "details": "The endpoint will take a post ID as a path parameter. It will find and delete the corresponding document from the MongoDB 'posts' collection. It should return a 204 No Content response on successful deletion. If the post ID is not found, it should return a 404 Not Found error.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Create a post to get a valid ID. Call `DELETE /posts/{id}` with that ID and verify a 204 No Content response. Attempt to `GET` the same post ID and verify a 404 Not Found response, confirming deletion."
           }
         ]
@@ -266,7 +266,7 @@
         "dependencies": [
           2
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -274,7 +274,7 @@
             "description": "Import the `CORSMiddleware` from `fastapi.middleware.cors` and add it to the main FastAPI application instance to enable cross-origin request handling.",
             "dependencies": [],
             "details": "In the main application file (e.g., `main.py`), import `CORSMiddleware` and use the `app.add_middleware()` method to integrate it into the application's request-response cycle. This is the foundational step before any specific rules are configured.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run the FastAPI server using Uvicorn and ensure it starts without any import errors or exceptions related to the middleware addition."
           },
           {
@@ -285,7 +285,7 @@
               "5.1"
             ],
             "details": "Within the `CORSMiddleware` configuration, set the `allow_origins` parameter to a list containing the frontend's origin, 'http://localhost:5173'. It is best practice to manage this list using environment variables for flexibility between development and production.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use a tool like `curl` with an `Origin` header to make a request and check if the `Access-Control-Allow-Origin` response header is present and correctly set to 'http://localhost:5173'."
           },
           {
@@ -296,7 +296,7 @@
               "5.1"
             ],
             "details": "Set the `allow_methods` and `allow_headers` parameters in the `CORSMiddleware` configuration. Using `['*']` is a common starting point for broad compatibility, allowing all standard methods and headers.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Trigger a preflight (OPTIONS) request from a browser's developer console and inspect the response. Verify that the `Access-Control-Allow-Methods` and `Access-Control-Allow-Headers` headers are present and include the expected values."
           },
           {
@@ -308,7 +308,7 @@
               "5.3"
             ],
             "details": "Create an `index.html` file. Use a simple web server (like Python's `http.server` or VS Code's Live Server) to serve it on a different port. The embedded JavaScript should attempt to `fetch` from a backend endpoint. A successful request confirms the CORS setup.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Open the test HTML file in a web browser. Check the developer console to ensure there are no CORS-related errors and that the `fetch` request successfully receives a response from the API."
           },
           {
@@ -319,7 +319,7 @@
               "5.1"
             ],
             "details": "The addition of middleware can sometimes interfere with default routes. This subtask is to explicitly check that the documentation, a critical developer tool, remains functional.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "With the server running, navigate to the `/docs` and `/redoc` endpoints in a web browser. Verify that the Swagger UI and ReDoc pages load completely and accurately display any existing API endpoints."
           }
         ]
@@ -336,7 +336,7 @@
           4,
           5
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -344,7 +344,7 @@
             "description": "Set up the initial file(s) for the `PostListView` component, which will serve as the container for the list of posts.",
             "dependencies": [],
             "details": "Create a new file at `src/views/PostListView.jsx`. The component should render a basic placeholder, such as a `div` with the text 'Post List View', to ensure it can be integrated into the application's routing.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify the new component file is created and can be rendered within the application's main layout without errors."
           },
           {
@@ -355,7 +355,7 @@
               "6.1"
             ],
             "details": "Use the `useEffect` hook to trigger the API call on component mount. Use `useState` to manage three states: `posts` (for the data array), `loading` (boolean), and `error` (for any fetch errors). An API service/utility function should be used for the actual fetch call.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use mock data to test the data fetching logic in isolation. Verify that the `loading` state is true during the fetch and false afterward, and that the `posts` state is correctly populated on success."
           },
           {
@@ -364,7 +364,7 @@
             "description": "Develop a dedicated, reusable component to display the data for a single post item in the list.",
             "dependencies": [],
             "details": "Create a new file at `src/components/PostListItem.jsx`. This component will accept a `post` object as a prop and render the post's title. This promotes component reusability and separation of concerns.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Render the component with a mock `post` prop and verify that the title is displayed correctly using a unit test or Storybook."
           },
           {
@@ -376,7 +376,7 @@
               "6.3"
             ],
             "details": "In `PostListView`, conditionally render the UI based on the `loading` and `error` states. If data is available, map over the `posts` array and render a `PostListItem` component for each post, passing the post data as a prop. Ensure a unique `key` prop is used for each item in the list.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify that a loading indicator is shown initially. Once data is loaded, confirm that a list of `PostListItem` components is rendered. Test the error state by simulating a failed API call and check that an error message is displayed."
           },
           {
@@ -387,7 +387,7 @@
               "6.3"
             ],
             "details": "Within the `PostListItem` component, import the `Link` component from the project's routing library (e.g., React Router). Wrap the post's title or a 'Read More' element in a `Link` that navigates to the dynamic route `/posts/${post.id}`.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Click on a post title in the rendered list and verify that the browser URL changes to the correct detail page path (e.g., `/posts/123`)."
           }
         ]
@@ -404,7 +404,7 @@
           4,
           5
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -412,7 +412,7 @@
             "description": "Set up the dynamic route in the application's router (e.g., React Router) to handle URLs like `/posts/:id` and render the `PostDetailView` component.",
             "dependencies": [],
             "details": "This involves modifying the main routing configuration file to add a new Route definition. The path should include a URL parameter for the post ID, which will be used to fetch the specific post.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Manually navigate to a URL like `/posts/123` and verify that the placeholder for the `PostDetailView` component is rendered without errors."
           },
           {
@@ -423,7 +423,7 @@
               "7.1"
             ],
             "details": "Create a new file, e.g., `src/views/PostDetailView.jsx`. The component should be a basic React functional component that returns a simple div with text like 'Post Detail Page'.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "After configuring the route in subtask 7.1, navigate to the route and confirm that the placeholder text from this new component is displayed on the screen."
           },
           {
@@ -434,7 +434,7 @@
               "7.2"
             ],
             "details": "Use the `useParams` hook from `react-router-dom` to get the ID. Use the `useEffect` hook to trigger the API call on component mount. Manage the component's state to handle loading, error, and the fetched data.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use browser developer tools to check the Network tab for a successful API request to the correct endpoint (e.g., `/api/posts/123`). Log the API response to the console to verify data is received."
           },
           {
@@ -445,7 +445,7 @@
               "7.3"
             ],
             "details": "Conditionally render the UI. If the component is in a loading state, display a loading indicator. If an error occurred, display an error message. Once data is successfully fetched, render the `post.title` and `post.content` in appropriate HTML elements.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify that the correct post title and content are displayed on the page. Test the loading state by throttling the network. Test the error state by navigating to a post ID that does not exist."
           },
           {
@@ -456,7 +456,7 @@
               "7.4"
             ],
             "details": "Use TailwindCSS utility classes to add padding, margins, and set font sizes/weights for the container, title, and content body. Ensure the layout is clean and readable on different screen sizes.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Visually inspect the rendered component in the browser to confirm that all styling has been applied correctly and the view is aesthetically pleasing."
           }
         ]
@@ -473,7 +473,7 @@
           4,
           5
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -481,7 +481,7 @@
             "description": "Develop the static JSX structure for the post form, including input fields for title, a textarea for content, and a select dropdown for category. Apply initial styling with TailwindCSS.",
             "dependencies": [],
             "details": "This subtask focuses on creating the visual layout of the form component in React. It will be a stateless component initially, with placeholder elements for all required fields as specified in the parent task.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Visually inspect the rendered component in the browser to ensure all form fields (title, content, category) are present, correctly labeled, and styled according to the design system."
           },
           {
@@ -492,7 +492,7 @@
               "8.1"
             ],
             "details": "Create state variables for each form field. Implement `onChange` event handlers that update the component's state as the user types, ensuring the UI and the component's state are always in sync.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use React DevTools to monitor the component's state. Verify that as you type into each input field, the corresponding state variable is updated correctly in real-time."
           },
           {
@@ -503,7 +503,7 @@
               "8.2"
             ],
             "details": "The submit handler will prevent the default form action, construct a payload from the component's state, and use `fetch` or `axios` to call the backend. Upon success, it should handle redirection or UI update. Basic error handling for the API call should be included.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Fill out and submit the form. Use the browser's network inspector to confirm a `POST` request is sent to `/posts` with the correct JSON payload. Verify that a new post is created in the database."
           },
           {
@@ -514,7 +514,7 @@
               "8.2"
             ],
             "details": "The component will check for an `id` or initial post data passed via props. A `useEffect` hook will be used to populate the form state when in edit mode. The `onSubmit` handler will be updated to conditionally send a `PUT` request to the specific post's endpoint.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Load the form for an existing post and verify the fields are pre-populated. Modify the data, submit the form, and check the network tab for a `PUT` request to `/posts/{id}`. Confirm the post is updated in the database."
           },
           {
@@ -526,7 +526,7 @@
               "8.4"
             ],
             "details": "Implement logic to check if the 'title' field is empty before submission. Display inline error messages for invalid fields. Add a loading indicator (e.g., disabling the submit button) during the API call. Show success or error notifications (e.g., toasts) to the user upon completion.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Attempt to submit the form with an empty title to verify that a validation error is displayed. Successfully submit the form and confirm a loading state appears, followed by a success message. Simulate an API failure and check that an appropriate error message is shown."
           }
         ]
@@ -542,7 +542,7 @@
           7,
           8
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -550,7 +550,7 @@
             "description": "Integrate a 'Delete' button into the UI of the post detail view component, placing it in a logical position, such as near the 'Edit' button.",
             "dependencies": [],
             "details": "The button's styling should be consistent with the existing UI theme, likely using TailwindCSS classes as defined in Task 11. It should be clearly labeled 'Delete'. Initially, the button will not have any functionality attached.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Visually inspect the post detail page to confirm the 'Delete' button is rendered correctly and is responsive across different screen sizes."
           },
           {
@@ -559,7 +559,7 @@
             "description": "Develop a generic, reusable modal or dialog component that prompts the user for confirmation before executing a critical action.",
             "dependencies": [],
             "details": "The component should accept a title and message as props. It must include 'Confirm' and 'Cancel' buttons. The component should emit events or resolve a promise to signal the user's choice. It must be accessible and responsive.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Render the component in isolation (e.g., in a Storybook environment or a test page) and verify its appearance. Test that clicking 'Confirm' and 'Cancel' triggers the correct corresponding events or promise resolutions."
           },
           {
@@ -571,7 +571,7 @@
               "9.2"
             ],
             "details": "Create an `onClick` handler for the 'Delete' button. This handler will manage a state variable (e.g., `isModalOpen`) to control the visibility of the confirmation dialog, passing the appropriate post-specific text to it.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Navigate to a post detail page. Click the 'Delete' button and verify the confirmation dialog appears. Click the 'Cancel' button and verify the dialog closes without any further action."
           },
           {
@@ -582,7 +582,7 @@
               "9.3"
             ],
             "details": "This function will be triggered by the 'Confirm' action from the dialog. It will use the post's ID to construct the endpoint URL (`/posts/{id}`). It must handle both successful (e.g., 204 No Content) and error (e.g., 4xx, 5xx) responses from the API.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use browser developer tools to monitor network requests. Confirm a `DELETE` request with the correct URL and method is sent upon confirmation. Mock the API to test the function's handling of success and various error status codes."
           },
           {
@@ -593,7 +593,7 @@
               "9.4"
             ],
             "details": "Upon a successful API response, redirect the user to the main post list page. The application state should be updated to reflect the deletion. If the API call fails, display a non-intrusive notification or toast message to the user indicating that the post could not be deleted.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Confirm a deletion and verify the user is redirected to the post list and the post is no longer visible. Manually trigger a failed API call (e.g., by using an invalid ID or mocking an error) and verify that a user-friendly error message is displayed and the user is not redirected."
           }
         ]
@@ -608,7 +608,7 @@
         "dependencies": [
           6
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -616,7 +616,7 @@
             "description": "Modify the `GET /posts` endpoint on the backend to accept and process an optional `category` query parameter. The endpoint should return a list of posts filtered by the provided category name.",
             "dependencies": [],
             "details": "The existing FastAPI route handler for `GET /posts` needs to be updated. If the `category` query parameter is present in the request, the database query (e.g., to MongoDB) must include a filter condition to match posts with that category. If the parameter is absent, it should return all posts as before.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use the auto-generated Swagger UI or an API client to call `GET /posts?category=example_category`. Verify that the JSON response contains only posts with the 'example_category'. Also, test `GET /posts` without the parameter to ensure it still returns all posts."
           },
           {
@@ -625,7 +625,7 @@
             "description": "Implement a new backend endpoint, `GET /categories`, that returns a JSON array of all unique category names currently present in the posts database.",
             "dependencies": [],
             "details": "This endpoint will perform a query on the posts collection to find all distinct values for the 'category' field. The result should be a simple array of strings, e.g., `[\"Technology\", \"Lifestyle\", \"News\"]`.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Call the new `GET /categories` endpoint using an API client. Verify that the response is a 200 OK and the body is a JSON array containing all unique category strings from the test data in the database."
           },
           {
@@ -636,7 +636,7 @@
               "10.2"
             ],
             "details": "This component will make an API call to `GET /categories` on load to fetch the list of available categories. It should then render these categories as selectable options. An 'All Categories' option should be included to allow the user to clear the filter.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Load the Post List View and verify that the filter component renders correctly. Check the browser's developer tools to confirm it made a successful call to `/categories` and that the dropdown/list is populated with the fetched category names."
           },
           {
@@ -648,7 +648,7 @@
               "10.3"
             ],
             "details": "Attach an event handler (e.g., `onChange` for a dropdown) to the filter component. When a user selects a category, update the application's state and trigger a data fetch to `GET /posts?category=<category_name>`. Selecting 'All Categories' should trigger a call to `GET /posts` without the query parameter.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Using browser developer tools, monitor the network tab. Select a category from the UI and verify that a new GET request is sent to the correct filtered endpoint. Select 'All Categories' and verify the request is sent to the base `/posts` endpoint."
           },
           {
@@ -659,7 +659,7 @@
               "10.4"
             ],
             "details": "The state that holds the list of posts for display must be updated with the response from the API call made in the previous subtask. The UI component should be reactive to this state change, automatically re-rendering the list to show the filtered results or the full list.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Perform an end-to-end test. Select a specific category from the filter UI. Visually confirm that the list of posts displayed on the page updates and shows only posts belonging to the selected category."
           }
         ]
@@ -676,7 +676,7 @@
           7,
           8
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -684,7 +684,7 @@
             "description": "Create the main responsive layout structure for the application, including a collapsible navigation for mobile and an adaptive footer, to serve as the container for all views.",
             "dependencies": [],
             "details": "Using a mobile-first approach, implement a header with a logo and a navigation menu that collapses into a hamburger icon on small screens (e.g., below the `md` breakpoint). The main content area should have responsive padding. The footer layout should stack vertically on mobile and horizontally on desktop.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify the navigation collapses and expands correctly at the `md` breakpoint using browser dev tools. Test the hamburger menu functionality. Check that page content does not overflow and padding is appropriate on all screen sizes."
           },
           {
@@ -695,7 +695,7 @@
               "11.1"
             ],
             "details": "Style the post list as a single-column feed on mobile screens. Use Tailwind's responsive prefixes (e.g., `md:grid-cols-2`, `lg:grid-cols-3`) to transition to a multi-column grid on tablets and desktops. Ensure post preview cards, including images and text excerpts, scale and reflow correctly.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "On a mobile viewport, confirm posts are listed in a single, scrollable column. As the viewport width increases past the `md` and `lg` breakpoints, verify the layout transitions to a 2-column and then 3-column grid. Check for any visual bugs or text overflow in the post cards."
           },
           {
@@ -706,7 +706,7 @@
               "11.1"
             ],
             "details": "Apply responsive typography classes to the post title and body text for optimal readability. The main content column should be full-width on mobile and have a max-width with centered alignment on larger screens. Ensure embedded elements like images and code blocks scale down and do not break the layout on small screens.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Load a post with long paragraphs and a wide image. On a mobile viewport, confirm the text is readable and the image scales to fit the screen width without causing horizontal scroll. On a desktop viewport, verify the content is constrained to a readable line-length."
           },
           {
@@ -717,7 +717,7 @@
               "11.1"
             ],
             "details": "Style form controls (input, textarea, select, button) to be full-width on mobile for easy interaction. On larger screens (`md` and up), arrange label-input pairs in a two-column layout to use space more efficiently. Ensure all form elements are easily accessible and readable.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Open the create/edit post form. On mobile, verify that all form fields and buttons are easily tappable and text is legible. On desktop, check that the layout is clean and organized. Attempt to fill out the form on both mobile and desktop viewports."
           },
           {
@@ -728,7 +728,7 @@
               "11.2"
             ],
             "details": "Implement the category filter as a space-saving element on mobile, such as a dropdown menu (`<select>`). On larger screens (`md` and up), display it as a more prominent horizontal list of links or a sidebar component, ensuring it aligns with the responsive Post List grid.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "View the Post List page on a mobile viewport and confirm the category filter is presented as a functional dropdown. Increase the viewport width and verify it transitions to a list/sidebar layout. Test the filtering functionality on both mobile and desktop layouts."
           }
         ]
@@ -745,7 +745,7 @@
           7,
           8
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -753,7 +753,7 @@
             "description": "Install and configure a dedicated library (e.g., React Query) to handle server state, including caching, background refetching, and managing loading/error states across the application.",
             "dependencies": [],
             "details": "Install the chosen library (e.g., `npm install @tanstack/react-query`). Create a `QueryClient` instance and wrap the root application component with the `QueryClientProvider`. This sets up the foundation for using the library's hooks throughout the app.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify the application still runs without errors after wrapping it with the provider. Check that the React Query Devtools (if installed) are visible and operational."
           },
           {
@@ -764,7 +764,7 @@
               "12.1"
             ],
             "details": "Install a toast library and add its provider/container to the main App layout. Create a reusable function or hook that can be called from the `onError` callback of React Query mutations or queries to display a standardized error message.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Create a test button that programmatically triggers an error toast. Verify the toast appears with the correct message and style, and disappears automatically or on user interaction."
           },
           {
@@ -776,7 +776,7 @@
               "12.2"
             ],
             "details": "Replace the existing data fetching logic (e.g., `useEffect` with `fetch`) in the Post List View with the `useQuery` hook. Use the `isLoading` state from the hook to display a skeleton screen. Use the `isError` state to trigger the global toast notification system.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use browser dev tools to throttle the network and verify the loading skeleton is displayed. Use dev tools to block the `/posts` API request and verify that the error toast is shown."
           },
           {
@@ -788,7 +788,7 @@
               "12.2"
             ],
             "details": "Create `useMutation` hooks for `POST`, `PUT`, and `DELETE` requests. Use the `isLoading` status to disable the submit/delete button and show a spinner. On `onError`, trigger the error toast. On `onSuccess`, show a success toast and invalidate the 'posts' query to refetch the list.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Attempt to create a post. Verify the 'Submit' button is disabled during the request. Simulate a server error and check for an error toast. On success, verify the success toast and that the post list updates."
           },
           {
@@ -800,7 +800,7 @@
               "12.2"
             ],
             "details": "In the component for displaying a single post, use the `useQuery` hook with the post ID as part of the query key (e.g., `['post', postId]`). Display a loading spinner or skeleton while `isLoading` is true. If `isError` is true, display an inline error message (e.g., 'Post not found') and trigger the global error toast.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Navigate to a valid post detail page with a throttled network; verify the loading state. Try to navigate to a non-existent post ID; verify that the API returns a 404 and the UI displays a 'Post not found' message."
           }
         ]
@@ -815,7 +815,7 @@
         "dependencies": [
           8
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -823,7 +823,7 @@
             "description": "Define a Pydantic `BaseModel` that specifies the data types and validation rules for incoming post data on the server.",
             "dependencies": [],
             "details": "The model should enforce that 'title' and 'content' are non-empty strings. Consider using `Field` from Pydantic to add constraints like `min_length=1`.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "This is a foundational step; its correctness will be verified in the next subtask by integrating it with the API endpoint."
           },
           {
@@ -834,7 +834,7 @@
               "13.1"
             ],
             "details": "Type-hint the request body parameter in the endpoint functions with the created Pydantic model. FastAPI will then automatically validate incoming data and return a 422 Unprocessable Entity error for invalid requests.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use an API client like Postman or the auto-generated Swagger UI to send a request with an empty 'title' or 'content' to the POST/PUT endpoints. Verify a 422 error response is returned with a descriptive error message."
           },
           {
@@ -843,7 +843,7 @@
             "description": "Modify the post creation/editing form's HTML to include basic client-side validation attributes and elements for error messages.",
             "dependencies": [],
             "details": "Add the `required` attribute to the `<input>` for 'title' and the `<textarea>` for 'content'. Add empty `<div>` or `<span>` elements near each field, which will be used to display JavaScript-driven error messages.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Load the form in a browser and try to click the submit button while the fields are empty. Confirm the browser's native validation prevents submission."
           },
           {
@@ -854,7 +854,7 @@
               "13.3"
             ],
             "details": "The script should listen for the form's `submit` event. On submission, it will call `event.preventDefault()`, check if the 'title' and 'content' fields are empty, and populate the corresponding error message elements if they are. If all fields are valid, the form submission proceeds.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "With the JavaScript active, attempt to submit the form with an empty 'title' but filled 'content'. Verify that a custom error message appears only for the 'title' field and the form is not submitted."
           },
           {
@@ -866,7 +866,7 @@
               "13.4"
             ],
             "details": "First, test the UI by attempting to submit invalid data and verify that user-friendly errors are shown. Second, use an API client to bypass the UI and send invalid data directly to the server to confirm a 4xx error is returned. Finally, submit a valid form to ensure it goes through successfully.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Execute the full test plan outlined in the parent task's 'Test Strategy' section to confirm all validation logic is robust."
           }
         ]
@@ -883,7 +883,7 @@
           12,
           13
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -891,7 +891,7 @@
             "description": "Refactor the frontend's folder structure to group components, hooks, and services by feature (e.g., 'posts', 'auth') rather than by type (e.g., 'components', 'pages'). This improves scalability and makes the codebase easier to navigate.",
             "dependencies": [],
             "details": "Create a top-level `/features` directory. Inside, create a `/posts` directory and move all related components (`PostList`, `PostDetail`, `PostForm`) into a `components` sub-folder within it. Update all import paths across the application to reflect the new locations.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "After restructuring, run the development server and manually click through the application to ensure all components render correctly and no import errors are present in the console."
           },
           {
@@ -900,7 +900,7 @@
             "description": "Refactor the main FastAPI router file by extracting the database interaction and business logic into a separate 'services' or 'repository' layer. This adheres to the separation of concerns principle, making the API routes cleaner and the logic more reusable and testable.",
             "dependencies": [],
             "details": "Create a new `services/post_service.py` file. Move the MongoDB query logic (e.g., find, insert_one, delete_one) from the API route functions into corresponding functions within this new service file (e.g., `get_all_posts`, `create_post`). The route handlers will now import and call these service functions.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use the auto-generated Swagger UI at the `/docs` endpoint to test each refactored endpoint. Verify that all CRUD operations still function correctly against the database."
           },
           {
@@ -911,7 +911,7 @@
               "14.2"
             ],
             "details": "Set up pytest with a mocking library (e.g., `unittest.mock`). Write test cases for the functions in `post_service.py`. Use mocks to simulate the Pymongo/Motor database client and its return values. Assert that the service functions process data and handle edge cases (e.g., post not found) correctly.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run the test suite via the `pytest` command. Ensure all tests pass and that they cover the primary logic paths for each service function."
           },
           {
@@ -922,7 +922,7 @@
               "14.1"
             ],
             "details": "Install and configure React Testing Library. For the `PostListView` component, write a test that renders the component with a mock array of post data. Assert that the correct number of posts are rendered and that their titles are displayed. Test for the loading state and empty state as well.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run the frontend test script (e.g., `npm test`). Verify that the component tests pass and that snapshots (if used) match the expected output."
           },
           {
@@ -936,7 +936,7 @@
               "14.4"
             ],
             "details": "Run both the frontend and backend servers. Follow a test plan to manually execute all primary user flows: viewing the post list, clicking to a post detail page, creating a new post via the form, and deleting a post (including the confirmation dialog).",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "First, run the entire automated test suite (backend and frontend) to ensure all tests pass. Then, perform the manual test, checking the browser console for errors and verifying data consistency in the database."
           }
         ]
@@ -952,7 +952,7 @@
           8,
           14
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -960,7 +960,7 @@
             "description": "Add the `@uiw/react-md-editor` library and its required CSS to the frontend project.",
             "dependencies": [],
             "details": "Use npm or yarn to install `@uiw/react-md-editor`. Import the library's CSS file in the main application component (e.g., App.jsx or main.jsx) to ensure the editor is styled correctly.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify that the frontend application compiles and runs without errors after adding the new dependency."
           },
           {
@@ -971,7 +971,7 @@
               "15.1"
             ],
             "details": "In the form component developed in Task 8, import `MDEditor`. Replace the `<textarea>` element with the `<MDEditor>` component. Manage the editor's content using React state, ensuring the `value` and `onChange` props are correctly bound.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Load the create/edit post page and confirm the Markdown editor is displayed. Verify that typing and using formatting buttons in the editor updates the component's state."
           },
           {
@@ -982,7 +982,7 @@
               "15.2"
             ],
             "details": "Modify the form's submission handler to pull the raw Markdown content from the state and include it in the 'content' field of the API request payload for both creating and updating posts.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use browser developer tools to inspect the network request when submitting the form. Confirm the payload contains the raw Markdown text (e.g., `# My Title`). Check the database to verify the raw string is saved."
           },
           {
@@ -993,7 +993,7 @@
               "15.3"
             ],
             "details": "Install a library like `react-markdown` to parse the content. In the post detail component, fetch the post data and pass the 'content' string to the `react-markdown` component for rendering instead of displaying it as plain text.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "View a post that was created using Markdown. Verify that formatting like headers, bold text, and lists are rendered correctly as HTML elements."
           },
           {
@@ -1005,7 +1005,7 @@
               "15.4"
             ],
             "details": "Use the `data-color-mode` prop on the `MDEditor` to support light/dark themes. Add custom CSS to style the HTML elements (`h1`, `p`, `pre`, `blockquote`, etc.) generated by `react-markdown` to ensure they align with the site's design.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Confirm the editor's theme matches the application's theme. Check that the rendered content on the post detail page is well-styled, readable, and visually integrated with the rest of the UI."
           }
         ]
@@ -1013,7 +1013,7 @@
     ],
     "metadata": {
       "created": "2025-08-02T04:41:42.820Z",
-      "updated": "2025-08-02T05:11:39.114Z",
+      "updated": "2025-08-02T10:06:28.319Z",
       "description": "Tasks for master context"
     }
   }
