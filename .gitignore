@@ -22,8 +22,8 @@ dev-debug.log
 # OS specific
 .DS_Store
 
+**/__pycache__/*
+
 # Task files
 # tasks.json
 # tasks/ 
-
-**/__pycache__/*
