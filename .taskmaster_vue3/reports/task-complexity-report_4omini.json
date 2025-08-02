@@ -1,0 +1,93 @@
+{
+	"meta": {
+		"generatedAt": "2025-07-31T08:25:40.331Z",
+		"tasksAnalyzed": 10,
+		"totalTasks": 10,
+		"analysisCount": 10,
+		"thresholdScore": 10,
+		"projectName": "Taskmaster",
+		"usedResearch": false
+	},
+	"complexityAnalysis": [
+		{
+			"taskId": 1,
+			"taskTitle": "Docker Compose 환경 설정",
+			"complexityScore": 5,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "이 작업을 4개의 하위 작업으로 분할하고, 각 하위 작업의 제목과 간략한 설명을 작성해 주세요.",
+			"reasoning": "FastAPI, Vue3, MongoDB를 한 번에 구성하고 네트워크·볼륨 설정까지 포함되어 있어 다중 서비스 관리 수준의 난이도가 있음."
+		},
+		{
+			"taskId": 2,
+			"taskTitle": "프론트엔드 초기 설정 (Vue3+Vite+Tailwind)",
+			"complexityScore": 3,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "이 작업을 4개의 하위 작업으로 분할하고, 각 하위 작업의 제목과 간략한 설명을 작성해 주세요.",
+			"reasoning": "프로젝트 생성과 의존성 설치, Tailwind·ESLint·Prettier 설정으로 구성되어 있지만 절차가 비교적 단순함."
+		},
+		{
+			"taskId": 3,
+			"taskTitle": "백엔드 초기 설정 (FastAPI)",
+			"complexityScore": 4,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "이 작업을 4개의 하위 작업으로 분할하고, 각 하위 작업의 제목과 간략한 설명을 작성해 주세요.",
+			"reasoning": "디렉터리 구조 생성, main.py 작성, requirements.txt 작성, Dockerfile 작성 등 기본 설정 위주라 난이도는 중간 이하."
+		},
+		{
+			"taskId": 4,
+			"taskTitle": "MongoDB 연결 및 Pydantic 모델 정의",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "이 작업을 4개의 하위 작업으로 분할하고, 각 하위 작업의 제목과 간략한 설명을 작성해 주세요.",
+			"reasoning": "비동기 DB 연결 설정, 환경 변수 관리, Pydantic 모델 정의, 인덱스 설정 등 여러 구성이 필요함."
+		},
+		{
+			"taskId": 5,
+			"taskTitle": "게시글 CRUD API 구현",
+			"complexityScore": 7,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "이 작업을 5개의 하위 작업으로 분할하고, 각 하위 작업의 제목과 간략한 설명을 작성해 주세요.",
+			"reasoning": "GET·POST·PUT·DELETE 각 엔드포인트 구현과 예외 처리, 상태 코드 관리 등 세부 로직이 많아 중상급 난이도."
+		},
+		{
+			"taskId": 6,
+			"taskTitle": "Axios 기반 프론트엔드 API 통합",
+			"complexityScore": 5,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "이 작업을 4개의 하위 작업으로 분할하고, 각 하위 작업의 제목과 간략한 설명을 작성해 주세요.",
+			"reasoning": "axios 인스턴스 설정, CRUD 메서드 구현, 인터셉터 에러 핸들링 등 모듈 작성이 주를 이룸."
+		},
+		{
+			"taskId": 7,
+			"taskTitle": "블로그 UI 컴포넌트 개발",
+			"complexityScore": 7,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "이 작업을 5개의 하위 작업으로 분할하고, 각 하위 작업의 제목과 간략한 설명을 작성해 주세요.",
+			"reasoning": "리스트·상세·폼 컴포넌트 구현과 반응형 스타일, 단위 테스트까지 포함돼 있어 복잡도가 높음."
+		},
+		{
+			"taskId": 8,
+			"taskTitle": "JWT 인증 기능 구현",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "이 작업을 4개의 하위 작업으로 분할하고, 각 하위 작업의 제목과 간략한 설명을 작성해 주세요.",
+			"reasoning": "토큰 생성·검증 로직, 로그인 엔드포인트, 보호된 라우트 의존성 작성 등 보안 관련 로직이 포함됨."
+		},
+		{
+			"taskId": 9,
+			"taskTitle": "프론트엔드 인증 통합",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "이 작업을 4개의 하위 작업으로 분할하고, 각 하위 작업의 제목과 간략한 설명을 작성해 주세요.",
+			"reasoning": "로그인 컴포넌트, 토큰 저장·삭제, axios 인터셉터, 라우트 가드 등 UI와 상태관리가 결합된 작업."
+		},
+		{
+			"taskId": 10,
+			"taskTitle": "ESLint·Prettier 및 CI 워크플로우 설정",
+			"complexityScore": 5,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "이 작업을 4개의 하위 작업으로 분할하고, 각 하위 작업의 제목과 간략한 설명을 작성해 주세요.",
+			"reasoning": "프론트·백엔드 린팅·포매팅 설정, Git Hooks 및 스크립트 구성으로 절차는 있지만 구현 난이도는 중간."
+		}
+	]
+}

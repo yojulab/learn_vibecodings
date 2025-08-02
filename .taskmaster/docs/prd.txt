@@ -1,0 +1,162 @@
+<context>
+
+## Overview
+This project is a modern blog platform that enables content creation and sharing without barriers. It solves the problem of quick content publishing by providing a streamlined interface for writing, categorizing, and displaying blog posts. The system is designed for content creators, writers, and anyone who wants to share their thoughts publicly without complex authentication processes. It's valuable because it focuses on content creation simplicity while maintaining professional presentation and organization features.
+
+## Core Features
+
+### 1. **게시글 CRUD 기능**
+- **What it does**: Enables users to create, read, update, and delete blog posts with rich content support
+- **Why it's important**: Forms the foundation of any content management system and provides essential content lifecycle management
+- **How it works**: FastAPI REST endpoints handle data operations while React components provide intuitive forms and interfaces for content manipulation
+
+### 2. **카테고리 분류 및 필터링**
+- **What it does**: Organizes posts into categories and allows users to filter content by category
+- **Why it's important**: Improves content discoverability and helps users find relevant information quickly
+- **How it works**: Category field in data model with React select components for filtering, enabling dynamic content organization
+
+### 3. **Tailwind 기반 반응형 UI 구성**
+- **What it does**: Provides responsive, modern user interface across all devices
+- **Why it's important**: Ensures accessibility and usability across desktop, tablet, and mobile platforms
+- **How it works**: TailwindCSS utility classes integrated with React components for consistent, maintainable styling
+
+### 4. **Markdown 기반 에디터 연동 (향후)**
+- **What it does**: Enables rich text formatting using markdown syntax for enhanced content creation
+- **Why it's important**: Provides technical writers and content creators with familiar, powerful formatting options
+- **How it works**: Integration with markdown editor libraries for WYSIWYG editing experience with markdown support
+
+## User Experience
+
+### User Personas
+- **Content Creator**: Writers, bloggers, and thought leaders who need quick content publishing
+- **Reader**: Visitors seeking informative content organized by categories and topics
+- **Casual User**: Anyone who wants to share thoughts or experiences without complex setup
+
+### Key User Flows
+1. **Content Creation Flow**: Landing page → Write button → Editor → Category selection → Publish
+2. **Content Discovery Flow**: Landing page → Category filter → Post list → Individual post view
+3. **Content Management Flow**: Post view → Edit button → Update content → Save changes
+
+### UI/UX Considerations
+- Clean, minimal design focusing on content readability
+- Mobile-first responsive design approach
+- Intuitive navigation with clear content hierarchy
+- Fast loading and smooth transitions between views
+
+</context>
+<PRD>
+
+## Technical Architecture
+
+### System Components
+- **Frontend**: React with Vite for fast development and building, TailwindCSS for styling
+- **Backend**: FastAPI with Pydantic v2 for type-safe API development and automatic documentation
+- **Database**: MongoDB for flexible schema and rapid development
+- **Dev Tools**: ESLint, Prettier, PostCSS for code quality and consistency
+
+### Data Models
+```python
+class Post(BaseModel):
+    id: str
+    title: str
+    content: str
+    category: Optional[str]
+    created_at: datetime
+    updated_at: datetime
+```
+
+### APIs and Integrations
+- `GET /posts`: Retrieve all posts with optional category filtering
+- `GET /posts/{id}`: Fetch specific post details
+- `POST /posts`: Create new blog post
+- `PUT /posts/{id}`: Update existing post
+- `DELETE /posts/{id}`: Remove post from system
+
+### Infrastructure Requirements
+- CORS configuration for cross-origin requests
+- MongoDB connection and indexing for performance
+- Vite development server with HMR for efficient development workflow
+- Environment configuration for development and production deployments
+
+## Development Roadmap
+
+### MVP Requirements
+- **Core CRUD Operations**: Complete create, read, update, delete functionality for blog posts
+- **Basic UI Components**: Post list view, individual post view, and post creation/editing forms
+- **Category System**: Basic category assignment and filtering capability
+- **MongoDB Integration**: Full database connectivity with CRUD operations
+- **Responsive Design**: Mobile and desktop compatibility using TailwindCSS
+- **API Documentation**: Auto-generated Swagger documentation via FastAPI
+
+### Future Enhancements
+- **Markdown Editor Integration**: Rich text editing with `@uiw/react-md-editor` or similar
+- **Image Upload System**: File handling for post thumbnails and inline images
+- **Comment System**: User engagement through post comments
+- **Advanced Category Management**: Category creation, editing, and hierarchical organization
+- **Search Functionality**: Full-text search across posts and categories
+- **Theme Support**: Dark mode and customizable color schemes
+- **Content Analytics**: View counts and engagement metrics
+- **SEO Optimization**: Meta tags, structured data, and search engine optimization
+
+## Logical Dependency Chain
+
+### Phase 1: Foundation (Priority 1)
+- Set up React + Vite + TailwindCSS development environment
+- Configure FastAPI project structure with Pydantic models
+- Establish MongoDB connection and basic Post model
+- Create basic API endpoints for CRUD operations
+
+### Phase 2: Core Functionality (Priority 2)
+- Implement post creation form with title, content, and category fields
+- Build post list view with category filtering
+- Create individual post detail view
+- Connect frontend to backend APIs with proper error handling
+
+### Phase 3: UI Polish (Priority 3)
+- Refine responsive design across all screen sizes
+- Implement loading states and user feedback mechanisms
+- Add form validation and error messaging
+- Optimize component structure for maintainability
+
+### Phase 4: Enhancement Preparation (Priority 4)
+- Refactor code structure to support future enhancements
+- Add comprehensive testing coverage
+- Implement performance optimizations
+- Prepare infrastructure for advanced features
+
+## Risks and Mitigations
+
+### Technical Challenges
+- **Risk**: Complex state management between React frontend and FastAPI backend
+- **Mitigation**: Use React Query or SWR for efficient data fetching and caching, implement proper error boundaries
+
+### MVP Scope Management
+- **Risk**: Feature creep preventing timely MVP delivery
+- **Mitigation**: Strict adherence to CRUD + basic UI requirements, defer all non-essential features to future phases
+
+### Resource Constraints
+- **Risk**: Parallel development of frontend and backend creating bottlenecks
+- **Mitigation**: API-first development approach with mock data for frontend development, enabling parallel workstreams
+
+### Database Design Evolution
+- **Risk**: MongoDB schema changes impacting existing functionality
+- **Mitigation**: Design flexible data models from the start, implement proper migration strategies for schema updates
+
+## Appendix
+
+### Technical Specifications
+- **Node.js**: >= 18.x for modern JavaScript features and performance
+- **Python**: >= 3.11 for latest FastAPI and Pydantic compatibility
+- **MongoDB**: >= 6.x for optimal performance and feature set
+
+### Performance Targets
+- **Page Load Time**: < 2 seconds for initial load
+- **API Response Time**: < 200ms for CRUD operations
+- **Bundle Size**: < 500KB for initial JavaScript bundle
+
+### Development Approach
+- **API-First Design**: Complete backend API before frontend implementation
+- **Component-Driven Development**: Reusable React components for consistent UI
+- **Incremental Enhancement**: Working MVP with gradual feature additions
+
+</PRD>

@@ -1,0 +1,2119 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Setup Docker Compose Environment",
+        "description": "Create a `docker-compose.yml` file to orchestrate FastAPI, Vue3, and MongoDB services for local development.",
+        "details": "Services to include: `backend` (FastAPI), `frontend` (Vue3/Vite), `database` (MongoDB). Configure networks, environment variables, and volumes for data persistence. The database should be accessible at the hostname `db_mongodb` from the backend service.",
+        "testStrategy": "Run `docker-compose up -d` and verify that all three containers (backend, frontend, database) start successfully without errors. Check container logs for confirmation.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize Docker Compose File and Service Structure",
+            "description": "Create the initial `docker-compose.yml` file and define the top-level structure including the `version` and the three main services: `backend`, `frontend`, and `database`.",
+            "dependencies": [],
+            "details": "Create an empty `docker-compose.yml` file. Add `version: '3.8'` (or a suitable recent version). Define the `services:` block and add placeholders for `backend`, `frontend`, and `database` services.",
+            "status": "done",
+            "testStrategy": "Verify the `docker-compose.yml` file is created and contains the basic structure with service names defined. Run `docker-compose config` to check for syntax errors."
+          },
+          {
+            "id": 2,
+            "title": "Configure MongoDB Database Service",
+            "description": "Define the `database` service within `docker-compose.yml` to use MongoDB, ensuring data persistence and network accessibility for other services.",
+            "dependencies": [],
+            "details": "For the `database` service, use `image: mongo:latest`. Map a named volume (e.g., `db_data`) to `/data/db` for data persistence. Ensure the service is part of a custom network and has the alias `db_mongodb` for inter-service communication.",
+            "status": "done",
+            "testStrategy": "Run `docker-compose config` to validate the syntax after adding the database service definition. Ensure the volume and network alias are correctly specified."
+          },
+          {
+            "id": 3,
+            "title": "Configure FastAPI Backend Service",
+            "description": "Define the `backend` service, specifying its build context, exposed ports, and environment variables required for connecting to the MongoDB database.",
+            "dependencies": [],
+            "details": "For the `backend` service, use `build: ./backend` (assuming the FastAPI project is in a `backend` directory). Map internal port 8000 to external port 8000 (e.g., `8000:8000`). Add `environment` variables for the MongoDB connection string, using `db_mongodb` as the hostname. Include `depends_on: - database` to ensure the database starts first.",
+            "status": "done",
+            "testStrategy": "Run `docker-compose config` to validate the syntax. Check that port mappings and environment variables for database connection are correctly defined."
+          },
+          {
+            "id": 4,
+            "title": "Configure Vue3 Frontend Service",
+            "description": "Define the `frontend` service, specifying its build context, exposed ports, and environment variables for connecting to the FastAPI backend API.",
+            "dependencies": [],
+            "details": "For the `frontend` service, use `build: ./frontend` (assuming the Vue3 project is in a `frontend` directory). Map the internal Vite development server port (e.g., 5173) to an external port (e.g., `5173:5173`). Add `environment` variables for the backend API URL (e.g., `VITE_API_URL=http://localhost:8000`).",
+            "status": "done",
+            "testStrategy": "Run `docker-compose config` to validate the syntax. Verify that port mappings and environment variables for the backend API URL are correctly defined."
+          },
+          {
+            "id": 5,
+            "title": "Define Networks, Volumes, and Finalize Configuration",
+            "description": "Define the custom network for inter-service communication and named volumes for data persistence. Ensure all services are connected to this network and the overall `docker-compose.yml` is complete and valid.",
+            "dependencies": [],
+            "details": "Add a `networks:` section to define a custom bridge network (e.g., `app_network`). Add a `volumes:` section to define the named volume for MongoDB data (e.g., `db_data`). Assign `networks: - app_network` to all three services (`backend`, `frontend`, `database`). Review the entire `docker-compose.yml` for correctness and completeness.",
+            "status": "done",
+            "testStrategy": "Run `docker-compose up -d`. Verify that all three containers (backend, frontend, database) start successfully without errors using `docker-compose ps`. Check container logs for confirmation using `docker-compose logs`. Attempt to access the frontend in a browser and confirm it can connect to the backend, and the backend can connect to the database."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Initialize FastAPI Backend Project",
+        "description": "Set up the basic FastAPI application structure, including dependencies (FastAPI, Pydantic v2, Motor), and a basic health check endpoint.",
+        "details": "Create the main application file (`main.py`), a `requirements.txt` file, and a basic project structure (e.g., `/app/routers`, `/app/models`, `/app/db`). Implement a root endpoint `/` that returns a welcome message.",
+        "testStrategy": "Run the FastAPI server within the Docker container and access its root URL. The Swagger UI at `/docs` should also be accessible and display the root endpoint.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Base Project Directory and requirements.txt",
+            "description": "Establish the root `backend` directory, its `app` subdirectory, and create the `requirements.txt` file. This file will list the core dependencies: `fastapi`, `pydantic>=2.0`, and `motor`.",
+            "dependencies": [],
+            "details": "Create `backend/` and `backend/app/` directories. Create `backend/requirements.txt` and populate it with `fastapi`, `pydantic>=2.0`, and `motor`.",
+            "status": "done",
+            "testStrategy": "Verify the existence of `backend/`, `backend/app/`, and `backend/requirements.txt` with the specified content."
+          },
+          {
+            "id": 2,
+            "title": "Initialize FastAPI Application in main.py",
+            "description": "Create the main application file (`main.py`) within the `app` directory and instantiate the FastAPI application. This sets up the core entry point for the backend service.",
+            "dependencies": [
+              "2.1"
+            ],
+            "details": "Create `backend/app/main.py`. Import `FastAPI` and initialize the application instance: `app = FastAPI()`.",
+            "status": "done",
+            "testStrategy": "Verify `backend/app/main.py` exists and contains the basic FastAPI application instantiation."
+          },
+          {
+            "id": 3,
+            "title": "Implement Root Endpoint (`/`)",
+            "description": "Add a basic GET endpoint at the root path (`/`) of the FastAPI application. This endpoint will serve as a welcome message and a basic connectivity test.",
+            "dependencies": [
+              "2.2"
+            ],
+            "details": "In `backend/app/main.py`, define an asynchronous GET route for `/` that returns a JSON response, e.g., `{\"message\": \"Welcome to the FastAPI Backend!\"}`.",
+            "status": "done",
+            "testStrategy": "After the server is runnable (as per parent task's test strategy), access `http://localhost:<port>/` and confirm the welcome message is returned."
+          },
+          {
+            "id": 4,
+            "title": "Implement Health Check Endpoint (`/health`)",
+            "description": "Create a dedicated health check endpoint (`/health`) to allow external systems (like Docker or Kubernetes) to monitor the application's operational status.",
+            "dependencies": [
+              "2.2"
+            ],
+            "details": "In `backend/app/main.py`, define an asynchronous GET route for `/health` that returns a simple JSON status, e.g., `{\"status\": \"ok\"}`.",
+            "status": "done",
+            "testStrategy": "After the server is runnable, access `http://localhost:<port>/health` and confirm the `{\"status\": \"ok\"}` message is returned."
+          },
+          {
+            "id": 5,
+            "title": "Create Core Application Subdirectories",
+            "description": "Establish the foundational directory structure for organizing future code, including `routers` for API endpoints, `models` for data schemas, and `db` for database-related logic.",
+            "dependencies": [
+              "2.1"
+            ],
+            "details": "Create empty directories: `backend/app/routers/`, `backend/app/models/`, and `backend/app/db/`.",
+            "status": "done",
+            "testStrategy": "Verify the existence of `backend/app/routers/`, `backend/app/models/`, and `backend/app/db/` directories."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Initialize Vue3 Frontend Project",
+        "description": "Set up the Vue3 project using Vite. Configure TailwindCSS with PostCSS, and set up ESLint/Prettier for code quality.",
+        "details": "Use `npm create vite@latest` with the Vue template. Install and configure `tailwindcss`, `postcss`, and `autoprefixer`. Set up a basic folder structure for `components`, `views`, and `services`.",
+        "testStrategy": "Run the Vite development server (`npm run dev`) inside the Docker container. Verify that the default Vue page loads and that TailwindCSS utility classes can be applied successfully.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Scaffold Vue3 Project with Vite",
+            "description": "Use Vite to create the initial Vue3 project structure.",
+            "dependencies": [],
+            "details": "Execute `npm create vite@latest` and select the Vue template. Navigate into the created project directory and run `npm install`.",
+            "status": "done",
+            "testStrategy": "Verify that the basic Vue project files (e.g., `package.json`, `src/App.vue`) are created and `node_modules` directory exists after `npm install`."
+          },
+          {
+            "id": 2,
+            "title": "Install TailwindCSS and PostCSS Dependencies",
+            "description": "Add necessary packages for TailwindCSS integration into the Vue project.",
+            "dependencies": [
+              "3.1"
+            ],
+            "details": "Install `tailwindcss`, `postcss`, and `autoprefixer` as development dependencies using npm: `npm install -D tailwindcss postcss autoprefixer`.",
+            "status": "done",
+            "testStrategy": "Check `package.json` to confirm that `tailwindcss`, `postcss`, and `autoprefixer` are listed under `devDependencies`."
+          },
+          {
+            "id": 3,
+            "title": "Configure TailwindCSS and PostCSS",
+            "description": "Generate and configure TailwindCSS and PostCSS configuration files, and integrate Tailwind into the main CSS.",
+            "dependencies": [
+              "3.2"
+            ],
+            "details": "Initialize TailwindCSS to create `tailwind.config.js` and `postcss.config.js` using `npx tailwindcss init -p`. Configure `tailwind.config.js` to scan Vue files (e.g., `content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}']`). Import Tailwind directives (`@tailwind base; @tailwind components; @tailwind utilities;`) into the project's main CSS file (e.g., `src/assets/main.css`).",
+            "status": "done",
+            "testStrategy": "Run `npm run dev`. Apply a basic Tailwind utility class (e.g., `bg-blue-500`) to an element in `App.vue`. Verify the style is applied correctly in the browser developer tools."
+          },
+          {
+            "id": 4,
+            "title": "Set up ESLint and Prettier for Code Quality",
+            "description": "Integrate ESLint and Prettier for consistent code formatting and linting within the project.",
+            "dependencies": [
+              "3.1"
+            ],
+            "details": "Install ESLint and Prettier packages along with necessary plugins (e.g., `eslint-plugin-vue`, `eslint-config-prettier`). Configure `.eslintrc.cjs` and `.prettierrc.cjs` files for Vue3 and Prettier rules. Add lint and format scripts to `package.json` (e.g., `\"lint\": \"eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore\"`).",
+            "status": "done",
+            "testStrategy": "Introduce a deliberate linting error or formatting issue (e.g., missing semicolon, incorrect indentation) in a `.vue` file. Run the configured lint/format script and verify that the issue is either reported or automatically fixed."
+          },
+          {
+            "id": 5,
+            "title": "Create Core Folder Structure",
+            "description": "Establish the foundational directory structure for application components, views, and services.",
+            "dependencies": [
+              "3.1"
+            ],
+            "details": "Create the following directories within the `src` folder: `src/components`, `src/views`, and `src/services`.",
+            "status": "done",
+            "testStrategy": "Verify that the `src/components`, `src/views`, and `src/services` directories exist in the project's file system."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Define Post Data Model",
+        "description": "Create the Pydantic model for a blog post to be used for API validation and database interaction.",
+        "details": "The model should be defined in `/app/models/post.py`. It must include `title: str`, `content: str`, `category: Optional[str]`, `author_id: str`, `created_at: datetime`, and `updated_at: datetime` as specified in the PRD.",
+        "testStrategy": "Unit test the Pydantic model to ensure it correctly validates valid data and raises errors for invalid data types or missing required fields.",
+        "priority": "high",
+        "dependencies": [
+          2
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Post Model File and Base Structure",
+            "description": "Create the `/app/models/post.py` file and define the basic Pydantic `BaseModel` class for the `Post`.",
+            "dependencies": [],
+            "details": "Create the file `/app/models/post.py`. Inside, import `BaseModel` from `pydantic` and define an empty `class Post(BaseModel):`.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Define Core Post Attributes",
+            "description": "Add `title: str`, `content: str`, `category: Optional[str]`, and `author_id: str` to the `Post` Pydantic model as specified.",
+            "dependencies": [
+              "4.1"
+            ],
+            "details": "Implement the `title`, `content`, `category`, and `author_id` fields within the `Post` model, ensuring correct type hints including `Optional` for `category`.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Implement `created_at` and `updated_at` Fields",
+            "description": "Add `created_at: datetime` and `updated_at: datetime` to the `Post` model, configuring them to automatically set current timestamps upon creation.",
+            "dependencies": [
+              "4.2"
+            ],
+            "details": "Import `datetime` from the `datetime` module and `Field` from `pydantic`. Define `created_at: datetime = Field(default_factory=datetime.now)` and `updated_at: datetime = Field(default_factory=datetime.now)`.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Configure Pydantic Model for Database Compatibility",
+            "description": "Configure the `Post` Pydantic model to be compatible with database interactions, specifically for handling attributes from database documents (e.g., MongoDB's `_id`).",
+            "dependencies": [
+              "4.3"
+            ],
+            "details": "Import `ConfigDict` from `pydantic`. Add `model_config = ConfigDict(from_attributes=True)` within the `Post` model class to enable Pydantic to create models from arbitrary class instances or ORM objects.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Unit Test Post Model Validation",
+            "description": "Create unit tests to verify that the `Post` Pydantic model correctly validates valid data, raises errors for invalid data types, and handles missing required fields as expected.",
+            "dependencies": [
+              "4.4"
+            ],
+            "details": "Write test cases using a testing framework (e.g., `pytest`) to instantiate the `Post` model with valid data, and assert that `ValidationError` is raised for invalid data types or missing required fields. Test cases should cover all defined fields.",
+            "status": "done",
+            "testStrategy": "Run the created unit tests to ensure all validation scenarios pass, confirming the model's robustness."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Implement MongoDB Database Connection",
+        "description": "Establish a connection to the MongoDB container from the FastAPI application using the `motor` async driver.",
+        "details": "Create a database utility module (`/app/db/database.py`) to handle the connection lifecycle (startup/shutdown events) and provide a database client instance to the application. Use a connection pool for efficiency.",
+        "testStrategy": "Add a startup log message to confirm a successful connection to MongoDB. Create a temporary test endpoint that performs a simple database operation (e.g., `ping`) to verify connectivity.",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Install MongoDB Driver",
+            "description": "Add `motor` and `pymongo` to the project's dependencies to enable asynchronous MongoDB interaction.",
+            "dependencies": [],
+            "details": "Update `requirements.txt` or `pyproject.toml` to include `motor` and `pymongo`. Ensure these packages are installed in the Docker environment during build or runtime.",
+            "status": "done",
+            "testStrategy": "Verify that `motor` and `pymongo` are listed in the installed packages within the Docker container (e.g., by running `pip freeze`)."
+          },
+          {
+            "id": 2,
+            "title": "Define MongoDB Connection Functions",
+            "description": "Create the `connect_to_mongo` and `close_mongo_connection` asynchronous functions within `/app/db/database.py` to manage the `motor` client lifecycle.",
+            "dependencies": [
+              "5.1"
+            ],
+            "details": "Initialize `motor.motor_asyncio.AsyncIOMotorClient` with the MongoDB connection string (e.g., `mongodb://mongodb:27017`) and store the client instance globally. Implement logic to close the client gracefully.",
+            "status": "done",
+            "testStrategy": "Manually inspect `/app/db/database.py` to confirm the presence and correct structure of `connect_to_mongo` and `close_mongo_connection` functions, ensuring they use `motor.motor_asyncio.AsyncIOMotorClient`."
+          },
+          {
+            "id": 3,
+            "title": "Integrate Connection with FastAPI Lifecycle Events",
+            "description": "Register the `connect_to_mongo` and `close_mongo_connection` functions with FastAPI's `startup` and `shutdown` events.",
+            "dependencies": [
+              "5.2"
+            ],
+            "details": "Modify the main FastAPI application file (e.g., `main.py`) to use `@app.on_event(\"startup\")` and `@app.on_event(\"shutdown\")` decorators for the respective connection functions. Add a log message (e.g., 'Successfully connected to MongoDB!') on successful startup connection.",
+            "status": "done",
+            "testStrategy": "Run the FastAPI application and check the console logs for the 'Successfully connected to MongoDB!' message during startup. Verify no errors occur during shutdown."
+          },
+          {
+            "id": 4,
+            "title": "Implement Database Client Provider",
+            "description": "Create a utility function or dependency injection provider in `/app/db/database.py` to make the `motor` database client instance accessible throughout the application.",
+            "dependencies": [
+              "5.3"
+            ],
+            "details": "Define an `async def get_database() -> AsyncIOMotorDatabase:` function that returns the `AsyncIOMotorDatabase` instance from the global client. This function will be used by FastAPI endpoints to interact with the database.",
+            "status": "done",
+            "testStrategy": "No direct test strategy for this subtask alone; its correctness will be verified when used by other components (e.g., the test endpoint in 5.5)."
+          },
+          {
+            "id": 5,
+            "title": "Create Connection Verification Endpoint",
+            "description": "Add a temporary FastAPI endpoint to verify the MongoDB connection by performing a simple database operation.",
+            "dependencies": [
+              "5.4"
+            ],
+            "details": "Create an endpoint (e.g., `/api/v1/db-status`) that uses the `get_database` provider to access the MongoDB client and execute a simple operation like `client.admin.command('ping')` or a collection count to confirm connectivity.",
+            "status": "done",
+            "testStrategy": "Access the `/api/v1/db-status` endpoint via a web browser or `curl`. Verify that it returns a success message (e.g., `{\"status\": \"MongoDB connected\"}`) and does not throw an error, confirming successful database interaction."
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "API: Implement POST /posts Endpoint",
+        "description": "Create the API endpoint for creating a new blog post.",
+        "details": "The endpoint should accept a JSON payload matching the Post model, save it to the MongoDB `posts` collection, and return the created post object with a `201 Created` status code.",
+        "testStrategy": "Use the auto-generated Swagger UI (`/docs`) to send a POST request with valid JSON data. Verify that the post is created in the MongoDB database and that the API returns the correct response.",
+        "priority": "high",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set up FastAPI Router and Endpoint Stub",
+            "description": "Create the necessary file structure for the API endpoint and define the POST /posts route within a FastAPI APIRouter, including basic imports and a placeholder function.",
+            "dependencies": [],
+            "details": "Create `app/api/v1/endpoints/posts.py`. Initialize an `APIRouter` instance. Define an asynchronous function decorated with `@router.post('/posts')` that initially returns a placeholder response.",
+            "status": "done",
+            "testStrategy": "Run the FastAPI application and verify that the '/docs' (Swagger UI) page lists the 'POST /posts' endpoint."
+          },
+          {
+            "id": 2,
+            "title": "Implement Request Body Validation with Post Model",
+            "description": "Configure the POST /posts endpoint to accept and validate incoming JSON payloads against the Pydantic Post model defined in Task 4.",
+            "dependencies": [
+              "6.1"
+            ],
+            "details": "Import the `Post` Pydantic model. Modify the endpoint function signature to accept a parameter typed as `Post` (e.g., `post: Post`). FastAPI will automatically handle the request body parsing and validation.",
+            "status": "done",
+            "testStrategy": "Use Swagger UI to send a POST request with valid JSON data matching the Post model. Verify a successful response (e.g., 200 OK initially). Send a request with invalid or missing data and verify a 422 Unprocessable Entity response with validation errors."
+          },
+          {
+            "id": 3,
+            "title": "Implement MongoDB Document Insertion",
+            "description": "Add the logic to convert the validated Post model data into a dictionary suitable for MongoDB and insert it into the `posts` collection using the established MongoDB connection (from Task 5).",
+            "dependencies": [
+              "6.2"
+            ],
+            "details": "Access the MongoDB database client (e.g., via `request.app.state.database`). Convert the Pydantic `Post` object to a dictionary using `post.model_dump(by_alias=True, exclude_unset=True)`. Add `created_at` and `updated_at` timestamps. Use `await db.posts.insert_one()` to save the document.",
+            "status": "done",
+            "testStrategy": "After sending a valid POST request via Swagger UI, connect to the MongoDB database and verify that a new document corresponding to the sent data has been successfully inserted into the `posts` collection."
+          },
+          {
+            "id": 4,
+            "title": "Format Response and Set 201 Status Code",
+            "description": "After successful insertion, retrieve the inserted document's ID, format the response to include the full created post object (including the MongoDB `_id` as `id`), and set the HTTP status code to 201 Created.",
+            "dependencies": [
+              "6.3"
+            ],
+            "details": "Retrieve the `inserted_id` from the `insert_one` result. Fetch the newly created document from MongoDB using this ID to ensure all default values and generated fields are present. Convert the MongoDB document (including `_id`) back into a `Post` Pydantic model instance. Set `status_code=status.HTTP_201_CREATED` in the endpoint decorator and specify `response_model=Post`.",
+            "status": "done",
+            "testStrategy": "Send a valid POST request via Swagger UI. Verify that the API response body contains the complete created post object (including an 'id' field) and that the HTTP status code is exactly 201 Created."
+          },
+          {
+            "id": 5,
+            "title": "Integrate Endpoint into Main Application and End-to-End Test",
+            "description": "Ensure the newly created `posts` router is properly included in the main FastAPI application and perform a comprehensive end-to-end test of the POST /posts endpoint.",
+            "dependencies": [
+              "6.1",
+              "6.2",
+              "6.3",
+              "6.4"
+            ],
+            "details": "In `app/main.py`, import the `posts` router and include it in the main FastAPI application using `app.include_router()`. Perform a full test by sending a valid POST request via Swagger UI, verifying database insertion, and confirming the correct API response (201 status, created object).",
+            "status": "done",
+            "testStrategy": "Use the auto-generated Swagger UI (`/docs`) to send a POST request with valid JSON data. Verify that the post is created in the MongoDB database and that the API returns the created post object with a `201 Created` status code, as per the parent task's test strategy."
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "API: Implement GET /posts Endpoint",
+        "description": "Create the API endpoint to retrieve a list of all blog posts.",
+        "details": "The endpoint should query the `posts` collection in MongoDB and return all documents as a JSON array.",
+        "testStrategy": "After creating several posts using the POST endpoint, call the GET /posts endpoint via Swagger UI or a browser. Verify that it returns an array containing all the created posts.",
+        "priority": "high",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define GET /posts API Route",
+            "description": "Create the basic FastAPI route for `/posts` within the appropriate router file.",
+            "dependencies": [],
+            "details": "Create a new function in `app/routers/posts.py` (or similar) decorated with `@router.get(\"/posts\")`. Define the function signature, potentially including a `db` dependency.",
+            "status": "done",
+            "testStrategy": "Access `/docs` to verify the new endpoint appears in Swagger UI."
+          },
+          {
+            "id": 2,
+            "title": "Inject MongoDB Client Dependency",
+            "description": "Configure the `/posts` endpoint to receive the MongoDB database client instance.",
+            "dependencies": [
+              "7.1"
+            ],
+            "details": "Use FastAPI's `Depends` mechanism to inject the `AsyncIOMotorClient` instance (or a specific database object) into the endpoint function. This relies on the utility created in Task 5.",
+            "status": "done",
+            "testStrategy": "Add a temporary log statement within the endpoint to confirm the `db` object is not None."
+          },
+          {
+            "id": 3,
+            "title": "Query All Posts from MongoDB",
+            "description": "Implement the database query logic to retrieve all documents from the `posts` collection.",
+            "dependencies": [
+              "7.2"
+            ],
+            "details": "Use `db.posts.find({})` to get an asynchronous cursor of all documents.",
+            "status": "done",
+            "testStrategy": "Temporarily print the raw documents retrieved from the database to verify the query is working."
+          },
+          {
+            "id": 4,
+            "title": "Serialize Retrieved Posts to Pydantic Model",
+            "description": "Convert the raw MongoDB documents into a list of `Post` Pydantic models.",
+            "dependencies": [
+              "7.3"
+            ],
+            "details": "Iterate through the cursor obtained from the query using `await cursor.to_list(length=None)`. For each document, convert its `_id` to a string (e.g., `str(doc[\"_id\"])`) and then parse it into the `Post` Pydantic model.",
+            "status": "done",
+            "testStrategy": "After querying, print the list of Pydantic `Post` objects to ensure correct serialization and data types."
+          },
+          {
+            "id": 5,
+            "title": "Return List of Posts as JSON Array",
+            "description": "Configure the endpoint to return the list of serialized `Post` objects as a JSON array.",
+            "dependencies": [
+              "7.4"
+            ],
+            "details": "The endpoint function should return the list of `Post` Pydantic objects. Ensure the response type hint is `List[Post]` (or `list[Post]` for Python 3.9+). FastAPI will automatically serialize this list into a JSON array.",
+            "status": "done",
+            "testStrategy": "Call the `/posts` endpoint via Swagger UI or a browser. Verify that the response is a JSON array containing the expected post data, matching the structure defined by the `Post` model."
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "API: Implement GET /posts/{id} Endpoint",
+        "description": "Create the API endpoint to retrieve a single blog post by its ID.",
+        "details": "The endpoint should take a post ID as a path parameter, query MongoDB for that specific document, and return the post. If not found, it should return a `404 Not Found` error.",
+        "testStrategy": "Use a valid ID from a created post to test the success case. Test the failure case by using a non-existent ID and verify the `404` response.",
+        "priority": "high",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create GET /posts/{id} Router and Path",
+            "description": "Define the FastAPI router and the specific GET endpoint path `/posts/{id}` within the `app/routers/posts.py` module. This includes extracting the `post_id` path parameter.",
+            "dependencies": [],
+            "details": "Create `app/routers/posts.py` if it doesn't exist. Define an `APIRouter` instance. Add a `@router.get(\"/posts/{post_id}\")` decorator to an async function that accepts `post_id: str`.",
+            "status": "done",
+            "testStrategy": "Verify the endpoint appears in the Swagger UI (`/docs`) and can be accessed, even if it returns a placeholder response initially."
+          },
+          {
+            "id": 2,
+            "title": "Implement MongoDB Query for Single Post",
+            "description": "Write the asynchronous code to query the MongoDB `posts` collection using the `motor` client to find a single document by its `_id` (which corresponds to the `post_id` path parameter).",
+            "dependencies": [
+              "8.1"
+            ],
+            "details": "Use the `db_client[\"posts\"].find_one({\"_id\": ObjectId(post_id)})` method. Ensure proper handling of `ObjectId` conversion for the `post_id`.",
+            "status": "done",
+            "testStrategy": "Manually test the query logic in isolation (e.g., in a temporary script or by mocking the FastAPI context) to ensure it retrieves a document when a valid ID is provided."
+          },
+          {
+            "id": 3,
+            "title": "Integrate Pydantic Model for Response",
+            "description": "Use the `Post` Pydantic model to serialize the retrieved MongoDB document into the expected API response format.",
+            "dependencies": [
+              "8.2"
+            ],
+            "details": "Convert the MongoDB dictionary result into an instance of the `Post` Pydantic model before returning it. This ensures data validation and proper serialization.",
+            "status": "done",
+            "testStrategy": "Verify that the successful response body matches the `Post` model's schema and data types."
+          },
+          {
+            "id": 4,
+            "title": "Implement 404 Not Found Error Handling",
+            "description": "Add logic to return a `HTTP 404 Not Found` response if the MongoDB query does not find a post with the given ID.",
+            "dependencies": [
+              "8.2"
+            ],
+            "details": "Check if the result from `find_one` is `None`. If so, raise an `HTTPException` with `status_code=404` and a `detail` message like 'Post not found'.",
+            "status": "done",
+            "testStrategy": "Use a non-existent ID to call the endpoint and verify that the response status code is `404` and the body contains the expected error message."
+          },
+          {
+            "id": 5,
+            "title": "End-to-End Testing and Refinement",
+            "description": "Perform comprehensive testing of the `GET /posts/{id}` endpoint, covering both success and 404 failure scenarios, and make any necessary refinements to the code.",
+            "dependencies": [
+              "8.1",
+              "8.2",
+              "8.3",
+              "8.4"
+            ],
+            "details": "Execute the test strategy defined in the parent task. Use a valid ID from a created post to test the success case. Use a non-existent ID to test the failure case and verify the `404` response. Ensure the endpoint is properly integrated into the main application.",
+            "status": "done",
+            "testStrategy": "Use a valid ID from a created post to test the success case. Test the failure case by using a non-existent ID and verify the `404` response."
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "API: Implement PUT /posts/{id} Endpoint",
+        "description": "Create the API endpoint to update an existing blog post.",
+        "details": "The endpoint should take a post ID and a JSON payload with the fields to be updated. It should find and update the document in MongoDB and return the updated post object.",
+        "testStrategy": "Use Swagger UI to send a PUT request with a valid ID and updated data. Verify that the API returns the updated object and that the changes are reflected in the database.",
+        "priority": "high",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define PUT /posts/{id} Route and Models",
+            "description": "Create the FastAPI route for `PUT /posts/{id}` within the appropriate router. Define a Pydantic model (e.g., `PostUpdate`) for the request body to allow partial updates, and specify the response model as the full `Post` object.",
+            "dependencies": [],
+            "details": "Use `@router.put('/posts/{id}', response_model=Post)` decorator. Create a `PostUpdate` Pydantic model in `/app/models/post.py` with `Optional` fields corresponding to updatable post attributes.",
+            "status": "done",
+            "testStrategy": "Verify the new endpoint appears correctly in Swagger UI (`/docs`) with the expected path parameters, request body schema, and response schema."
+          },
+          {
+            "id": 2,
+            "title": "Implement MongoDB Post Update Function",
+            "description": "Create an asynchronous function in the database service layer (e.g., `app/db/crud.py`) to find a post by its ID and update its fields in MongoDB. This function should handle setting the `updated_at` timestamp automatically.",
+            "dependencies": [],
+            "details": "Use `motor`'s `find_one_and_update` method with `$set` operator to apply updates. Ensure the `return_document=ReturnDocument.AFTER` option is used to get the updated document. The function should return `None` if the post is not found.",
+            "status": "done",
+            "testStrategy": "Write a unit test for this function, mocking the database if necessary, to ensure it correctly updates a document, sets `updated_at`, and returns the updated version, or `None` if the ID does not exist."
+          },
+          {
+            "id": 3,
+            "title": "Integrate Update Logic and Handle Post Not Found",
+            "description": "Call the MongoDB post update function from within the `PUT /posts/{id}` endpoint handler. If the post is not found by the provided ID, raise an `HTTPException` with status code 404 (Not Found).",
+            "dependencies": [
+              "9.1",
+              "9.2"
+            ],
+            "details": "Inside the route handler, await the call to the update function. If the returned post object is `None`, raise `HTTPException(status_code=404, detail='Post not found')`. Otherwise, return the updated post.",
+            "status": "done",
+            "testStrategy": "Use Swagger UI or a tool like Postman to send a PUT request with a non-existent post ID and verify that a 404 Not Found response is returned. Send a request with a valid ID and verify the updated post is returned."
+          },
+          {
+            "id": 4,
+            "title": "Implement Request Body Validation and Error Handling",
+            "description": "Ensure the incoming JSON payload for the update request is properly validated against the `PostUpdate` Pydantic model. Verify that FastAPI's automatic validation handles invalid data types or formats, returning appropriate error responses.",
+            "dependencies": [
+              "9.1"
+            ],
+            "details": "This subtask primarily involves ensuring the `PostUpdate` Pydantic model is correctly defined to catch common data issues (e.g., non-string title). FastAPI handles the HTTP 422 response for validation errors automatically.",
+            "status": "done",
+            "testStrategy": "Send a PUT request to the endpoint with an invalid payload (e.g., `{'title': 123}` instead of a string) and verify that FastAPI returns a 422 Unprocessable Entity error with detailed validation messages."
+          },
+          {
+            "id": 5,
+            "title": "Write API Endpoint Tests",
+            "description": "Create comprehensive unit/integration tests for the `PUT /posts/{id}` endpoint using FastAPI's `TestClient`. Cover successful updates, partial updates, handling of non-existent IDs, and validation errors.",
+            "dependencies": [
+              "9.1",
+              "9.2",
+              "9.3",
+              "9.4"
+            ],
+            "details": "Write test cases for: 1) Successfully updating an existing post with all fields. 2) Successfully updating an existing post with only a subset of fields. 3) Attempting to update a non-existent post (expect 404). 4) Sending an invalid request body (expect 422). Verify database state after successful updates.",
+            "status": "done",
+            "testStrategy": "Run the test suite. All test cases should pass, confirming the endpoint's robustness and correctness across various scenarios."
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "API: Implement DELETE /posts/{id} Endpoint",
+        "description": "Create the API endpoint to delete a blog post.",
+        "details": "The endpoint should take a post ID, delete the corresponding document from MongoDB, and return a success response with a `204 No Content` status code.",
+        "testStrategy": "Use Swagger UI to send a DELETE request with a valid ID. Verify the `204` response. Then, call `GET /posts/{id}` with the same ID and confirm that it returns a `404`.",
+        "priority": "high",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create DELETE /posts/{id} Endpoint Skeleton",
+            "description": "Set up the basic FastAPI route for deleting a post, including path parameters and initial imports within the appropriate router file.",
+            "dependencies": [],
+            "details": "Create a new route in `/app/routers/posts.py` (or similar) using `@router.delete('/{id}')` assuming a prefix of `/posts`. Define the `id` path parameter as a `str` and ensure necessary imports like `APIRouter`, `HTTPException`, and `status` are present. The function signature should accept `id: str`.",
+            "status": "done",
+            "testStrategy": "Verify that the new endpoint appears in Swagger UI (`/docs`) with the correct HTTP method (DELETE) and path (`/posts/{id}`)."
+          },
+          {
+            "id": 2,
+            "title": "Implement MongoDB Document Deletion Logic",
+            "description": "Write the asynchronous code within the endpoint to connect to MongoDB and attempt to delete a document matching the provided ID.",
+            "dependencies": [],
+            "details": "Access the MongoDB client via `request.app.mongodb` (or similar dependency injection). Use `collection.delete_one({'_id': ObjectId(id)})` on the 'posts' collection. Ensure proper conversion of the string `id` to `bson.ObjectId`.",
+            "status": "done",
+            "testStrategy": "Manually test the endpoint with a valid ID. Observe server logs for database interaction. Verify that the `deleted_count` from the `DeleteResult` is 1 in the debugger or logs."
+          },
+          {
+            "id": 3,
+            "title": "Add 404 Not Found Error Handling",
+            "description": "Implement logic to return a `404 Not Found` response if no post with the given ID is found in the database after the deletion attempt.",
+            "dependencies": [],
+            "details": "After calling `delete_one`, check the `deleted_count` property of the `DeleteResult`. If `deleted_count` is 0, raise an `HTTPException` with `status_code=status.HTTP_404_NOT_FOUND` and a detail message like 'Post not found'.",
+            "status": "done",
+            "testStrategy": "Send a DELETE request to `/posts/{id}` with a non-existent ID (e.g., a valid-looking but non-matching ObjectId). Verify that the API returns a `404 Not Found` status code and the appropriate error message."
+          },
+          {
+            "id": 4,
+            "title": "Configure 204 No Content Success Response",
+            "description": "Ensure the API endpoint returns a `204 No Content` status code upon successful deletion of a post.",
+            "dependencies": [],
+            "details": "If the deletion is successful (i.e., `deleted_count` is 1), return a `Response(status_code=status.HTTP_204_NO_CONTENT)`. FastAPI often handles this implicitly for functions that return `None`, but explicitly setting the `status_code` is good practice for clarity.",
+            "status": "done",
+            "testStrategy": "Send a DELETE request to `/posts/{id}` with a valid, existing ID. Verify that the API returns a `204 No Content` status code."
+          },
+          {
+            "id": 5,
+            "title": "End-to-End Testing and Documentation Review",
+            "description": "Perform comprehensive end-to-end testing of the DELETE endpoint as per the parent task's test strategy and review its documentation in Swagger UI.",
+            "dependencies": [],
+            "details": "1. Use Swagger UI to send a DELETE request with a valid, existing post ID. 2. Verify the `204 No Content` response. 3. Immediately after, send a `GET /posts/{id}` request with the *same* ID. 4. Confirm that the `GET` request returns a `404 Not Found` response, indicating successful deletion. 5. Review the endpoint's appearance in Swagger UI for correctness (parameters, expected responses, descriptions).",
+            "status": "done",
+            "testStrategy": "As described in the details section of this subtask."
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Configure Backend CORS",
+        "description": "Enable Cross-Origin Resource Sharing (CORS) in the FastAPI application to allow requests from the Vue3 frontend.",
+        "details": "Use FastAPI's `CORSMiddleware` to allow requests from the frontend's origin (e.g., `http://localhost:5173` or as configured in Docker). Allow common methods (GET, POST, PUT, DELETE) and headers.",
+        "testStrategy": "Once the frontend is connected, check the browser's developer console for CORS errors. A successful configuration will show no such errors when the frontend makes API calls.",
+        "priority": "high",
+        "dependencies": [
+          2
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Identify Frontend CORS Origin(s)",
+            "description": "Research and confirm the exact URL(s) from which the Vue3 frontend will be served, both in local development (e.g., `http://localhost:5173`) and within the Dockerized environment. This information is crucial for setting the `allow_origins` parameter in `CORSMiddleware`.",
+            "dependencies": [],
+            "details": "Check `vite.config.js` for local dev server port. If Docker Compose is used, consider the service name and exposed port for the frontend service. Document the identified origins (e.g., `['http://localhost:5173', 'http://frontend-service:80']`).",
+            "status": "done",
+            "testStrategy": "Document the identified origins for use in subsequent steps."
+          },
+          {
+            "id": 2,
+            "title": "Import CORSMiddleware and Prepare FastAPI App",
+            "description": "Add the necessary import statement for `CORSMiddleware` from `starlette.middleware.cors` into the main FastAPI application file (e.g., `main.py`). Ensure the FastAPI application instance is ready to accept middleware.",
+            "dependencies": [],
+            "details": "Locate `main.py` or the primary FastAPI application instantiation file. Add `from starlette.middleware.cors import CORSMiddleware` at the top of the file.",
+            "status": "done",
+            "testStrategy": "Verify the import statement is correctly placed and no syntax errors occur when the application starts."
+          },
+          {
+            "id": 3,
+            "title": "Instantiate and Apply CORSMiddleware with Origins",
+            "description": "Instantiate `CORSMiddleware` and add it to the FastAPI application using `app.add_middleware()`. The `allow_origins` parameter must be set using the origins identified in subtask 11.1.",
+            "dependencies": [
+              "11.1",
+              "11.2"
+            ],
+            "details": "Use `app.add_middleware(CORSMiddleware, allow_origins=...)` immediately after the FastAPI app instance is created. Ensure the list of origins is correctly formatted as a Python list of strings.",
+            "status": "done",
+            "testStrategy": "Run the FastAPI application and check logs for any middleware configuration errors. Verify the `allow_origins` parameter is correctly passed."
+          },
+          {
+            "id": 4,
+            "title": "Define Allowed HTTP Methods and Headers",
+            "description": "Extend the `CORSMiddleware` configuration to explicitly allow common HTTP methods (GET, POST, PUT, DELETE) and necessary headers (e.g., `Content-Type`, `Authorization`). This ensures the frontend can perform various API operations.",
+            "dependencies": [
+              "11.3"
+            ],
+            "details": "Add `allow_methods=['GET', 'POST', 'PUT', 'DELETE']` and `allow_headers=['*']` (or a specific list like `['Content-Type', 'Authorization']`) to the `CORSMiddleware` instantiation. Consider `allow_credentials=True` if authentication tokens (cookies/headers) are involved.",
+            "status": "done",
+            "testStrategy": "Review the `CORSMiddleware` parameters in the code to ensure all required methods and headers are included as specified."
+          },
+          {
+            "id": 5,
+            "title": "Verify CORS Configuration with Frontend Requests",
+            "description": "Perform end-to-end testing by making actual API requests from the Vue3 frontend to the FastAPI backend. Monitor the browser's developer console for any CORS-related errors. A successful configuration will show no such errors.",
+            "dependencies": [
+              "11.4"
+            ],
+            "details": "Start both the FastAPI backend and the Vue3 frontend. Navigate to a frontend page that makes an API call. Open the browser's developer console (Network tab and Console tab) to observe the request and response headers, specifically looking for `Access-Control-Allow-Origin` and the absence of CORS errors.",
+            "status": "done",
+            "testStrategy": "Make a simple GET request from the frontend to a backend endpoint (e.g., the health check or root endpoint). Verify the request completes successfully without CORS preflight or actual request errors in the browser console."
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Frontend: Basic UI Layout",
+        "description": "Develop the main application layout using Vue3 components and TailwindCSS, including a header, main content area, and footer.",
+        "details": "Create an `App.vue` or `DefaultLayout.vue` component that will wrap the different views using `<router-view>`. The header should contain the blog title and a link to the home/post list page.",
+        "testStrategy": "Visually inspect the layout in the browser. Ensure the header and footer are static while the main content area changes with navigation.",
+        "priority": "medium",
+        "dependencies": [
+          3
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Base Layout Component Structure",
+            "description": "Set up the main layout component file (e.g., `DefaultLayout.vue` or `App.vue`) with a basic Vue 3 component structure.",
+            "dependencies": [],
+            "details": "Create the `.vue` file, define the `<template>`, `<script setup>`, and `<style>` sections. Include a root `div` for the layout.",
+            "status": "done",
+            "testStrategy": "Verify the component file exists and can be rendered (even if empty) in the application."
+          },
+          {
+            "id": 2,
+            "title": "Develop Header Component/Section",
+            "description": "Implement the header section within the main layout component, including the blog title and a navigation link to the home/post list page.",
+            "dependencies": [
+              "12.1"
+            ],
+            "details": "Add a `<header>` element. Include a `<h1>` for the blog title and a `<router-link>` for navigation to the home/post list.",
+            "status": "done",
+            "testStrategy": "Visually inspect the header in the browser. Ensure the title and link are present and the link points to the correct route (e.g., `/posts`)."
+          },
+          {
+            "id": 3,
+            "title": "Develop Footer Component/Section",
+            "description": "Implement the footer section within the main layout component.",
+            "dependencies": [
+              "12.1"
+            ],
+            "details": "Add a `<footer>` element. Include basic placeholder text like '© 2023 My Blog'.",
+            "status": "done",
+            "testStrategy": "Visually inspect the footer in the browser. Ensure it's present at the bottom of the page."
+          },
+          {
+            "id": 4,
+            "title": "Integrate Router View for Dynamic Content",
+            "description": "Place the `<router-view>` component within the main layout to allow different views (Post List, Post Detail, etc.) to be rendered dynamically in the main content area.",
+            "dependencies": [
+              "12.1"
+            ],
+            "details": "Add `<router-view>` within the layout's main content `div` or `<main>` tag.",
+            "status": "done",
+            "testStrategy": "Verify that navigating between different (even empty) routes correctly swaps content within the main area, while header and footer remain static."
+          },
+          {
+            "id": 5,
+            "title": "Apply Basic TailwindCSS Styling to Layout",
+            "description": "Apply initial TailwindCSS classes to the header, main content area, and footer to establish a basic visual layout and structure.",
+            "dependencies": [
+              "12.2",
+              "12.3",
+              "12.4"
+            ],
+            "details": "Use Tailwind utility classes for spacing (padding, margin), background colors, text styling, and basic flexbox/grid for layout structure (e.g., `flex flex-col min-h-screen`).",
+            "status": "done",
+            "testStrategy": "Visually inspect the layout in the browser. Ensure the header, main content, and footer are distinct, have appropriate spacing, and the overall page takes up the full viewport height."
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "title": "Frontend: Post List Page",
+        "description": "Create a Vue view to display a list of blog posts.",
+        "details": "This page (`views/PostListView.vue`) will fetch and display post titles. Each title should be a link to its detail page. Include a prominent 'Create New Post' button.",
+        "testStrategy": "Initially, render the page with mock/static data. Verify that the list structure is correct and links are generated properly. Component tests can be written with Vitest.",
+        "priority": "high",
+        "dependencies": [
+          12
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create PostListView.vue and Initial Layout",
+            "description": "Scaffold the `PostListView.vue` file, set up the basic Vue component structure (`<template>`, `<script setup>`, `<style>`), and define the main container for the page content, including a title for the page.",
+            "dependencies": [],
+            "details": "Create `src/views/PostListView.vue`. Add a `div` for the main content, an `<h1>` for 'Blog Posts', and placeholders for the post list and the 'Create New Post' button.",
+            "status": "done",
+            "testStrategy": "Verify the file exists and the basic page title is rendered when navigating to the route."
+          },
+          {
+            "id": 2,
+            "title": "Implement 'Create New Post' Button",
+            "description": "Add a prominent 'Create New Post' button to the `PostListView.vue` template and configure its click handler to navigate to the post creation form page.",
+            "dependencies": [
+              "13.1"
+            ],
+            "details": "Add a `<button>` element. Use `router-link` or `router.push()` to navigate to the route for Task 15 (e.g., `/posts/new`). Apply basic styling to make it prominent.",
+            "status": "done",
+            "testStrategy": "Click the button and verify that the application navigates to the correct URL for creating a new post."
+          },
+          {
+            "id": 3,
+            "title": "Display Post List Structure with Mock Data",
+            "description": "Define an array of mock blog post objects (each with an `id` and `title`) within `PostListView.vue` and use Vue's `v-for` directive to render these titles as a list.",
+            "dependencies": [
+              "13.1"
+            ],
+            "details": "Create a `ref` or `reactive` variable for `posts` initialized with sample data. Use an unordered list (`<ul>`) or similar structure with `v-for` to display each post's title.",
+            "status": "done",
+            "testStrategy": "Visually inspect the page to ensure the mock post titles are rendered correctly in a list format."
+          },
+          {
+            "id": 4,
+            "title": "Implement Post Title Links to Detail Page",
+            "description": "Convert each displayed post title into a clickable link that navigates to its corresponding detail page, passing the post's ID as a route parameter.",
+            "dependencies": [
+              "13.3"
+            ],
+            "details": "Wrap each post title within a `<router-link>` component. Dynamically bind the `to` prop using the post's `id` (e.g., `:to=\"{ name: 'PostDetail', params: { id: post.id } }\"`).",
+            "status": "done",
+            "testStrategy": "Click on several post titles and verify that the URL changes correctly to reflect the post's ID (e.g., `/posts/1`, `/posts/2`)."
+          },
+          {
+            "id": 5,
+            "title": "Integrate Data Fetching Logic",
+            "description": "Replace the mock data with logic to fetch actual blog post data from an API endpoint (or a simulated asynchronous call) and update the component's state to display the fetched posts.",
+            "dependencies": [
+              "13.3",
+              "13.4"
+            ],
+            "details": "Use `onMounted` lifecycle hook to trigger an asynchronous function (e.g., using `fetch` or `axios`) to retrieve post data. Update the `posts` ref/reactive variable with the fetched data.",
+            "status": "done",
+            "testStrategy": "Verify that the page displays actual post data (if an API is available) or that the loading mechanism is correctly implemented and replaces mock data after a delay."
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "title": "Frontend: Post Detail Page",
+        "description": "Create a Vue view to display the full content of a single blog post.",
+        "details": "This page (`views/PostDetailView.vue`) will display the post's title, content, and metadata. It should also have 'Edit' and 'Delete' buttons. Focus on a clean, readable layout.",
+        "testStrategy": "Render the page using a route parameter for the post ID and mock data. Verify all elements are displayed correctly. Component tests can check for the presence of title, content, and buttons.",
+        "priority": "high",
+        "dependencies": [
+          12
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create PostDetailView and Configure Routing",
+            "description": "Create the `views/PostDetailView.vue` file and configure the Vue Router to map `/posts/:id` to this new view component. This establishes the basic entry point for the post detail page.",
+            "dependencies": [],
+            "details": "Create `views/PostDetailView.vue` with a basic `<template>` and `<script>` structure. Add a route definition in `router/index.js` (or similar) for `/posts/:id` pointing to `PostDetailView`.",
+            "status": "done",
+            "testStrategy": "Verify that navigating to `/posts/1` (or any ID) successfully renders the `PostDetailView` component (even if it's just a placeholder)."
+          },
+          {
+            "id": 2,
+            "title": "Implement Post Content Layout and Styling",
+            "description": "Design and implement the visual layout for displaying the post's title, content, and metadata within `PostDetailView.vue`. Focus on a clean, readable design using TailwindCSS. Use static placeholder data for initial styling.",
+            "dependencies": [
+              "14.1"
+            ],
+            "details": "Use TailwindCSS classes to structure the title, content area, and metadata (e.g., author, date). Ensure appropriate spacing, font sizes, and overall readability.",
+            "status": "done",
+            "testStrategy": "Visually inspect the page with mock data to ensure the layout is clean and all elements are correctly positioned and styled."
+          },
+          {
+            "id": 3,
+            "title": "Integrate Data Fetching for Post Details",
+            "description": "Implement the logic within `PostDetailView.vue` to fetch a single post's data based on the `id` route parameter. Bind the fetched `title`, `content`, and `metadata` to the template.",
+            "dependencies": [
+              "14.2"
+            ],
+            "details": "Use Vue's lifecycle hooks (e.g., `onMounted` or `created`) to make an API call to retrieve post data. Handle potential loading states or errors.",
+            "status": "done",
+            "testStrategy": "Render the page with a valid post ID. Verify that the fetched title, content, and metadata are correctly displayed on the page. Use mock data for initial testing."
+          },
+          {
+            "id": 4,
+            "title": "Implement Edit and Delete Actions",
+            "description": "Add 'Edit' and 'Delete' buttons to the `PostDetailView.vue`. Implement basic click handlers for these buttons. The 'Edit' button should prepare for navigation to the edit form, and the 'Delete' button should prepare for a delete action (e.g., show a confirmation or trigger an event).",
+            "dependencies": [
+              "14.3"
+            ],
+            "details": "Place the buttons prominently. For 'Edit', consider using `router.push` to navigate to a hypothetical `/posts/:id/edit` route. For 'Delete', define a method that could, for example, emit an event or log a message.",
+            "status": "done",
+            "testStrategy": "Verify the presence and clickable nature of both 'Edit' and 'Delete' buttons. Check that their respective click handlers are triggered (e.g., by console logs or mock navigation)."
+          },
+          {
+            "id": 5,
+            "title": "Refine Layout and Implement Component Tests",
+            "description": "Conduct a final review of the `PostDetailView.vue` for layout consistency, readability, and basic responsiveness (in preparation for Task 16). Write component tests to verify the presence of the post title, content, and the 'Edit' and 'Delete' buttons.",
+            "dependencies": [
+              "14.4"
+            ],
+            "details": "Ensure the layout looks good across different (simulated) screen sizes. Use a testing framework (e.g., Vitest/Vue Test Utils) to write tests that assert the rendering of key elements when provided with mock post data.",
+            "status": "done",
+            "testStrategy": "Run component tests to confirm that the title, content, and both buttons are rendered correctly. Manually inspect the page in the browser for visual consistency and basic responsiveness."
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "title": "Frontend: Post Create/Edit Form Component",
+        "description": "Create a reusable Vue component for the post creation and editing form.",
+        "details": "The component (`components/PostForm.vue`) should have input fields for `title` and a `textarea` for `content`. It should emit a `submit` event with the form data.",
+        "testStrategy": "Create a story in Storybook or a test page to render the component. Verify that data binding works and that the submit event is emitted with the correct payload.",
+        "priority": "high",
+        "dependencies": [
+          12
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Component Scaffolding and Basic Form Structure",
+            "description": "Create the `components/PostForm.vue` file and set up the basic Vue component structure, including the root `<form>` element.",
+            "dependencies": [],
+            "details": "This involves creating the file, defining the `<script setup>` block, and adding the root `<template>` with a `<form>` tag. No input fields or logic yet.",
+            "status": "done",
+            "testStrategy": "Verify the `PostForm.vue` file exists and the basic component can be imported and rendered without errors in a test environment."
+          },
+          {
+            "id": 2,
+            "title": "Implement Title and Content Input Fields",
+            "description": "Add the necessary input fields for `title` and `content` within the form's template.",
+            "dependencies": [
+              "15.1"
+            ],
+            "details": "Include an `<input type=\"text\">` for the post title and a `<textarea>` for the post content. Add corresponding `<label>` elements for accessibility.",
+            "status": "done",
+            "testStrategy": "Visually inspect the rendered component to ensure both the title input field and the content textarea are present on the page."
+          },
+          {
+            "id": 3,
+            "title": "Implement Data Binding and Props for Editing",
+            "description": "Set up `v-model` for the `title` and `content` fields and define component props to allow pre-filling the form for editing existing posts.",
+            "dependencies": [
+              "15.2"
+            ],
+            "details": "Use `ref` or `reactive` to manage the local form data (`title`, `content`). Bind `v-model` to these reactive properties. Define `defineProps` for `initialTitle` and `initialContent` and initialize the local form data from these props, handling updates if props change.",
+            "status": "done",
+            "testStrategy": "Render the component with mock `initialTitle` and `initialContent` props and verify that the input fields are pre-filled correctly. Type into the fields and confirm the internal reactive data updates."
+          },
+          {
+            "id": 4,
+            "title": "Implement Form Submission and Event Emission",
+            "description": "Add a submit button and implement the logic to emit a `submit` event with the current form data when the form is submitted.",
+            "dependencies": [
+              "15.3"
+            ],
+            "details": "Add a `<button type=\"submit\">` element. Attach an `@submit.prevent` handler to the `<form>` element. Inside the handler, use `defineEmits` to emit a custom `submit` event, passing an object `{ title: currentTitle, content: currentContent }` as the payload.",
+            "status": "done",
+            "testStrategy": "Use a test page or Storybook to render the component. Fill the form fields, click the submit button, and verify that the `submit` event is emitted with the correct `title` and `content` payload using event listeners or testing utilities."
+          },
+          {
+            "id": 5,
+            "title": "Apply Basic Styling and Component Test Setup",
+            "description": "Apply basic TailwindCSS styling to the form elements for a clean appearance and set up a Storybook story or a dedicated test page for comprehensive component verification.",
+            "dependencies": [
+              "15.4"
+            ],
+            "details": "Use Tailwind utility classes (e.g., `p-4`, `mb-4`, `block`, `w-full`, `border`, `rounded`, `shadow`, `bg-blue-500`, `text-white`) to style the form container, labels, input fields, textarea, and submit button. Create `PostForm.stories.js` to demonstrate the component in both create (empty) and edit (pre-filled) modes, allowing for visual inspection and event testing.",
+            "status": "done",
+            "testStrategy": "Visually inspect the styled component in Storybook or a test page to ensure it looks presentable and responsive. Use Storybook's actions panel or browser developer tools to confirm `submit` event emission and payload correctness upon form submission."
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "title": "Frontend: Apply Responsive Design",
+        "description": "Ensure all frontend pages (List, Detail, Form) are fully responsive for mobile, tablet, and desktop screens using TailwindCSS.",
+        "details": "Use Tailwind's responsive prefixes (e.g., `md:`, `lg:`) to adjust layout, font sizes, and spacing. Pay special attention to navigation, forms, and content readability on small screens.",
+        "testStrategy": "Use browser developer tools to test the layout at various standard breakpoints (e.g., 360px, 768px, 1024px). Verify that no content overflows and all interactive elements are usable.",
+        "priority": "medium",
+        "dependencies": [
+          13,
+          14,
+          15
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Global Layout & Navigation Responsiveness",
+            "description": "Apply responsive design principles to the main application layout (header, footer, overall container) and the primary navigation. This ensures the basic structure adapts correctly across screen sizes before diving into specific page content.",
+            "dependencies": [],
+            "details": "Use Tailwind's responsive prefixes (e.g., `sm:`, `md:`, `lg:`) to adjust the `App.vue` or `DefaultLayout.vue` structure. Focus on the header (blog title, home link) and potentially implement a mobile-friendly navigation toggle if needed for smaller screens. Ensure the footer remains at the bottom and is readable.",
+            "status": "done",
+            "testStrategy": "Test the global layout and navigation across various breakpoints (e.g., 320px, 768px, 1024px) using browser developer tools. Verify header/footer positioning and navigation usability."
+          },
+          {
+            "id": 2,
+            "title": "Post List Page Responsiveness",
+            "description": "Implement responsive design for the `PostListView.vue` page, ensuring the list of posts and the 'Create New Post' button adapt well to different screen sizes.",
+            "dependencies": [],
+            "details": "Adjust column layouts for the post list (e.g., single column on mobile, multiple on desktop), font sizes, and spacing using Tailwind's responsive utilities. Ensure the 'Create New Post' button remains prominent and accessible on all devices, potentially adjusting its size or position.",
+            "status": "done",
+            "testStrategy": "Verify the list layout, post title readability, and button placement on mobile, tablet, and desktop views. Check for horizontal scrolling or content overflow at various breakpoints."
+          },
+          {
+            "id": 3,
+            "title": "Post Detail Page Responsiveness",
+            "description": "Apply responsive design to the `PostDetailView.vue` page, optimizing the display of a single post's title, content, and action buttons for various screen sizes.",
+            "dependencies": [],
+            "details": "Focus on content readability by adjusting font sizes, line heights, and paragraph spacing responsively. Ensure 'Edit' and 'Delete' buttons are well-placed and usable on small screens, potentially stacking them or making them full-width. Handle potential image scaling within the content.",
+            "status": "done",
+            "testStrategy": "Check content wrapping, image scaling (if any), and button accessibility on different screen sizes. Ensure the main content area remains readable without excessive scrolling or overflow."
+          },
+          {
+            "id": 4,
+            "title": "Post Form Component Responsiveness",
+            "description": "Make the `PostForm.vue` component fully responsive, ensuring input fields and the textarea are user-friendly on mobile, tablet, and desktop devices.",
+            "dependencies": [],
+            "details": "Adjust input field widths, textarea height, and button layouts within the form using Tailwind's responsive utilities. On smaller screens, inputs should typically take full width. Ensure labels are clearly associated with their fields and error messages are readable.",
+            "status": "done",
+            "testStrategy": "Test the form's usability on various screen sizes. Verify that input fields are correctly sized, textareas are scrollable if content is long, and the submit button is easily clickable and visible."
+          },
+          {
+            "id": 5,
+            "title": "Cross-Page Responsiveness Review & Optimization",
+            "description": "Conduct a comprehensive review of all responsive implementations across the List, Detail, and Form pages, identifying and fixing any inconsistencies, edge cases, or remaining layout issues.",
+            "dependencies": [
+              "16.1",
+              "16.2",
+              "16.3",
+              "16.4"
+            ],
+            "details": "Perform a final pass to ensure consistent spacing, typography, and component behavior across all responsive breakpoints. Optimize performance for mobile devices if necessary (e.g., image optimization, lazy loading). Address any specific feedback from initial testing and ensure all interactive elements are usable.",
+            "status": "done",
+            "testStrategy": "Perform end-to-end responsive testing across all pages using browser developer tools, simulating various common device widths (e.g., 360px, 414px, 768px, 1024px, 1440px). Verify content readability, element alignment, and interactive element usability. Ensure no content overflows and the user experience is seamless."
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "title": "Integration: Connect List View to API",
+        "description": "Use Axios in the Post List View to fetch data from the `GET /posts` endpoint and display it.",
+        "details": "Create an API service module (e.g., `services/api.js`) with an Axios instance. In `PostListView.vue`, call the service in the `onMounted` hook to fetch posts and store them in the component's state. Handle loading and error states.",
+        "testStrategy": "Run the full stack. Navigate to the post list page and verify that the posts created via the backend API are displayed correctly. Test the loading indicator and error message display.",
+        "priority": "high",
+        "dependencies": [
+          7,
+          11,
+          13
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create API Service Module",
+            "description": "Establish a centralized API service module (`services/api.js`) with an Axios instance configured for backend communication.",
+            "dependencies": [],
+            "details": "Create `services/api.js`. Initialize an Axios instance. Define a `getPosts` function that makes a `GET` request to the `/posts` endpoint.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Integrate API Call in Post List View",
+            "description": "Implement the API call to fetch posts within the `PostListView.vue` component's lifecycle hook.",
+            "dependencies": [],
+            "details": "Import the API service into `PostListView.vue`. In the `onMounted` hook, call the `getPosts` function to initiate data fetching.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Manage Post Data State",
+            "description": "Declare and update a reactive state variable in `PostListView.vue` to store the fetched posts.",
+            "dependencies": [],
+            "details": "Define a `posts` reactive variable (e.g., using `ref([])` or `reactive({ posts: [] })`). Assign the successful response data from the `getPosts` call to this `posts` variable.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Render Post List Data",
+            "description": "Display the fetched post data in the `PostListView.vue` template.",
+            "dependencies": [],
+            "details": "Iterate over the `posts` array in the `PostListView.vue` template to render each post's title and other relevant information.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Implement Loading and Error State UI",
+            "description": "Add reactive state variables for loading and error states, and conditionally render corresponding UI elements in `PostListView.vue`.",
+            "dependencies": [],
+            "details": "Define `isLoading` (e.g., `ref(false)`) and `error` (e.g., `ref(null)`) reactive variables. Set `isLoading` to `true` before the API call and `false` in `finally`. In the `catch` block, set `error` with the error message. Conditionally render a loading indicator when `isLoading` is `true` and an error message when `error` is not `null`.",
+            "status": "done",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "title": "Integration: Connect Detail View to API",
+        "description": "Use Axios in the Post Detail View to fetch data from the `GET /posts/{id}` endpoint.",
+        "details": "In `PostDetailView.vue`, get the post ID from the route parameters. Use the API service to call the `GET /posts/{id}` endpoint and display the fetched data.",
+        "testStrategy": "Click on a post title from the list view. Verify that the detail page loads and displays the correct content for that specific post.",
+        "priority": "high",
+        "dependencies": [
+          8,
+          14,
+          17
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Extract Post ID from Route Parameters",
+            "description": "Implement logic in `PostDetailView.vue` to retrieve the post ID from the Vue Router's route parameters.",
+            "dependencies": [],
+            "details": "Use `useRoute()` (Vue 3 Composition API) or `this.$route.params.id` (Options API) to get the `id` parameter. This ID will be the key for fetching specific post data.",
+            "status": "done",
+            "testStrategy": "Log the extracted ID to the console to verify it matches the expected ID for the navigated post."
+          },
+          {
+            "id": 2,
+            "title": "Fetch Post Data via API Service",
+            "description": "Call the `getPostById` method from the API service module, passing the extracted post ID, within `PostDetailView.vue`.",
+            "dependencies": [
+              "18.1"
+            ],
+            "details": "Trigger the API call using an appropriate lifecycle hook (e.g., `onMounted` for initial load) or a `watch` effect for route changes. Store the fetched data in a reactive state variable.",
+            "status": "done",
+            "testStrategy": "Verify a network request to `GET /posts/{id}` is made with the correct ID and that the response data is received successfully in the component's state."
+          },
+          {
+            "id": 3,
+            "title": "Implement Loading and Error States",
+            "description": "Add reactive state variables to `PostDetailView.vue` to manage loading status and display error messages during the API call.",
+            "dependencies": [
+              "18.2"
+            ],
+            "details": "Show a loading indicator (e.g., a spinner or skeleton loader) while data is being fetched. Display a user-friendly error message if the API call fails (e.g., network error, 404 Not Found).",
+            "status": "done",
+            "testStrategy": "Simulate network delays and API errors (e.g., by temporarily disabling the backend or returning a 404) to ensure loading indicators and error messages are displayed correctly."
+          },
+          {
+            "id": 4,
+            "title": "Render Fetched Post Data in UI",
+            "description": "Update the template of `PostDetailView.vue` to display the fetched post data (e.g., title, content, author) once it's successfully loaded.",
+            "dependencies": [
+              "18.2",
+              "18.3"
+            ],
+            "details": "Bind the fetched post object's properties to the appropriate HTML elements in the component's template. Ensure proper conditional rendering based on loading and error states to prevent displaying incomplete or erroneous data.",
+            "status": "done",
+            "testStrategy": "Navigate to a post's detail page and visually verify that all relevant post information (title, content, etc.) is displayed accurately and completely."
+          },
+          {
+            "id": 5,
+            "title": "React to Route Parameter Changes for Re-fetching",
+            "description": "Ensure the `PostDetailView.vue` component re-fetches data if the post ID in the route parameters changes (e.g., navigating from one detail page to another without re-mounting the component).",
+            "dependencies": [
+              "18.1",
+              "18.2",
+              "18.4"
+            ],
+            "details": "Implement a `watch` effect on the route parameter `id` to trigger a new API call whenever the ID changes, ensuring the view updates with the correct post data.",
+            "status": "done",
+            "testStrategy": "From one post detail page, programmatically navigate to another post's detail page (e.g., via a link or router push) and verify that the new post's data is loaded and displayed without a full page reload."
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "title": "Integration: Connect Create Form to API",
+        "description": "Wire up the create form to send a `POST` request to the backend API upon submission.",
+        "details": "In the 'Create Post' view that uses the `PostForm` component, handle the `submit` event by calling the API service's `createPost` method. On success, redirect the user to the new post's detail page or the main list.",
+        "testStrategy": "Fill out and submit the new post form. Verify that a `POST` request is sent, the post appears in the database, and the user is redirected correctly.",
+        "priority": "high",
+        "dependencies": [
+          6,
+          15
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Configure Form Submission Event Handling",
+            "description": "In the 'Create Post' view, set up the event listener for the `submit` event emitted by the `PostForm` component.",
+            "dependencies": [],
+            "details": "Ensure the `PostForm` component is correctly emitting a `submit` event with the form data as its payload. The 'Create Post' view component should have a method (e.g., `handleSubmit`) bound to this event.",
+            "status": "done",
+            "testStrategy": "Submit the form and verify that the `handleSubmit` method (or equivalent) in the 'Create Post' view is triggered with the correct form data."
+          },
+          {
+            "id": 2,
+            "title": "Prepare Post Data for API Request",
+            "description": "Within the form submission handler, extract and structure the data from the submitted form into the format expected by the `createPost` API endpoint.",
+            "dependencies": [
+              "19.1"
+            ],
+            "details": "Map form fields (e.g., `title`, `content`) to the `createPost` method's parameters. Perform any necessary data transformations or basic client-side validation (e.g., check for empty fields).",
+            "status": "done",
+            "testStrategy": "Log the prepared data object before the API call to confirm it matches the expected `POST` request body structure."
+          },
+          {
+            "id": 3,
+            "title": "Execute API Call to Create Post",
+            "description": "Invoke the `apiService.createPost` method with the prepared post data to send a `POST` request to the backend API.",
+            "dependencies": [
+              "19.2"
+            ],
+            "details": "Import and utilize the `apiService` module. Call `apiService.createPost(postData)` within an `async` function or using promises.",
+            "status": "done",
+            "testStrategy": "Use browser developer tools to inspect network requests upon form submission, verifying a `POST` request is sent to the correct endpoint with the correct payload."
+          },
+          {
+            "id": 4,
+            "title": "Implement Post Creation Success Redirection",
+            "description": "After a successful API response, redirect the user to either the newly created post's detail page or the main post list, as per requirements.",
+            "dependencies": [
+              "19.3"
+            ],
+            "details": "Access the new post's ID from the API response (if available) and use the Vue Router's `router.push()` method to navigate. If no ID, redirect to the main list.",
+            "status": "done",
+            "testStrategy": "Submit a valid form and verify that the browser navigates to the correct URL (e.g., `/posts/new-post-id` or `/posts`) after the API call completes successfully."
+          },
+          {
+            "id": 5,
+            "title": "Add Loading State and Error Handling",
+            "description": "Implement visual feedback for the user during the API call (loading state) and display appropriate error messages if the API request fails.",
+            "dependencies": [
+              "19.3"
+            ],
+            "details": "Use a reactive variable (e.g., `isLoading`) to control a loading spinner or disable the submit button. Wrap the API call in a `try-catch` block to catch errors and display user-friendly messages (e.g., using a toast notification or an inline error message).",
+            "status": "done",
+            "testStrategy": "Submit the form and observe a loading indicator. Simulate an API error (e.g., by temporarily changing the endpoint to a non-existent one) and verify that an error message is displayed to the user."
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "title": "Integration: Connect Edit Form to API",
+        "description": "Wire up the edit form to send a `PUT` request to the backend API upon submission.",
+        "details": "The 'Edit Post' view should first fetch the post data to pre-populate the form. On form submission, call the API service's `updatePost` method with the post ID and new data.",
+        "testStrategy": "Navigate to a post's detail page, click 'Edit', change the content, and submit. Verify that the post is updated in the database and the new content is displayed.",
+        "priority": "high",
+        "dependencies": [
+          9,
+          18
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create/Configure Edit Post View Component and Route",
+            "description": "Ensure an 'Edit Post' view component exists and a corresponding route (`/posts/:id/edit`) is defined to load it, allowing access to the post ID from route parameters.",
+            "dependencies": [],
+            "details": "Create `EditPostView.vue` (or similar) and add a route definition in `router/index.js` that includes a dynamic segment for the post ID.",
+            "status": "done",
+            "testStrategy": "Navigate directly to `/posts/123/edit` (using a placeholder ID) and verify the component loads without errors."
+          },
+          {
+            "id": 2,
+            "title": "Fetch Existing Post Data in Edit View",
+            "description": "In the 'Edit Post' view, retrieve the post ID from the route parameters and use the API service's `getPost` method to fetch the current post data from the backend.",
+            "dependencies": [],
+            "details": "Implement data fetching in the component's `onMounted` (or equivalent lifecycle hook) using the `apiService.getPost(id)`. Handle loading and error states.",
+            "status": "done",
+            "testStrategy": "Load an edit page for an existing post; use browser developer tools to confirm a `GET /posts/{id}` request is made and data is received."
+          },
+          {
+            "id": 3,
+            "title": "Pre-populate Edit Form Fields",
+            "description": "Bind the fetched post data to the form input fields within the 'Edit Post' view, ensuring the form displays the current values of the post (e.g., title, content) when loaded.",
+            "dependencies": [
+              "20.2"
+            ],
+            "details": "Declare reactive data properties (e.g., `postForm.title`, `postForm.content`) in the component. Once data is fetched in 20.2, assign the fetched values to these properties. Bind these properties to the form inputs using `v-model` or similar.",
+            "status": "done",
+            "testStrategy": "Navigate to the edit page for an existing post and verify that all form fields are pre-filled with the correct current post data."
+          },
+          {
+            "id": 4,
+            "title": "Implement Form Submission for Post Update",
+            "description": "Create a submission handler for the edit form that collects the updated data, retrieves the post ID, and calls the API service's `updatePost` method with a `PUT` request to the backend.",
+            "dependencies": [
+              "20.3"
+            ],
+            "details": "Define an `onSubmit` method for the form. Inside this method, construct the payload from the form's bound data. Call `apiService.updatePost(postId, updatedData)`.",
+            "status": "done",
+            "testStrategy": "Change a field in the edit form and submit. Use network tab in dev tools to verify a `PUT` request is sent to the correct endpoint (`/posts/{id}`) with the updated data."
+          },
+          {
+            "id": 5,
+            "title": "Handle Post-Update Success and Redirection",
+            "description": "After a successful `PUT` request, redirect the user to the updated post's detail page or the post list, and provide appropriate UI feedback (e.g., a success message).",
+            "dependencies": [
+              "20.4"
+            ],
+            "details": "In the `onSubmit` method's success callback, use the router to navigate to `/posts/{id}` or `/posts`. Optionally, display a transient success notification. Handle potential API errors by displaying an error message.",
+            "status": "done",
+            "testStrategy": "Submit an updated post. Verify that the page redirects to the post's detail view (or list view), and the displayed content reflects the changes. Check for error messages on failed submission."
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "title": "Integration: Connect Delete Button to API",
+        "description": "Implement the delete functionality on the post detail or edit page.",
+        "details": "When the delete button is clicked, show a confirmation dialog (`window.confirm`). If confirmed, call the API service's `deletePost` method. On success, redirect to the post list.",
+        "testStrategy": "Click the 'Delete' button on a post, confirm the action, and verify that the post is removed from the list view and attempting to access its detail URL results in a 404.",
+        "priority": "high",
+        "dependencies": [
+          10,
+          18
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Add Delete Button and Initial Event Handler",
+            "description": "Place the 'Delete' button on the Post Detail or Edit page and attach a click event listener to it.",
+            "dependencies": [],
+            "details": "Identify the appropriate location for the delete button within `PostDetailView.vue` or `PostEditView.vue`. Add a button element and bind a method (e.g., `handleDeleteClick`) to its `@click` event. Ensure the button is only visible if the user has permission to delete (if applicable, otherwise assume always visible for now).",
+            "status": "done",
+            "testStrategy": "Navigate to a post's detail or edit page and verify that the 'Delete' button is visible and clickable."
+          },
+          {
+            "id": 2,
+            "title": "Implement Delete Confirmation Dialog",
+            "description": "Modify the delete button's click handler to display a `window.confirm` dialog before proceeding with the delete operation.",
+            "dependencies": [
+              "21.1"
+            ],
+            "details": "Inside the `handleDeleteClick` method, use `if (window.confirm('Are you sure you want to delete this post?')) { ... }` to gate the subsequent logic. If the user cancels, the operation should stop.",
+            "status": "done",
+            "testStrategy": "Click the 'Delete' button. Verify that a confirmation dialog appears. Test both 'OK' and 'Cancel' actions to ensure the flow proceeds or stops correctly."
+          },
+          {
+            "id": 3,
+            "title": "Implement `deletePost` Method in API Service",
+            "description": "Add a `deletePost` method to the existing API service (`services/api.js`) that sends a `DELETE` request to the `/posts/{id}` endpoint.",
+            "dependencies": [],
+            "details": "In `services/api.js`, export a new asynchronous function `deletePost(id)` that uses the Axios instance to make a `DELETE` request to `/api/posts/${id}`. This method should return the API response or throw an error.",
+            "status": "done",
+            "testStrategy": "Perform a unit test or manual check to ensure that calling `api.deletePost(123)` correctly attempts to send a `DELETE` request to `/api/posts/123`."
+          },
+          {
+            "id": 4,
+            "title": "Call `deletePost` API and Redirect on Success",
+            "description": "Integrate the `deletePost` API call into the confirmed delete flow and, upon successful deletion, redirect the user to the post list page.",
+            "dependencies": [
+              "21.2",
+              "21.3"
+            ],
+            "details": "Inside the `if (window.confirm(...))` block from subtask 21.2, call the `api.deletePost(postId)` method. Upon a successful response from the API, use the Vue Router to programmatically navigate to the post list route (e.g., `/posts`).",
+            "status": "done",
+            "testStrategy": "Click 'Delete', confirm the action, and verify that the application redirects to the post list page immediately after the API call is successful."
+          },
+          {
+            "id": 5,
+            "title": "Implement Delete Error Handling and UI Feedback",
+            "description": "Add robust error handling for the `deletePost` API call, displaying a user-friendly message if the deletion fails. Optionally, provide UI feedback during the API call.",
+            "dependencies": [
+              "21.4"
+            ],
+            "details": "Wrap the `api.deletePost` call in a `try...catch` block. In the `catch` block, display an informative error message to the user (e.g., using an alert or a temporary notification). Consider adding a loading state variable to disable the delete button or show a spinner while the API request is in progress, preventing multiple clicks.",
+            "status": "done",
+            "testStrategy": "Simulate an API error (e.g., by temporarily changing the endpoint to a non-existent one or blocking the request in dev tools) and verify that an appropriate error message is displayed to the user and the application does not crash."
+          }
+        ]
+      },
+      {
+        "id": 22,
+        "title": "Future: Implement User Authentication (Backend)",
+        "description": "Add user registration and login endpoints to the FastAPI backend, issuing JWTs upon successful login.",
+        "details": "Create a User model with hashed passwords. Implement `/register` and `/token` (OAuth2PasswordRequestForm) endpoints. Create dependency functions to verify JWTs from request headers.",
+        "testStrategy": "Test the `/register` endpoint. Test the `/token` endpoint with correct and incorrect credentials. Test a protected endpoint with and without a valid JWT.",
+        "priority": "medium",
+        "dependencies": [
+          10
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define User Database Model and Schema",
+            "description": "Create the database model (e.g., SQLAlchemy or ORM equivalent) for users, including fields for ID, username, and hashed password. Also define Pydantic schemas for request/response bodies.",
+            "dependencies": [],
+            "details": "Implement `User` ORM model with `id`, `username`, `hashed_password`. Define Pydantic `UserCreate`, `UserInDB`, `UserResponse` schemas for data validation and serialization.",
+            "status": "done",
+            "testStrategy": "N/A (Schema definition, no direct testable endpoint yet)."
+          },
+          {
+            "id": 2,
+            "title": "Implement Password Hashing Utilities",
+            "description": "Develop functions for securely hashing user passwords before storage and verifying them during login attempts.",
+            "dependencies": [],
+            "details": "Use `passlib.context.CryptContext` for password hashing and verification. Create helper functions like `get_password_hash` and `verify_password`.",
+            "status": "done",
+            "testStrategy": "Write unit tests for `get_password_hash` and `verify_password` functions to ensure correct hashing and verification against known inputs."
+          },
+          {
+            "id": 3,
+            "title": "Create User Registration Endpoint",
+            "description": "Implement the `/register` API endpoint to allow new users to create an account, storing their hashed password in the database.",
+            "dependencies": [
+              "22.1",
+              "22.2"
+            ],
+            "details": "Implement `POST /register` endpoint. It should accept `UserCreate` schema, hash the password using utilities from 22.2, and save the new user via the model from 22.1. Handle potential duplicate username/email errors with appropriate HTTP status codes.",
+            "status": "done",
+            "testStrategy": "Test the `/register` endpoint with valid data and verify user creation. Test with duplicate usernames/emails to ensure appropriate error responses (e.g., 400 Bad Request)."
+          },
+          {
+            "id": 4,
+            "title": "Implement JWT Generation and Token Endpoint",
+            "description": "Develop the `/token` endpoint using OAuth2PasswordRequestForm to authenticate users and issue JSON Web Tokens (JWTs) upon successful login.",
+            "dependencies": [
+              "22.1",
+              "22.2"
+            ],
+            "details": "Implement `POST /token` endpoint. Use `OAuth2PasswordRequestForm` to get credentials. Verify credentials using utilities from 22.2 against the user model from 22.1. If valid, generate an access token (JWT) with an expiration and return it.",
+            "status": "done",
+            "testStrategy": "Test the `/token` endpoint with correct credentials to receive a JWT. Test with incorrect credentials (username/password) to verify authentication failure (e.g., 401 Unauthorized)."
+          },
+          {
+            "id": 5,
+            "title": "Develop JWT Verification Dependency",
+            "description": "Create a FastAPI dependency function that extracts, decodes, and validates JWTs from request headers, making authenticated user information available to protected routes.",
+            "dependencies": [
+              "22.4"
+            ],
+            "details": "Implement a dependency function using `OAuth2PasswordBearer` and `jwt.decode`. This function should extract the token from the `Authorization` header, decode it using the secret key, validate its signature and expiration, and retrieve the user ID or object from the payload. This dependency will be used by other tasks to protect endpoints.",
+            "status": "done",
+            "testStrategy": "This dependency's functionality will be implicitly tested when applied to a protected endpoint (e.g., in Task 24), by attempting access with and without a valid JWT to verify correct authorization behavior."
+          }
+        ]
+      },
+      {
+        "id": 23,
+        "title": "Future: Implement Login/Logout (Frontend)",
+        "description": "Create a login page and manage authentication state (JWT token) in the Vue app.",
+        "details": "Create a login form that calls the `/token` endpoint. Store the token securely (e.g., in a Pinia store with persistence). Use an Axios interceptor to add the `Authorization` header to requests. Implement logout to clear the token.",
+        "testStrategy": "Test logging in and see the token stored. Verify that subsequent API requests contain the auth header. Test logging out and see the token cleared.",
+        "priority": "medium",
+        "dependencies": [
+          12,
+          22
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Develop Login Page UI",
+            "description": "Create the Vue component for the login page, including input fields for username/email and password, and a submit button.",
+            "dependencies": [],
+            "details": "Design a `LoginPage.vue` component. Include `<input type=\"text/email\">` for username/email and `<input type=\"password\">` for password, along with a submit button. Implement basic client-side form validation (e.g., fields are not empty).",
+            "status": "done",
+            "testStrategy": "Visually inspect the login page. Attempt to submit the form with empty fields and verify validation messages are displayed."
+          },
+          {
+            "id": 2,
+            "title": "Integrate Login API Call",
+            "description": "Add logic to the login form to send user credentials to the backend's `/token` endpoint and handle the response.",
+            "dependencies": [
+              "23.1"
+            ],
+            "details": "On form submission, use Axios to make a POST request to the `/token` endpoint with the username and password. Handle successful responses by extracting the JWT token and error responses by displaying appropriate messages to the user.",
+            "status": "done",
+            "testStrategy": "Use browser developer tools to monitor network requests. Submit the form with valid credentials and verify a successful call to `/token` and a JWT in the response. Submit with invalid credentials and verify an error response (e.g., 401 Unauthorized)."
+          },
+          {
+            "id": 3,
+            "title": "Manage Auth State with Pinia",
+            "description": "Create a Pinia store to securely store the JWT token and user authentication status, ensuring persistence across sessions.",
+            "dependencies": [
+              "23.2"
+            ],
+            "details": "Define an `authStore.js` using Pinia. Store the JWT token and a boolean `isAuthenticated` flag. Use a Pinia plugin (e.g., `pinia-plugin-persistedstate`) to persist the token in local storage or session storage. Implement actions to set and clear the token.",
+            "status": "done",
+            "testStrategy": "Log in successfully. Close and reopen the browser/tab and verify that the user is still considered logged in (token is persisted). Manually inspect local storage for the token."
+          },
+          {
+            "id": 4,
+            "title": "Configure Axios Interceptor",
+            "description": "Set up an Axios interceptor to automatically attach the JWT from the Pinia store to the `Authorization` header of all outgoing API requests.",
+            "dependencies": [
+              "23.3"
+            ],
+            "details": "In `main.js` or a dedicated `axios.js` file, configure an Axios request interceptor. Before each request, check if a token exists in the Pinia `authStore`. If present, add `Authorization: Bearer <token>` to the request headers.",
+            "status": "done",
+            "testStrategy": "Log in. Make a subsequent API call (e.g., fetch posts). Use browser developer tools to inspect the request headers and verify that the `Authorization` header with the Bearer token is present."
+          },
+          {
+            "id": 5,
+            "title": "Implement Logout Feature",
+            "description": "Create a logout mechanism that clears the authentication token and resets the user's session state.",
+            "dependencies": [
+              "23.3"
+            ],
+            "details": "Add a 'Logout' button or link to the UI (e.g., in a navigation bar). When clicked, dispatch an action in the Pinia `authStore` to clear the token and reset the `isAuthenticated` flag. Redirect the user to the login page or home page after logout.",
+            "status": "done",
+            "testStrategy": "Log in. Click the logout button. Verify that the token is cleared from local storage/Pinia store and that subsequent protected API calls fail with a 401 Unauthorized error. Verify redirection to the login page."
+          }
+        ]
+      },
+      {
+        "id": 24,
+        "title": "Future: Secure CRUD Endpoints",
+        "description": "Protect the `POST`, `PUT`, and `DELETE` post endpoints so they can only be accessed by authenticated users.",
+        "details": "Apply the JWT verification dependency to the create, update, and delete API routes in FastAPI. `GET` endpoints will remain public. Associate posts with an `author_id`.",
+        "testStrategy": "Attempt to call POST, PUT, DELETE endpoints without a token and verify a `401 Unauthorized` error. Call them with a valid token and verify success.",
+        "priority": "medium",
+        "dependencies": [
+          22
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement author_id in Post Model",
+            "description": "Modify the Post database model and Pydantic schemas to include an `author_id` field, linking posts to their creators. This field will store the ID of the user who created the post.",
+            "dependencies": [],
+            "details": "Add an `author_id` column to the `posts` table in the database (e.g., as a foreign key to `users.id`). Update the corresponding Pydantic `PostCreate` and `PostResponse` schemas to include this new field.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Secure Post Creation (POST) and Assign Author",
+            "description": "Apply JWT authentication to the `POST /posts` endpoint. Extract the authenticated user's ID from the token and assign it as the `author_id` for the newly created post.",
+            "dependencies": [
+              "24.1"
+            ],
+            "details": "Import and use the `Depends(get_current_user)` (or similar dependency from Task 22) in the `create_post` FastAPI route. Modify the `create_post` function to accept the `current_user` object and use `current_user.id` to populate the `author_id` field when saving the new post to the database.",
+            "status": "done",
+            "testStrategy": "Attempt to create a post without a token and verify a 401 Unauthorized error. Create a post with a valid token and verify success, then check the database to ensure the `author_id` is correctly set to the creating user's ID."
+          },
+          {
+            "id": 3,
+            "title": "Secure Post Update (PUT) with Author Authorization",
+            "description": "Apply JWT authentication to the `PUT /posts/{post_id}` endpoint. Implement authorization logic to ensure that only the original author of a post can update it.",
+            "dependencies": [
+              "24.1"
+            ],
+            "details": "Use `Depends(get_current_user)` in the `update_post` FastAPI route. Before applying updates, fetch the post by `post_id` from the database. Compare its `author_id` with `current_user.id`. If they do not match, return a `403 Forbidden` HTTP error. Otherwise, proceed with the update.",
+            "status": "done",
+            "testStrategy": "Attempt to update a post without a token (expect 401). Attempt to update a post with a valid token but as a user who is not the author (expect 403). Attempt to update a post with a valid token as the author (expect 200 success)."
+          },
+          {
+            "id": 4,
+            "title": "Secure Post Deletion (DELETE) with Author Authorization",
+            "description": "Apply JWT authentication to the `DELETE /posts/{post_id}` endpoint. Implement authorization logic to ensure that only the original author of a post can delete it.",
+            "dependencies": [
+              "24.1"
+            ],
+            "details": "Use `Depends(get_current_user)` in the `delete_post` FastAPI route. Before deleting, fetch the post by `post_id` from the database. Compare its `author_id` with `current_user.id`. If they do not match, return a `403 Forbidden` HTTP error. Otherwise, proceed with the deletion.",
+            "status": "done",
+            "testStrategy": "Attempt to delete a post without a token (expect 401). Attempt to delete a post with a valid token but as a user who is not the author (expect 403). Attempt to delete a post with a valid token as the author (expect 204 success)."
+          },
+          {
+            "id": 5,
+            "title": "Verify Endpoint Security and Public Access",
+            "description": "Conduct comprehensive testing to ensure that `POST`, `PUT`, and `DELETE` endpoints are properly secured and require authentication, while `GET` endpoints remain publicly accessible.",
+            "dependencies": [
+              "24.2",
+              "24.3",
+              "24.4"
+            ],
+            "details": "Perform end-to-end tests for all post-related endpoints. Specifically: 1. Attempt to call POST, PUT, DELETE endpoints without a token and verify a `401 Unauthorized` error. 2. Call them with a valid token and verify success. 3. For PUT/DELETE, test with a valid token but for a post not owned by the user, expecting `403 Forbidden`. 4. Verify that `GET /posts` and `GET /posts/{post_id}` endpoints are still accessible without any authentication token.",
+            "status": "done",
+            "testStrategy": "Automated API tests covering all scenarios described in the details, including positive and negative cases for authentication and authorization."
+          }
+        ]
+      },
+      {
+        "id": 25,
+        "title": "Future: Implement Category Feature (Backend)",
+        "description": "Enhance the backend to support category filtering on the `GET /posts` endpoint.",
+        "details": "Update the `GET /posts` endpoint to accept an optional `category` query parameter. If provided, the database query should filter posts by that category.",
+        "testStrategy": "Create posts with different categories. Call `GET /posts?category=some_category` and verify that only posts with that category are returned.",
+        "priority": "low",
+        "dependencies": [
+          7
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define Post Category Field",
+            "description": "Modify the backend's Post model/schema to include a 'category' field.",
+            "dependencies": [],
+            "details": "Update the Post model definition (e.g., SQLAlchemy model, Pydantic schema for ORM) to include a 'category: Optional[str]' field. This field will store the category name for each post.",
+            "status": "done",
+            "testStrategy": "N/A (Schema definition, not directly testable in isolation. Verification will occur in subsequent steps.)"
+          },
+          {
+            "id": 2,
+            "title": "Database Migration for Category",
+            "description": "Generate and apply the necessary database migration to add the 'category' column to the 'posts' table.",
+            "dependencies": [
+              "25.1"
+            ],
+            "details": "Use the project's database migration tool (e.g., Alembic) to create a migration script that adds a 'category' column (VARCHAR/TEXT) to the 'posts' table. Apply this migration to the development database.",
+            "status": "done",
+            "testStrategy": "Connect to the database and verify that the 'posts' table now contains a 'category' column."
+          },
+          {
+            "id": 3,
+            "title": "Update Post CRUD for Category Input",
+            "description": "Modify the POST /posts and PUT /posts/{id} endpoints to allow specifying a 'category' when creating or updating posts.",
+            "dependencies": [
+              "25.1",
+              "25.2"
+            ],
+            "details": "Update the Pydantic schemas used for creating (PostCreate) and updating (PostUpdate) posts to include an optional 'category: Optional[str]' field. Ensure the backend logic correctly processes and saves this category to the database when a post is created or updated.",
+            "status": "done",
+            "testStrategy": "Create a new post via POST /posts with a specified category. Update an existing post via PUT /posts/{id} to add or change its category. Verify the category is correctly stored in the database for these posts."
+          },
+          {
+            "id": 4,
+            "title": "Modify GET /posts Endpoint Signature",
+            "description": "Update the GET /posts endpoint to accept an optional 'category' query parameter in its function signature.",
+            "dependencies": [],
+            "details": "Modify the FastAPI route handler for GET /posts to include 'category: Optional[str] = Query(None)' as a parameter. This makes the endpoint capable of receiving the category filter from client requests.",
+            "status": "done",
+            "testStrategy": "Call GET /posts?category=some_category and verify that the endpoint accepts the parameter without raising a validation error (even if the filtering logic is not yet implemented)."
+          },
+          {
+            "id": 5,
+            "title": "Implement Category Filtering Logic",
+            "description": "Add the database query logic to filter posts by the provided 'category' query parameter within the GET /posts endpoint.",
+            "dependencies": [
+              "25.1",
+              "25.4"
+            ],
+            "details": "Within the GET /posts endpoint's handler function, if the 'category' query parameter is provided, modify the database query (e.g., SQLAlchemy ORM query) to include a WHERE clause that filters posts where 'Post.category == category'.",
+            "status": "done",
+            "testStrategy": "Create posts with different categories (e.g., 'Tech', 'News'). Call GET /posts?category=Tech and verify only 'Tech' posts are returned. Call GET /posts?category=NonExistent and verify an empty list is returned. Call GET /posts (without a category parameter) and verify all posts are returned."
+          }
+        ]
+      },
+      {
+        "id": 26,
+        "title": "Future: Implement Category Filter (Frontend)",
+        "description": "Add a dropdown or list of categories to the Post List page to allow users to filter posts.",
+        "details": "Add a UI element (e.g., a dropdown) for category selection. When a category is selected, update the component's state and re-fetch the post list with the `category` query parameter.",
+        "testStrategy": "Visually test the filter UI. Select a category and verify that the list of posts updates to show only relevant posts.",
+        "priority": "low",
+        "dependencies": [
+          17,
+          25
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Fetch Available Categories",
+            "description": "Implement an API call to retrieve the list of available categories from the backend. This data will be used to populate the filter UI.",
+            "dependencies": [],
+            "details": "Create a new API service method or extend an existing one to fetch categories. Store them in the component's data or a global store (e.g., Pinia) for use by the filter UI.",
+            "status": "done",
+            "testStrategy": "Verify that the application successfully fetches and stores a list of categories upon page load or component mount."
+          },
+          {
+            "id": 2,
+            "title": "Implement Category Filter UI Component",
+            "description": "Create the user interface element (e.g., a dropdown or list) on the Post List page that displays the fetched categories and allows users to select one.",
+            "dependencies": [
+              "26.1"
+            ],
+            "details": "Use a Vue component to render the filter UI. Populate it with the categories fetched in subtask 26.1. Ensure it emits an event or updates a model when a category is selected.",
+            "status": "done",
+            "testStrategy": "Visually confirm the filter UI is present and populated with categories. Verify that selecting an option triggers an event or state change."
+          },
+          {
+            "id": 3,
+            "title": "Manage Selected Category State and Trigger Refetch",
+            "description": "Implement the logic to store the currently selected category in the component's state and trigger a re-fetch of posts whenever the selected category changes.",
+            "dependencies": [
+              "26.2"
+            ],
+            "details": "Bind the UI component's selection to a data property (e.g., `selectedCategory`). Use a watcher or computed property to detect changes in `selectedCategory` and initiate the post list re-fetch function.",
+            "status": "done",
+            "testStrategy": "Select a category and verify that the internal state variable updates correctly and that the function to fetch posts is invoked."
+          },
+          {
+            "id": 4,
+            "title": "Modify Post List API Call for Filtering",
+            "description": "Update the existing API call responsible for fetching posts to include the `category` query parameter based on the selected category state.",
+            "dependencies": [
+              "26.3"
+            ],
+            "details": "Modify the `getPosts` (or similar) API service method to accept an optional `category` parameter. Conditionally add this parameter to the API request URL (e.g., `/posts?category=selected_category`).",
+            "status": "done",
+            "testStrategy": "Use browser developer tools to inspect network requests. Select a category and verify that the `category` query parameter is correctly appended to the post list API request URL."
+          },
+          {
+            "id": 5,
+            "title": "Display Filtered Posts and Handle Clear Filter",
+            "description": "Ensure the Post List component correctly renders the posts returned by the filtered API call. Implement a mechanism to clear the selected filter and revert to showing all posts.",
+            "dependencies": [
+              "26.4"
+            ],
+            "details": "The Post List component should automatically react to changes in the fetched posts. Add a 'Clear Filter' option (e.g., an 'All Categories' option or a reset button) that resets the `selectedCategory` state to null/empty, triggering a re-fetch of all posts.",
+            "status": "done",
+            "testStrategy": "Select a category and verify only relevant posts are displayed. Clear the filter and verify all posts are displayed again. Ensure initial page load shows all posts."
+          }
+        ]
+      },
+      {
+        "id": 27,
+        "title": "Future: Integrate Markdown Editor",
+        "description": "Replace the basic `textarea` in the post form with a Vue-based Markdown editor component.",
+        "details": "Research and select a suitable component (e.g., `toast-ui/vue-editor`). Integrate it into the `PostForm.vue` component, replacing the `textarea`. Ensure the markdown content is correctly bound and saved.",
+        "testStrategy": "Create a new post using the markdown editor. Use markdown syntax (e.g., headers, lists, code blocks). Save and view the post on the detail page, ensuring the markdown is rendered correctly as HTML.",
+        "priority": "low",
+        "dependencies": [
+          15
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Research and Select Markdown Editor Component",
+            "description": "Investigate available Vue.js Markdown editor components, compare their features, licensing, bundle size, documentation, and community support. Select the most appropriate component for the project.",
+            "dependencies": [],
+            "details": "Look into options like `toast-ui/vue-editor`, `vue-simplemde`, `mavon-editor`, etc. Consider features like real-time preview, toolbar options, and ease of customization. Document the chosen component and the rationale for its selection.",
+            "status": "done",
+            "testStrategy": "N/A (Research task, outcome is a decision and documentation)"
+          },
+          {
+            "id": 2,
+            "title": "Install and Basic Integration into PostForm.vue",
+            "description": "Install the selected Markdown editor component via npm/yarn. Import and register it within `PostForm.vue`, replacing the existing `textarea` element.",
+            "dependencies": [
+              "27.1"
+            ],
+            "details": "Follow the chosen component's installation instructions. Ensure the component renders correctly on the `PostForm.vue` page without errors.",
+            "status": "done",
+            "testStrategy": "Visually confirm the Markdown editor component appears on the post creation/edit form instead of the plain textarea. Check browser console for errors."
+          },
+          {
+            "id": 3,
+            "title": "Implement Data Binding and Form Submission Logic",
+            "description": "Connect the Markdown editor component's content to the `PostForm.vue` component's data model (e.g., `v-model` or specific event listeners). Ensure that when the form is submitted, the Markdown content from the editor is correctly sent to the backend API.",
+            "dependencies": [
+              "27.2"
+            ],
+            "details": "This involves reading the editor's content and assigning it to the `post.content` property. Update the `createPost` or `updatePost` methods to send this new content.",
+            "status": "done",
+            "testStrategy": "Fill the editor with some text. Submit the form. Use browser developer tools (Network tab) to verify that the request payload includes the Markdown content from the editor."
+          },
+          {
+            "id": 4,
+            "title": "Backend Content Handling and Storage",
+            "description": "Verify that the FastAPI backend is configured to correctly receive and store the potentially longer Markdown content. This might involve adjusting the database schema for the `content` field if it's currently too small (e.g., `VARCHAR` to `TEXT`).",
+            "dependencies": [
+              "27.3"
+            ],
+            "details": "Check the `Post` model in FastAPI and the corresponding database migration. Ensure the `content` field can accommodate long Markdown strings. No specific code changes might be needed if it's already `TEXT` or equivalent.",
+            "status": "done",
+            "testStrategy": "Create a post with a very long Markdown content string (e.g., several paragraphs, lists, code blocks). Verify that the content is saved completely in the database without truncation."
+          },
+          {
+            "id": 5,
+            "title": "Markdown Rendering on Post Detail Page",
+            "description": "Implement the logic to convert the stored Markdown content into HTML for display on the `PostDetail.vue` page. This typically involves using a Markdown parsing library on the frontend.",
+            "dependencies": [
+              "27.4"
+            ],
+            "details": "Install a Markdown parsing library (e.g., `marked.js`, `markdown-it`). In `PostDetail.vue`, take the `post.content` (which is Markdown) and convert it to HTML before displaying it in a `v-html` directive.",
+            "status": "done",
+            "testStrategy": "Create a new post using the Markdown editor with various Markdown elements (headers, lists, bold, italics, code blocks, links). Save the post. Navigate to the post detail page and visually verify that all Markdown elements are correctly rendered as HTML."
+          }
+        ]
+      },
+      {
+        "id": 28,
+        "title": "Setup Frontend Environment",
+        "description": "Initialize a new React project using Vite and configure TailwindCSS for styling.",
+        "details": "Create the project structure, install necessary dependencies (React, Vite, TailwindCSS, PostCSS, Autoprefixer), and configure `tailwind.config.js` and `postcss.config.js`. Ensure the development server runs with Hot Module Replacement (HMR).",
+        "testStrategy": "Verify that the Vite development server starts successfully and that TailwindCSS utility classes can be applied to components and are reflected in the browser.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 29,
+        "title": "Setup Backend Environment",
+        "description": "Configure a new FastAPI project with Pydantic v2 for data modeling.",
+        "details": "Set up the Python virtual environment, install FastAPI, Uvicorn, and Pydantic. Create the main application file and a basic project structure for routes, models, and services.",
+        "testStrategy": "Run the FastAPI server using Uvicorn and access the root endpoint to confirm the server is running correctly.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 30,
+        "title": "Establish MongoDB Connection and Define Post Model",
+        "description": "Connect the FastAPI application to a MongoDB database and define the `Post` data model.",
+        "details": "Use a library like `motor` or `pymongo` to establish the database connection. Define the `Post` model using Pydantic, matching the schema specified in the PRD, including fields for title, content, category, and timestamps.",
+        "testStrategy": "Write a startup event in FastAPI to test the database connection. Create a test script to insert and retrieve a document using the defined model.",
+        "priority": "high",
+        "dependencies": [
+          29
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 31,
+        "title": "Implement `POST /posts` Endpoint",
+        "description": "Create a new blog post.",
+        "details": "Develop the FastAPI endpoint to handle POST requests at `/posts`. It should accept a JSON payload matching the Post model (excluding server-generated fields like id and timestamps), validate it, and save it to MongoDB.",
+        "testStrategy": "Use an API client (like Postman or curl) or an automated test to send a valid payload to the endpoint and verify that a new document is created in the database with a 201 status code.",
+        "priority": "high",
+        "dependencies": [
+          30
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 32,
+        "title": "Implement `GET /posts` and `GET /posts/{id}` Endpoints",
+        "description": "Retrieve all posts and a single post by its ID.",
+        "details": "Implement `GET /posts` to return a list of all posts, with an optional query parameter for category filtering. Implement `GET /posts/{id}` to retrieve a specific post by its unique identifier.",
+        "testStrategy": "Test `GET /posts` to ensure it returns an array of post objects. Test the category filter. Test `GET /posts/{id}` with a valid ID to get a single post and with an invalid ID to get a 404 error.",
+        "priority": "high",
+        "dependencies": [
+          30
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 33,
+        "title": "Implement `PUT /posts/{id}` Endpoint",
+        "description": "Update an existing blog post.",
+        "details": "Develop the endpoint to handle PUT requests at `/posts/{id}`. It should accept a JSON payload with the updated post data, find the corresponding document in MongoDB, and apply the changes.",
+        "testStrategy": "Send a PUT request with updated data to an existing post's ID. Verify the response and check the database to confirm the document has been updated correctly.",
+        "priority": "high",
+        "dependencies": [
+          30
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 34,
+        "title": "Implement `DELETE /posts/{id}` Endpoint",
+        "description": "Remove a blog post from the system.",
+        "details": "Develop the endpoint to handle DELETE requests at `/posts/{id}`. It should find and remove the specified post from the MongoDB collection.",
+        "testStrategy": "Send a DELETE request to an existing post's ID. Verify the response (e.g., 204 No Content) and confirm the document has been removed from the database.",
+        "priority": "high",
+        "dependencies": [
+          30
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 35,
+        "title": "Configure Auto-generated API Documentation",
+        "description": "Ensure FastAPI's automatic Swagger/OpenAPI documentation is correctly configured and accessible.",
+        "details": "Review the auto-generated documentation at `/docs`. Add summaries, descriptions, and examples to the Pydantic models and API endpoints to make the documentation clear and useful for frontend development.",
+        "testStrategy": "Navigate to the `/docs` URL of the running FastAPI application and verify that all CRUD endpoints are listed with correct models, parameters, and response types.",
+        "priority": "high",
+        "dependencies": [
+          31,
+          32,
+          33,
+          34
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 36,
+        "title": "Implement Post Creation/Edit Form Component",
+        "description": "Build a reusable React form component for creating and editing blog posts.",
+        "details": "The form should include input fields for the post's title, a textarea for content, and a select dropdown for the category. It should manage its own state for the input values.",
+        "testStrategy": "Render the component in a test environment (e.g., Storybook or a test page). Verify that all form fields are present and that user input correctly updates the component's state.",
+        "priority": "high",
+        "dependencies": [
+          28
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 37,
+        "title": "Implement Post List View Component",
+        "description": "Build a React component to display a list of all blog posts.",
+        "details": "The component will fetch and display posts, showing the title and a brief summary for each. It should also include the category filter dropdown as specified in the PRD.",
+        "testStrategy": "Render the component with mock data. Verify that the list of posts is displayed correctly and that the category filter is present.",
+        "priority": "high",
+        "dependencies": [
+          28
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 38,
+        "title": "Implement Individual Post Detail View Component",
+        "description": "Create a React component to display the full content of a single blog post.",
+        "details": "This component will show the post's title, full content, category, and creation/update dates. It should also include 'Edit' and 'Delete' buttons for content management.",
+        "testStrategy": "Render the component with a single mock post object. Verify that all details are displayed correctly and that the action buttons are present.",
+        "priority": "high",
+        "dependencies": [
+          28
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 39,
+        "title": "Connect Create/Update Form to Backend APIs",
+        "description": "Integrate the frontend form component with the `POST /posts` and `PUT /posts/{id}` endpoints.",
+        "details": "Use a data fetching library like React Query or SWR to handle form submissions. On submit, send the form data to the appropriate backend endpoint. Handle API responses, including success and error states.",
+        "testStrategy": "Fill out and submit the form in the UI. Use browser developer tools to monitor the network request. Verify that the correct API call is made and that the UI updates appropriately upon success or failure.",
+        "priority": "high",
+        "dependencies": [
+          31,
+          33,
+          36
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 40,
+        "title": "Connect Post List View to `GET /posts` API",
+        "description": "Fetch and display real post data from the backend in the post list view.",
+        "details": "Replace mock data with a live API call to `GET /posts`. Implement the logic for the category filter to re-fetch data with the selected category query parameter.",
+        "testStrategy": "Load the post list page and verify that data from the backend is displayed. Test the category filter to ensure the list updates to show only posts from the selected category.",
+        "priority": "high",
+        "dependencies": [
+          32,
+          37
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 41,
+        "title": "Connect Post Detail View to `GET /posts/{id}` API",
+        "description": "Fetch and display a single post's data from the backend.",
+        "details": "When a user navigates to a post's detail page, use the post ID from the URL to call the `GET /posts/{id}` endpoint and display the returned data.",
+        "testStrategy": "Navigate to a post detail page and verify that the correct post content is fetched from the API and rendered. Test with an invalid ID to ensure an error state (e.g., 'Post not found') is handled.",
+        "priority": "high",
+        "dependencies": [
+          32,
+          38
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 42,
+        "title": "Implement Delete Functionality in UI",
+        "description": "Connect the 'Delete' button in the post detail view to the `DELETE /posts/{id}` API.",
+        "details": "Add an onClick handler to the delete button that prompts the user for confirmation and then sends a request to the DELETE endpoint. Upon success, redirect the user back to the post list.",
+        "testStrategy": "Click the delete button on a post, confirm the action, and verify that the API call is made. Check that the user is redirected and the post is no longer visible in the list.",
+        "priority": "high",
+        "dependencies": [
+          34,
+          38
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 43,
+        "title": "Refine Responsive Design",
+        "description": "Ensure all UI components and views are fully responsive and usable on mobile, tablet, and desktop screens.",
+        "details": "Use TailwindCSS's responsive breakpoints to adjust layouts, font sizes, and spacing. Test all user flows on different device sizes to ensure a consistent and accessible experience.",
+        "testStrategy": "Use browser developer tools to simulate various screen sizes (e.g., iPhone, iPad, desktop). Manually test all pages and interactions to identify and fix any layout or usability issues.",
+        "priority": "medium",
+        "dependencies": [
+          39,
+          40,
+          41,
+          42
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 44,
+        "title": "Implement UI Loading and Feedback States",
+        "description": "Add loading indicators and user feedback mechanisms for all asynchronous operations.",
+        "details": "Show loading spinners or skeleton screens while data is being fetched. Display success or error messages (e.g., toasts) after form submissions or other API interactions. Disable submit buttons during submission to prevent duplicates.",
+        "testStrategy": "Manually trigger API calls and use network throttling in browser dev tools to verify that loading states are displayed correctly. Test error scenarios to ensure feedback messages appear.",
+        "priority": "medium",
+        "dependencies": [
+          39,
+          40,
+          41,
+          42
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 45,
+        "title": "Add Form Validation",
+        "description": "Implement client-side and server-side validation for the post creation/editing forms.",
+        "details": "On the client-side, add validation to ensure required fields (like title and content) are not empty. On the server-side, ensure the FastAPI endpoint validates the incoming data using Pydantic to reject invalid requests.",
+        "testStrategy": "Attempt to submit the form with empty required fields and verify that client-side error messages are shown. Use an API client to send invalid data to the backend and verify that a 422 Unprocessable Entity error is returned.",
+        "priority": "medium",
+        "dependencies": [
+          39
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 46,
+        "title": "Refactor Frontend Components for Reusability",
+        "description": "Optimize the React component structure for maintainability and reusability.",
+        "details": "Identify and extract common UI elements (e.g., buttons, inputs, cards) into their own reusable components. Review the overall component hierarchy to ensure a logical and maintainable structure.",
+        "testStrategy": "Conduct a code review to identify refactoring opportunities. Ensure that after refactoring, all application features continue to work as expected.",
+        "priority": "low",
+        "dependencies": [
+          43,
+          44,
+          45
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 47,
+        "title": "Add Unit and Integration Tests for Backend",
+        "description": "Implement comprehensive testing coverage for the FastAPI backend.",
+        "details": "Write unit tests for business logic and integration tests for the API endpoints using a framework like `pytest`. Ensure tests cover success cases, edge cases, and error handling for all CRUD operations.",
+        "testStrategy": "Run the test suite and ensure all tests pass. Check the test coverage report to ensure critical code paths are covered.",
+        "priority": "low",
+        "dependencies": [
+          35
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 48,
+        "title": "Add Component Tests for Frontend",
+        "description": "Implement component tests for the React frontend using a library like Vitest or React Testing Library.",
+        "details": "Write tests for key components like the post form and post list. Tests should verify that components render correctly with given props and that user interactions trigger the expected behavior.",
+        "testStrategy": "Run the frontend test suite and ensure all tests pass. Verify that tests cover rendering logic, state changes, and event handling.",
+        "priority": "low",
+        "dependencies": [
+          46
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 49,
+        "title": "Configure CORS and Environment Variables",
+        "description": "Finalize infrastructure configuration for development and production.",
+        "details": "Configure CORS in the FastAPI application to allow requests from the frontend domain. Set up environment variable handling (e.g., using `.env` files) for sensitive information like database connection strings and for differentiating between development and production settings.",
+        "testStrategy": "Run the frontend and backend on their respective development servers and verify that there are no CORS errors. Check that the application can correctly read configuration from environment variables.",
+        "priority": "medium",
+        "dependencies": [
+          30,
+          35
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-08-01T05:33:32.660Z",
+      "updated": "2025-08-02T04:22:06.387Z",
+      "description": "Tasks for master context"
+    }
+  }
+}
