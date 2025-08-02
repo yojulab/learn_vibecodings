@@ -58,23 +58,23 @@ const PostFormPage = () => {
   if (loading && isEditing) return <div>Loading...</div>;
 
   return (
-    <div className="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg mt-8">
-      <h1 className="text-3xl font-extrabold mb-6 text-gray-900">{isEditing ? 'Edit Post' : 'Create Post'}</h1>
-      {error && <div className="text-red-500 mb-4">Error: {error}</div>}
+    <div className="max-w-2xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-2xl mt-8 border border-gray-800">
+      <h1 className="text-3xl font-extrabold mb-6 text-white">{isEditing ? 'Edit Post' : 'Create Post'}</h1>
+      {error && <div className="text-red-400 mb-4">Error: {error}</div>}
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="title" className="block text-gray-700 font-semibold mb-2">Title</label>
+          <label htmlFor="title" className="block text-gray-300 font-semibold mb-2">Title</label>
           <input
             type="text"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border border-gray-700 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
             required
           />
         </div>
         <div>
-          <label htmlFor="content" className="block text-gray-700 font-semibold mb-2">Content</label>
+          <label htmlFor="content" className="block text-gray-300 font-semibold mb-2">Content</label>
           <div className="prose max-w-none">
             <MDEditor
               value={content}
@@ -83,19 +83,19 @@ const PostFormPage = () => {
           </div>
         </div>
         <div>
-          <label htmlFor="category" className="block text-gray-700 font-semibold mb-2">Category</label>
+          <label htmlFor="category" className="block text-gray-300 font-semibold mb-2">Category</label>
           <input
             type="text"
             id="category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border border-gray-700 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
             required
           />
         </div>
         <button
           type="submit"
-          className="bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 transition-colors duration-150"
+          className="bg-violet-600 text-white px-6 py-2 rounded-md hover:bg-violet-500 transition-colors duration-150"
           disabled={loading}
         >
           {loading ? 'Saving...' : 'Save Post'}

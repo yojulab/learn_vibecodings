@@ -45,17 +45,17 @@ const PostDetailPage = () => {
   if (!post) return <div>Post not found</div>;
 
   return (
-    <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-lg mt-8">
-      <h1 className="text-4xl font-extrabold mb-2 text-gray-900">{post.title}</h1>
-      <p className="text-sm text-gray-500 mb-6">Category: <span className="font-medium text-blue-500">{post.category}</span></p>
-      <div className="prose prose-lg max-w-none text-gray-800">
+    <div className="max-w-3xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-2xl mt-8 border border-gray-800">
+      <h1 className="text-4xl font-extrabold mb-2 text-white">{post.title}</h1>
+      <p className="text-sm text-gray-400 mb-6">Category: <span className="font-medium text-violet-400">{post.category}</span></p>
+      <div className="prose prose-lg max-w-none text-gray-200">
         <ReactMarkdown>{post.content}</ReactMarkdown>
       </div>
       <div className="mt-8 flex gap-2">
-        <Link to={`/edit-post/${id}`} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-150">
+        <Link to={`/edit-post/${id}`} className="bg-violet-600 text-white px-4 py-2 rounded-md hover:bg-violet-500 transition-colors duration-150">
           Edit
         </Link>
-        <button onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors duration-150">
+        <button onClick={handleDelete} className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-500 transition-colors duration-150">
           Delete
         </button>
       </div>

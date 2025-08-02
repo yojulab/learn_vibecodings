@@ -8,15 +8,15 @@ import './App.css';
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800">
         <div className="container mx-auto p-4">
-          <nav className="bg-gray-800 text-white p-4 rounded-md mb-6 shadow-md">
+          <nav className="bg-gray-950 text-white p-4 rounded-md mb-6 shadow-lg border border-gray-800">
             <ul className="flex space-x-4">
               <li>
-                <Link to="/" className="hover:text-gray-300 font-semibold">Home</Link>
+                <Link to="/" className="hover:text-violet-400 font-semibold transition-colors">Home</Link>
               </li>
               <li>
-                <Link to="/new-post" className="hover:text-gray-300 font-semibold">New Post</Link>
+                <Link to="/new-post" className="hover:text-violet-400 font-semibold transition-colors">New Post</Link>
               </li>
             </ul>
           </nav>

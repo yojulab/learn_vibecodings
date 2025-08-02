@@ -26,11 +26,11 @@ const CategoryFilter = ({ onCategoryChange }) => {
 
   return (
     <div className="mb-4">
-      <label htmlFor="category-filter" className="mr-2">Filter by category:</label>
+      <label htmlFor="category-filter" className="mr-2 text-gray-300">Filter by category:</label>
       <select
         id="category-filter"
         onChange={(e) => onCategoryChange(e.target.value)}
-        className="border p-2 rounded-md"
+        className="border border-gray-700 bg-gray-800 text-white p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
       >
         {categories.map((category) => (
           <option key={category} value={category}>
