@@ -1,3 +1,17 @@
+
+---
+
+### 브랜치별 목적 및 기술 스펙
+
+| 브랜치명                | 주 목적                                                         | 주요 기술/스펙                                      |
+|------------------------|----------------------------------------------------------------|-----------------------------------------------------|
+| main                   | 전체 프로젝트 통합, 기본 환경 및 문서 관리                      | Docker, Python, Node.js, MongoDB, MCP, AI CLI       |
+| gemini_clis_main       | Gemini API 및 Taskmaster 연동, AI CLI 실습 환경                 | Node.js, @google/gemini-cli, task-master-ai, Python |
+| gemini_clis_taskmaster | Taskmaster 기반 AI 작업 관리 및 프론트엔드 예제                | React, Vite, Taskmaster, MongoDB, Python            |
+| gemini_clis_blog       | 블로그 예제, TDD 기반 포스트 관리, 프론트엔드(Vue) 실습         | Vue 3, Vite, Playwright, MongoDB, Python            |
+| copilot_main           | VS Code Copilot 및 확장 설정, 개발 환경 자동화                  | VS Code, Copilot, Node.js, Python                   |
+
+- 각 브랜치는 실습 목적에 따라 AI CLI, MCP 서버, 프론트엔드(React/Vue), 자동화 등 다양한 기술을 포함합니다.
 # learn_vibecodings
 - docker 설치 확인
 ```bash
